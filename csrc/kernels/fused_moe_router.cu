@@ -616,8 +616,18 @@ fused_moe_routing_kernel(const DTYPE_I* __restrict__ gating,   // [M, E]
     }
     __syncthreads();
 
+    // Bound the id before the histogram, as #5295 does in the stock sorting path. In the
+    // fused launch these ids are this kernel's own and are always in range, but kPhase23 is
+    // a separate launch that re-reads topk_ids from global memory, so an id the caller left
+    // there -- a -1 masked row, most obviously -- would be an out-of-bounds LDS atomic that
+    // corrupts a neighbouring counter rather than faulting. One compare in a latency-bound
+    // phase is the cheaper side of that trade.
     for(int i = tid; i < total_routed_rows; i += BlockSize)
-        atomicAdd(&s_cnt[s_expert[i]], 1);
+    {
+        const int eid = s_expert[i];
+        if(eid >= 0 && eid < E_tot)
+            atomicAdd(&s_cnt[eid], 1);
+    }
     __syncthreads();
 
     // Padded two-level inclusive scan over 2*BlockSize slots (>= E): each thread

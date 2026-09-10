@@ -83,8 +83,12 @@ void fused_moe_router_impl(
     const int M    = gating.size(0);
     const int E    = num_experts;
     const int cols = hidden.size(1);
-    constexpr int BlockSize = 256;
-    constexpr int TD        = 16; // cols / TD must equal BlockSize
+    // TD is the MXFP4 quant's per-thread vector width and is fixed; the block size follows
+    // the model dim so one thread still covers exactly one vector of the row in a single
+    // pass (cols == BlockSize * TD). Pinning BlockSize instead would pin the model dim,
+    // which is what restricted this entry to 4096.
+    constexpr int TD        = 16;
+    const int     BlockSize = cols / TD;
     // Instantiated shared-expert counts. Every model that fuses shared experts
     // today has exactly one; a wider ladder is dead template instantiations.
     constexpr int kMaxShared = 1;
@@ -97,7 +101,12 @@ void fused_moe_router_impl(
     TORCH_CHECK(ep_size >= 1 && ep_rank >= 0 && ep_rank < ep_size,
                 "fused_moe_router_impl: need 0 <= ep_rank < ep_size, got ep_rank=",
                 ep_rank, " ep_size=", ep_size);
-    TORCH_CHECK(cols == BlockSize * TD, "fused_moe_router_impl: cols must be ", BlockSize * TD);
+    // Dims this entry is instantiated for: 4096 (BlockSize 256) and 6144 (BlockSize 384).
+    // Both are whole numbers of waves and satisfy E <= 2*BlockSize below. Serving another
+    // dim is one more tag in dispatch_block -- nothing in the kernel body is dim-specific.
+    TORCH_CHECK(cols % TD == 0 && (BlockSize == 256 || BlockSize == 384),
+                "fused_moe_router_impl: model dim ", cols,
+                " is not instantiated; served dims are 4096 and 6144");
     // The histogram, the scan and the local-id table are all indexed by emitted
     // expert id, so it is the full slot count -- not the routed count -- that
     // has to fit s_scan's 2*BlockSize slots.
@@ -264,18 +273,21 @@ void fused_moe_router_impl(
     const bool bias_is_f32 = bias.scalar_type() == at::kFloat;
 
     // One body, instantiated per (bias dtype, shared-expert count).
-    auto launch_all = [&](auto bias_tag, auto nshared_tag) {
+    auto launch_all = [&](auto bias_tag, auto nshared_tag, auto bs_tag) {
         using DB                = decltype(bias_tag);
         constexpr int NSHARED   = decltype(nshared_tag)::value;
+        // Compile-time twin of the runtime BlockSize checked above; the kernel is
+        // templated on it, so the two must agree and dispatch_block is what makes them.
+        constexpr int kBlock    = decltype(bs_tag)::value;
         const DB* b = reinterpret_cast<const DB*>(bias.data_ptr());
         auto* kern = aiter::fmr::fused_moe_routing_kernel<
-            BlockSize, TD, opus::bf16_t, aiter::fmr::kFused, DB, NSHARED>;
+            kBlock, TD, opus::bf16_t, aiter::fmr::kFused, DB, NSHARED>;
         (void)hipFuncSetAttribute(reinterpret_cast<const void*>(kern),
                                   hipFuncAttributeMaxDynamicSharedMemorySize, shmem);
         // The grid barrier deadlocks unless every block is co-resident.
         int max_blocks_per_cu = 0;
         (void)hipOccupancyMaxActiveBlocksPerMultiprocessor(
-            &max_blocks_per_cu, reinterpret_cast<const void*>(kern), BlockSize, shmem);
+            &max_blocks_per_cu, reinterpret_cast<const void*>(kern), kBlock, shmem);
         TORCH_CHECK(max_blocks_per_cu >= 1,
                     "fused_moe_router_impl: kernel not resident (shmem=", shmem, ")");
         // Above the crossover, run the two halves as separate launches. Same
@@ -303,9 +315,9 @@ void fused_moe_router_impl(
         if(split)
         {
             auto* k1 = aiter::fmr::fused_moe_routing_kernel<
-                BlockSize, TD, opus::bf16_t, aiter::fmr::kPhase1, DB, NSHARED>;
+                kBlock, TD, opus::bf16_t, aiter::fmr::kPhase1, DB, NSHARED>;
             auto* k23 = aiter::fmr::fused_moe_routing_kernel<
-                BlockSize, TD, opus::bf16_t, aiter::fmr::kPhase23, DB, NSHARED>;
+                kBlock, TD, opus::bf16_t, aiter::fmr::kPhase23, DB, NSHARED>;
             (void)hipFuncSetAttribute(reinterpret_cast<const void*>(k1),
                                       hipFuncAttributeMaxDynamicSharedMemorySize, shmem);
             (void)hipFuncSetAttribute(reinterpret_cast<const void*>(k23),
@@ -322,15 +334,15 @@ void fused_moe_router_impl(
         unit_size, group_size, cols, max_blocks, max_tokens, need_renorm,                    \
         (float)routed_scaling_factor, (float)shared_expert_weight, (int)ep_rank,             \
         (int)ep_size
-            k1<<<G1, BlockSize, shmem, stream>>>(FMR_ARGS);
-            k23<<<G23, BlockSize, shmem, stream>>>(FMR_ARGS);
+            k1<<<G1, kBlock, shmem, stream>>>(FMR_ARGS);
+            k23<<<G23, kBlock, shmem, stream>>>(FMR_ARGS);
 #undef FMR_ARGS
             return; // returns from the lambda, not fused_moe_router_impl
         }
         // Only the fused path grid-barriers, so only it needs co-residency.
         TORCH_CHECK(GRID <= max_blocks_per_cu * prop.multiProcessorCount,
                     "fused_moe_router_impl: GRID ", GRID, " exceeds co-resident capacity");
-        kern<<<GRID, BlockSize, shmem, stream>>>(
+        kern<<<GRID, kBlock, shmem, stream>>>(
             g, b, h, topk_weights.data_ptr<float>(), topk_ids.data_ptr<int>(),
             sorted_ids.data_ptr<int>(), sorted_weights.data_ptr<float>(),
             sorted_expert_ids.data_ptr<int>(), num_valid_ids.data_ptr<int>(),
@@ -345,11 +357,19 @@ void fused_moe_router_impl(
     // NSHARED == 0 must reach the same instantiation as before this feature
     // existed, so the shared-expert lanes fold out entirely and the no-shared
     // config keeps its register count.
+    // Selection is by shape alone -- the served dim decides the block, nothing consults a
+    // model name, a path registry or an environment threshold.
+    auto dispatch_block = [&](auto bias_tag, auto nshared_tag) {
+        if(BlockSize == 256)
+            launch_all(bias_tag, nshared_tag, std::integral_constant<int, 256>{});
+        else
+            launch_all(bias_tag, nshared_tag, std::integral_constant<int, 384>{});
+    };
     auto dispatch_shared = [&](auto bias_tag) {
         if(n_shared == 0)
-            launch_all(bias_tag, std::integral_constant<int, 0>{});
+            dispatch_block(bias_tag, std::integral_constant<int, 0>{});
         else
-            launch_all(bias_tag, std::integral_constant<int, 1>{});
+            dispatch_block(bias_tag, std::integral_constant<int, 1>{});
     };
 
     if(bias_is_f32)

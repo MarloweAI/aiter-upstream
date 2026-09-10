@@ -1411,7 +1411,13 @@ FUSED_MOE_ROUTER_MAX_TOKENS = 128
 # shared rows take the lanes just past topk, so both must fit kWaveSize. The
 # pair scan gives each of BlockSize threads two expert slots.
 FUSED_MOE_ROUTER_MAX_TOPK = 64  # kWaveSize
-FUSED_MOE_ROUTER_MAX_EXPERTS = 512  # 2 * BlockSize
+FUSED_MOE_ROUTER_MAX_EXPERTS = 512  # 2 * BlockSize, at the widest served block
+
+# Model dims the entry is instantiated for. The quant gives each thread one TD == 16
+# vector of the row, so the block is dim / 16 and the dim decides the block rather than
+# the other way round: 4096 -> 256 threads, 6144 -> 384. A dim outside this set is
+# refused by the C++ entry, so the two lists must agree.
+FUSED_MOE_ROUTER_HIDDEN_DIMS = (4096, 6144)
 
 
 def _cfg_topk(topk: int, n_shared: int, expert_mask: torch.Tensor | None) -> int:
@@ -1452,7 +1458,7 @@ def fused_moe_router_config_supported(
         and GateMode(gate_mode) == GateMode.SEPARATED
         and w1_dtype == dtypes.fp4x2
         and hidden_dtype == dtypes.bf16
-        and hidden_dim == 4096
+        and hidden_dim in FUSED_MOE_ROUTER_HIDDEN_DIMS
     )
 
 
