@@ -2,6 +2,7 @@
 
 #include <algorithm>
 #include <climits>
+#include <cstdio>
 #include <cstdlib>
 #include <type_traits>
 
@@ -299,6 +300,14 @@ void fused_moe_router_impl(
             &max_blocks_per_cu, reinterpret_cast<const void*>(kern), kBlock, shmem);
         TORCH_CHECK(max_blocks_per_cu >= 1,
                     "fused_moe_router_impl: kernel not resident (shmem=", shmem, ")");
+        // DIAGNOSTIC, droppable: the envelope readout wants co-residency per token count,
+        // and whether a call ran fused or split is otherwise only inferable from timing.
+        if(const char* dbg = std::getenv("AITER_MOE_ROUTING_VERBOSE"); dbg && *dbg)
+            fprintf(stderr,
+                    "[fmr] M=%d cols=%d block=%d E=%d topk=%d shmem=%zu "
+                    "max_blocks_per_cu=%d CUs=%d GRID=%d\n",
+                    M, cols, kBlock, E, topk, shmem, max_blocks_per_cu,
+                    prop.multiProcessorCount, GRID);
         // Above the crossover, run the two halves as separate launches. Same
         // device code either way -- the split point IS the barrier -- but a
         // kernel boundary needs no co-residency, so each half gets a grid sized
@@ -321,6 +330,9 @@ void fused_moe_router_impl(
             split_min = (int)v;
         }
         const bool split = M >= split_min;
+        if(const char* dbg = std::getenv("AITER_MOE_ROUTING_VERBOSE"); dbg && *dbg)
+            fprintf(stderr, "[fmr] M=%d path=%s split_min=%d\n", M,
+                    split ? "split" : "fused", split_min);
         if(split)
         {
             auto* k1 = aiter::fmr::fused_moe_routing_kernel<
