@@ -1419,6 +1419,17 @@ FUSED_MOE_ROUTER_MAX_EXPERTS = 512  # 2 * BlockSize, at the widest served block
 # refused by the C++ entry, so the two lists must agree.
 FUSED_MOE_ROUTER_HIDDEN_DIMS = (4096, 6144)
 
+# Token counts the fused router has been measured to beat the unfused stage chain at, on
+# gfx950 at the dims above. The set is the measurement, and the constant is derived from it
+# rather than written beside it, so the two cannot drift; test_max_validated_tokens_matches_
+# validated_set is what enforces that.
+#
+# Tuned rows are landed for exactly these token counts. Note that a missing row does NOT
+# refuse -- get_2stage_cfgs falls through to default heuristics -- so this constant, not the
+# presence of metadata, is what a caller must gate on.
+FUSED_MOE_ROUTER_VALIDATED_TOKENS = (1, 2, 4, 8, 16, 24, 32, 48, 64, 96, 128, 192, 256)
+AITER_FUSED_ROUTER_MAX_VALIDATED_TOKENS = max(FUSED_MOE_ROUTER_VALIDATED_TOKENS)
+
 
 def _cfg_topk(topk: int, n_shared: int, expert_mask: torch.Tensor | None) -> int:
     """Tuned-config topk key: the width the unfused path would look up.
