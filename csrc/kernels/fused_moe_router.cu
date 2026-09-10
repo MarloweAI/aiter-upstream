@@ -96,6 +96,24 @@ __device__ __forceinline__ float bf16f(const T& x)
     return opus::bf16_to_fp32(x);
 }
 
+// The reference sigmoid, computed the way aiter's own top-k reference computes it.
+//
+// The reference is 1/(1 + exp2(-log2(e) * x)) with the hardware reciprocal, and its log2(e)
+// is a *double*, so the multiply happens in double and is narrowed on the way into exp2f.
+// __expf(-x) with a float multiply is the fast approximate exponential and differs by about
+// an ulp on some inputs. That ulp propagates through the renormalised weight, and at the
+// top-k boundary it decides which expert is selected -- with E = 256 and topk = 8 the
+// 8th/9th scores land within an ulp of each other often enough that this is a routing
+// question, not a rounding one. Selection and weight must use the same form or the emitted
+// weight belongs to a different score than the one that won.
+#ifndef FMR_LOG2E
+#define FMR_LOG2E 1.44269504088896340736
+#endif
+__device__ __forceinline__ float ref_sigmoid(float x)
+{
+    return __builtin_amdgcn_rcpf(1.0f + exp2f(-FMR_LOG2E * x));
+}
+
 // Max experts per lane, covering E <= 512 (the entry's limit).
 static constexpr int kEptMax = 8;
 
@@ -251,7 +269,7 @@ __device__ __forceinline__ void phase1_topk_select(const DTYPE_I* __restrict__ g
         const int e = lane_id + j * kWaveSize;
         // Out-of-range lanes get the minimum key and can never win.
         key[j] = pack_argmax_key(
-            (e < E) ? (1.0f / (1.0f + __expf(-bf16f(g[j]))) + bf16f(b[j])) : -INFINITY,
+            (e < E) ? (ref_sigmoid(bf16f(g[j])) + bf16f(b[j])) : -INFINITY,
             (e < E) ? e : INT_MAX);
     }
 
@@ -287,7 +305,7 @@ __device__ __forceinline__ void phase1_topk_select(const DTYPE_I* __restrict__ g
 
     float w = 0.0f;
     if(lane_id < topk)
-        w = 1.0f / (1.0f + __expf(-bf16f(gating_row[winner_expert])));
+        w = ref_sigmoid(bf16f(gating_row[winner_expert]));
     if(need_renorm)
     {
         float s = w; // full 64-lane sum in DPP
