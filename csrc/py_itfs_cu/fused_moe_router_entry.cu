@@ -234,7 +234,14 @@ void fused_moe_router_impl(
         TORCH_CHECK(t.is_contiguous(),
                     "fused_moe_router_impl: ", name, " must be contiguous");
     };
-    check_bf16(gating, "gating");
+    // The activation must be bf16 -- it is what gets quantized. The router logits need not
+    // be: sglang#35055 makes the ROCm router GEMM emit fp32 to match CUDA, and coercing
+    // them back to bf16 here would reintroduce the rounding that fix removes. Dispatched
+    // on the real dtype, like the bias.
+    TORCH_CHECK(gating.scalar_type() == at::kFloat || gating.scalar_type() == at::kBFloat16,
+                "fused_moe_router_impl: gating must be float32 or bfloat16, got ",
+                gating.scalar_type());
+    TORCH_CHECK(gating.is_contiguous(), "fused_moe_router_impl: gating must be contiguous");
     check_bf16(hidden, "hidden");
     // The rest are reached through data_ptr<T>, which checks the dtype but not
     // the layout, or are cast to a byte type where only the layout matters.
@@ -259,8 +266,8 @@ void fused_moe_router_impl(
                     " elements, need M * (topk + fused shared) = ",
                     (int64_t)M * topk_total);
 
-    const opus::bf16_t* g = reinterpret_cast<const opus::bf16_t*>(gating.data_ptr());
     const opus::bf16_t* h = reinterpret_cast<const opus::bf16_t*>(hidden.data_ptr());
+    const bool gating_is_f32 = gating.scalar_type() == at::kFloat;
 
     // The bias is not necessarily bf16 and, unlike the stock
     // biased_grouped_topk wrapper, this path does not coerce it -- reading fp32
@@ -273,15 +280,17 @@ void fused_moe_router_impl(
     const bool bias_is_f32 = bias.scalar_type() == at::kFloat;
 
     // One body, instantiated per (bias dtype, shared-expert count).
-    auto launch_all = [&](auto bias_tag, auto nshared_tag, auto bs_tag) {
+    auto launch_all = [&](auto bias_tag, auto nshared_tag, auto bs_tag, auto gating_tag) {
         using DB                = decltype(bias_tag);
+        using DG                = decltype(gating_tag);
+        const DG* g = reinterpret_cast<const DG*>(gating.data_ptr());
         constexpr int NSHARED   = decltype(nshared_tag)::value;
         // Compile-time twin of the runtime BlockSize checked above; the kernel is
         // templated on it, so the two must agree and dispatch_block is what makes them.
         constexpr int kBlock    = decltype(bs_tag)::value;
         const DB* b = reinterpret_cast<const DB*>(bias.data_ptr());
         auto* kern = aiter::fmr::fused_moe_routing_kernel<
-            kBlock, TD, opus::bf16_t, aiter::fmr::kFused, DB, NSHARED>;
+            kBlock, TD, opus::bf16_t, aiter::fmr::kFused, DB, NSHARED, DG>;
         (void)hipFuncSetAttribute(reinterpret_cast<const void*>(kern),
                                   hipFuncAttributeMaxDynamicSharedMemorySize, shmem);
         // The grid barrier deadlocks unless every block is co-resident.
@@ -315,9 +324,9 @@ void fused_moe_router_impl(
         if(split)
         {
             auto* k1 = aiter::fmr::fused_moe_routing_kernel<
-                kBlock, TD, opus::bf16_t, aiter::fmr::kPhase1, DB, NSHARED>;
+                kBlock, TD, opus::bf16_t, aiter::fmr::kPhase1, DB, NSHARED, DG>;
             auto* k23 = aiter::fmr::fused_moe_routing_kernel<
-                kBlock, TD, opus::bf16_t, aiter::fmr::kPhase23, DB, NSHARED>;
+                kBlock, TD, opus::bf16_t, aiter::fmr::kPhase23, DB, NSHARED, DG>;
             (void)hipFuncSetAttribute(reinterpret_cast<const void*>(k1),
                                       hipFuncAttributeMaxDynamicSharedMemorySize, shmem);
             (void)hipFuncSetAttribute(reinterpret_cast<const void*>(k23),
@@ -359,11 +368,17 @@ void fused_moe_router_impl(
     // config keeps its register count.
     // Selection is by shape alone -- the served dim decides the block, nothing consults a
     // model name, a path registry or an environment threshold.
+    auto dispatch_gating = [&](auto bias_tag, auto nshared_tag, auto bs_tag) {
+        if(gating_is_f32)
+            launch_all(bias_tag, nshared_tag, bs_tag, float{});
+        else
+            launch_all(bias_tag, nshared_tag, bs_tag, opus::bf16_t{});
+    };
     auto dispatch_block = [&](auto bias_tag, auto nshared_tag) {
         if(BlockSize == 256)
-            launch_all(bias_tag, nshared_tag, std::integral_constant<int, 256>{});
+            dispatch_gating(bias_tag, nshared_tag, std::integral_constant<int, 256>{});
         else
-            launch_all(bias_tag, nshared_tag, std::integral_constant<int, 384>{});
+            dispatch_gating(bias_tag, nshared_tag, std::integral_constant<int, 384>{});
     };
     auto dispatch_shared = [&](auto bias_tag) {
         if(n_shared == 0)

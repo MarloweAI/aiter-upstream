@@ -389,23 +389,24 @@ __device__ __forceinline__ void phase1_quant_token(opus::fp4_t* __restrict__ out
             CALL(8);                \
     } while(0)
 
-template <int BlockSize, int TD, int NSHARED, typename DTYPE_I, typename DTYPE_B>
+template <int BlockSize, int TD, int NSHARED, typename DTYPE_I, typename DTYPE_B,
+          typename DTYPE_G = DTYPE_I>
 __device__ __forceinline__ void
 phase1_token(opus::fp4_t* __restrict__ out, uint8_t* __restrict__ tok_scale,
-             const DTYPE_I* __restrict__ hidden, const DTYPE_I* __restrict__ gating,
+             const DTYPE_I* __restrict__ hidden, const DTYPE_G* __restrict__ gating,
              const DTYPE_B* __restrict__ bias, float* __restrict__ topk_weights,
              int* __restrict__ topk_ids, int token, int E, int topk, int cols, int group_size,
              int scaleN_pad, bool need_renorm, float rsf, float shared_w, int ep_rank,
              int ep_size)
 {
-    const DTYPE_I* gating_row = gating + (int64_t)token * E;
+    const DTYPE_G* gating_row = gating + (int64_t)token * E;
     const bool     sel  = (threadIdx.x >> 6) == 0;
 
-    DTYPE_I g[kEptMax];
+    DTYPE_G g[kEptMax];
     DTYPE_B b[kEptMax];
     if(sel)
     {
-#define FMR_LOAD(EPT) phase1_topk_load<EPT, DTYPE_I, DTYPE_B>(gating_row, bias, E, g, b)
+#define FMR_LOAD(EPT) phase1_topk_load<EPT, DTYPE_G, DTYPE_B>(gating_row, bias, E, g, b)
         FMR_EPT_DISPATCH(FMR_LOAD);
 #undef FMR_LOAD
     }
@@ -416,7 +417,7 @@ phase1_token(opus::fp4_t* __restrict__ out, uint8_t* __restrict__ tok_scale,
     if(sel)
     {
 #define FMR_SELECT(EPT)                                                                \
-    phase1_topk_select<EPT, NSHARED, DTYPE_I, DTYPE_B>(                                \
+    phase1_topk_select<EPT, NSHARED, DTYPE_G, DTYPE_B>(                                \
         gating_row, topk_weights, topk_ids, token, E, topk, need_renorm, rsf,          \
         shared_w, ep_rank, ep_size, g, b)
         FMR_EPT_DISPATCH(FMR_SELECT);
@@ -479,10 +480,15 @@ __device__ __forceinline__ void expert_rank_list(int* buf, const int* s_expert, 
 // The host picks by token count (kSplitMinTokens).
 enum FmrPart { kFused = 0, kPhase1 = 1, kPhase23 = 2 };
 
+// DTYPE_G is the router-logit type and is deliberately separate from DTYPE_I, the
+// activation type. sglang#35055 makes the ROCm router GEMM emit fp32 logits to match what
+// CUDA already computes, and rounding them to bf16 at the call to satisfy one shared type
+// would put back exactly the precision this kernel is supposed to preserve. The gate math
+// needs no change for it: bf16f() is the identity on float.
 template <int BlockSize, int TD, typename DTYPE_I, int PART = kFused,
-          typename DTYPE_B = DTYPE_I, int NSHARED = 0>
+          typename DTYPE_B = DTYPE_I, int NSHARED = 0, typename DTYPE_G = DTYPE_I>
 __global__ void __launch_bounds__(BlockSize)
-fused_moe_routing_kernel(const DTYPE_I* __restrict__ gating,   // [M, E]
+fused_moe_routing_kernel(const DTYPE_G* __restrict__ gating,   // [M, E] fp32 or bf16
                          const DTYPE_B* __restrict__ bias,     // [E] fp32 or bf16
                          const DTYPE_I* __restrict__ hidden,   // [M, cols]
                          float* __restrict__ topk_weights,     // [M, topk]
@@ -572,7 +578,7 @@ fused_moe_routing_kernel(const DTYPE_I* __restrict__ gating,   // [M, E]
     if constexpr(PART != kPhase23)
     for(int t = blockIdx.x; t < M; t += gridDim.x)
     {
-        phase1_token<BlockSize, TD, NSHARED, DTYPE_I, DTYPE_B>(
+        phase1_token<BlockSize, TD, NSHARED, DTYPE_I, DTYPE_B, DTYPE_G>(
             out, tok_scale, hidden, gating, bias, topk_weights, topk_ids, t, E, topk, cols,
             group_size, scaleN_pad, need_renorm, rsf, shared_w, ep_rank, ep_size);
         __syncthreads(); // the aliased scratch is reused each iteration

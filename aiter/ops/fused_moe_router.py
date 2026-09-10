@@ -57,7 +57,7 @@ def fused_moe_router_impl(
     ``num_expert_group == topk_group == 1``.
 
     Args:
-        gating: ``[M, num_experts]`` bf16 router logits.
+        gating: ``[M, num_experts]`` router logits, fp32 or bf16.
         bias: ``[num_experts]`` bf16 or fp32 e_score_correction_bias. Read as
             given; unlike the stock wrapper this path does not coerce it.
         hidden: ``[M, cols]`` bf16 activations to quantize.

@@ -1246,7 +1246,9 @@ def fused_moe_router(
 
     Args:
         hidden_states: ``[M, model_dim]`` bf16 activations.
-        gating_output: ``[M, global_expert]`` bf16 router logits.
+        gating_output: ``[M, global_expert]`` router logits, fp32 or bf16. Prefer
+            fp32: the ROCm router GEMM emits fp32 (sglang#35055) and the kernel
+            reads it without narrowing, so the scores match the CUDA reference.
         correction_bias: ``[global_expert]`` bf16 sigmoid score correction.
         w1: stage1 weights, ``[local_expert, inter_dim*2, model_dim]``.
         w2: stage2 weights, ``[local_expert, model_dim, inter_dim]``.
