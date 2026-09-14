@@ -1057,6 +1057,18 @@ FUSED_MOE_ROUTER_MAX_EXPERTS = 512  # 2 * BlockSize, at the widest served block
 # refused by the C++ entry, so the two lists must agree.
 FUSED_MOE_ROUTER_HIDDEN_DIMS = (4096, 6144)
 
+#: Token counts this entry has been verified at on served routing, for the GLM-shaped
+#: router (E=256+1 shared, topk=8+1, hidden 6144). Recorded here so a caller can read the
+#: verified set rather than infer it from the cap: FUSED_MOE_ROUTER_MAX_TOKENS is a
+#: capability maximum, and a tuned-metadata miss falls through to default heuristics
+#: rather than refusing, so this entry cannot itself restrict which widths are served.
+#: The gate has to be the caller's, and this is what it should be derived from.
+#:
+#: Verified: ids byte-exact, weights within one ulp, fp4 bytes and e8m0 scales byte-equal.
+#: At 12 and 16 the ids differ by two picks at bit-exact score ties with identical
+#: weights (see the tie-break note); the final MoE output is byte-identical throughout.
+FUSED_MOE_ROUTER_VALIDATED_TOKENS = (4, 8, 12, 16)
+
 
 def _cfg_topk(topk: int, n_shared: int, expert_mask: torch.Tensor | None) -> int:
     """Tuned-config topk key: the width the unfused path would look up.
