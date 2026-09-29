@@ -1,8 +1,14 @@
+import functools
+import json
 import math
+from pathlib import Path
 
 import torch
 import triton
 
+from aiter.ops.triton.gemm.batched import (
+    batched_gemm_a8w8_a_per_token_group_prequant_w_per_batched_tensor_quant as op_module,
+)
 from aiter.ops.triton.gemm.batched.batched_gemm_a8w8_a_per_token_group_prequant_w_per_batched_tensor_quant import (
     batched_gemm_a8w8_a_per_token_group_prequant_w_per_batched_tensor_quant,
 )
@@ -35,6 +41,9 @@ def bench_gemm_fn(
     has_bias: bool,
     transpose_bm: bool,
     transpose_bm_in: bool,
+    config: dict | None = None,
+    gluon_launch_config: dict | None = None,
+    profile_path: str | None = None,
 ):
     c_dtype = torch.bfloat16
     x, weight, w_scale, bias, y = generate_batched_gemm_a8w8_per_token_group_inputs(
@@ -70,13 +79,44 @@ def bench_gemm_fn(
             group_size=group_size,
             bias=bias,
             backend=backend,
+            config=config,
             dtype=c_dtype,
             YQ=y,
             transpose_bm=transpose_bm,
             transpose_bm_in=transpose_bm_in,
         )
 
-    ms = triton.testing.do_bench(fn, warmup=25, rep=100)
+    original_launch = op_module._gluon_small_m
+    if profile_path is not None and Path(profile_path).exists():
+        raise FileExistsError(f"Refusing to overwrite profile: {profile_path}")
+    if gluon_launch_config is not None:
+        assert backend == "gluon", "Launch diagnostics require --backend gluon"
+        assert set(gluon_launch_config) <= {"num_stages", "waves_per_eu"}
+        op_module._gluon_small_m = functools.partial(
+            original_launch, **gluon_launch_config
+        )
+    try:
+        if profile_path is not None:
+            # Eager warmup/JIT is outside capture and outside the profiler.
+            fn()
+            torch.cuda.synchronize()
+            with torch.profiler.profile(
+                activities=[
+                    torch.profiler.ProfilerActivity.CPU,
+                    torch.profiler.ProfilerActivity.CUDA,
+                ]
+            ) as prof:
+                fn()
+                torch.cuda.synchronize()
+            Path(profile_path).parent.mkdir(parents=True, exist_ok=True)
+            prof.export_chrome_trace(profile_path)
+            print(f"Profile only: {profile_path}; no clean timing reported.")
+            return float("nan")
+        # Native do_bench uses GPU events with a cache flush before each sample.
+        # The default return_mode is a mean, so request the median explicitly.
+        ms = triton.testing.do_bench(fn, warmup=25, rep=100, return_mode="median")
+    finally:
+        op_module._gluon_small_m = original_launch
 
     # Return exactly one scalar depending on which metric is active
     if metric == "time":
@@ -127,6 +167,9 @@ def run_model_benchmark(args):
             not args.no_bias,
             args.transpose_bm,
             args.transpose_bm_in,
+            args.config,
+            args.gluon_launch_config,
+            args.profile,
         )
 
     bench_batched_gemm_a8w8_per_token_group_prequant_w_per_batched_tensor_quant.run(
@@ -155,6 +198,9 @@ def run_shape_benchmark(args):
             not args.no_bias,
             args.transpose_bm,
             args.transpose_bm_in,
+            args.config,
+            args.gluon_launch_config,
+            args.profile,
         )
 
     bench_batched_gemm_a8w8_per_token_group_prequant_w_per_batched_tensor_quant.run(
@@ -183,6 +229,24 @@ def parse_args(args: list[str] | None = None):
         help="Kernel backend; default: the wrapper's own choice by arch and shape.",
     )
     parser.add_argument(
+        "--config",
+        type=json.loads,
+        default=None,
+        help="Explicit Triton config JSON; use --backend triton.",
+    )
+    parser.add_argument(
+        "--gluon-launch-config",
+        type=json.loads,
+        default=None,
+        help="Gluon launch diagnostic JSON (num_stages and waves_per_eu only).",
+    )
+    parser.add_argument(
+        "--profile",
+        type=str,
+        default=None,
+        help="Write one warmed-up invocation's Chrome trace; no clean timing.",
+    )
+    parser.add_argument(
         "--group-size",
         type=int,
         default=128,
@@ -209,7 +273,21 @@ def parse_args(args: list[str] | None = None):
         dest="transpose_bm_in",
         help="Transpose batch and M dimensions in the input tensor.",
     )
-    return get_ff_args(parser, args=args)
+    parsed, defaults = get_ff_args(parser, args=args)
+    if parsed.config is not None and not isinstance(parsed.config, dict):
+        parser.error("--config must be a JSON object")
+    if parsed.gluon_launch_config is not None:
+        if not isinstance(parsed.gluon_launch_config, dict) or not set(
+            parsed.gluon_launch_config
+        ) <= {"num_stages", "waves_per_eu"}:
+            parser.error(
+                "--gluon-launch-config accepts num_stages and waves_per_eu only"
+            )
+        if parsed.backend != "gluon":
+            parser.error("--gluon-launch-config requires --backend gluon")
+    if parsed.profile and (parsed.model or not parsed.shape or len(parsed.shape) != 4):
+        parser.error("--profile requires one --shape B M N K and no --model")
+    return parsed, defaults
 
 
 def main(args: list[str] | None = None) -> None:

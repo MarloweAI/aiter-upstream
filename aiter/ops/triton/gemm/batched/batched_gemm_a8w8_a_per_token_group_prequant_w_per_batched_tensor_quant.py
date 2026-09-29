@@ -57,17 +57,57 @@ def _gluon_small_m_available():
     )
 
 
-def _gluon_small_m_supports(X, WQ, YQ, M, group_size, bias, dtype):
+def _addressed_byte_span(tensor):
+    """Bytes from the view's data pointer through its last addressed element."""
+    if tensor.numel() == 0 or any(stride < 0 for stride in tensor.stride()):
+        return 0
+    return (
+        1
+        + sum(
+            (size - 1) * stride for size, stride in zip(tensor.shape, tensor.stride())
+        )
+    ) * tensor.element_size()
+
+
+def _overlaps_output(output, operand):
+    """Conservative byte-range check, including holes in strided views."""
+    output_start, operand_start = output.data_ptr(), operand.data_ptr()
+    return output_start < operand_start + _addressed_byte_span(
+        operand
+    ) and operand_start < output_start + _addressed_byte_span(output)
+
+
+def _nonoverlapping_strides(tensor):
+    """Accept ordinary dense/transposed layouts and conservatively reject overlap."""
+    span = 1
+    for stride, size in sorted(zip(tensor.stride(), tensor.shape)):
+        if size > 1:
+            if stride < span:
+                return False
+            span += (size - 1) * stride
+    return True
+
+
+def _gluon_small_m_supports(X, WQ, YQ, M, group_size, bias, dtype, w_scale):
     """Whether the gfx950 Gluon small-M kernel implements this call; WQ is (B, N, K)."""
     # 16-byte aligned rows keep the direct-to-LDS copies at their 16-byte width, and
     # the kernel's offsets are int32.
     return (
         _gluon_small_m_available()
+        and X.is_cuda
+        and WQ.is_cuda
+        and w_scale.is_cuda
+        and X.device == WQ.device == w_scale.device
+        and w_scale.dtype == torch.float32
+        and w_scale.numel() == 1
+        and M > 0
         and M % 16 == 0
         and X.dtype == torch.bfloat16
         and X.stride(2) == 1
         and X.stride(0) % 16 == 0
         and X.stride(1) % 16 == 0
+        and X.stride(0) > 0
+        and X.stride(1) > 0
         and X.data_ptr() % 16 == 0
         and WQ.dtype == torch.float8_e4m3fn
         and WQ.shape[1] % 32 == 0
@@ -78,10 +118,24 @@ def _gluon_small_m_supports(X, WQ, YQ, M, group_size, bias, dtype):
         and group_size == 128
         and bias is None
         and dtype == torch.bfloat16
-        and (YQ is None or YQ.stride(2) == 1)
-        and X.numel() * X.element_size() < 2**31
-        and WQ.numel() * WQ.element_size() < 2**31
-        and X.numel() // X.shape[2] * WQ.shape[1] * 2 < 2**31
+        and (
+            YQ is None
+            or (
+                YQ.is_cuda
+                and YQ.device == X.device
+                and YQ.dtype == torch.bfloat16
+                and YQ.stride(2) == 1
+                and all(stride > 0 for stride in YQ.stride())
+                and _nonoverlapping_strides(YQ)
+                and _addressed_byte_span(YQ) < 2**31
+                and not any(
+                    _overlaps_output(YQ, operand) for operand in (X, WQ, w_scale)
+                )
+            )
+        )
+        and _addressed_byte_span(X) < 2**31
+        and _addressed_byte_span(WQ) < 2**31
+        and M * WQ.shape[0] * WQ.shape[1] * 2 < 2**31
     )
 
 
@@ -95,7 +149,9 @@ def _disable_gluon_small_m(error):
     )
 
 
-def _gluon_small_m(X, WQ, YQ, w_scale, M, transpose_bm_in, transpose_bm):
+def _gluon_small_m(
+    X, WQ, YQ, w_scale, M, transpose_bm_in, transpose_bm, **launch_options
+):
     """Launches the gfx950 Gluon small-M kernel; WQ is (B, N, K)."""
     from aiter.ops.triton._gluon_kernels.gfx950.gemm.batched.batched_gemm_a8w8_a_per_token_group_prequant_w_per_batched_tensor_quant import (
         _batched_gemm_a8w8_a_per_token_group_prequant_w_per_batched_tensor_quant_small_m_kernel as kernel,
@@ -105,19 +161,23 @@ def _gluon_small_m(X, WQ, YQ, w_scale, M, transpose_bm_in, transpose_bm):
     # The kernel reads each FP8 weight row as K // 2 16-bit words and computes one
     # 16x32 output tile per workgroup.
     w_words = WQ.view(torch.bfloat16)
-    kernel[(M // 16, N // 32, B)](
-        X,
-        w_words,
-        YQ,
-        w_scale,
-        X.stride(0) if not transpose_bm_in else X.stride(1),
-        X.stride(1) if not transpose_bm_in else X.stride(0),
-        w_words.stride(0),
-        w_words.stride(1),
-        YQ.stride(0) if not transpose_bm else YQ.stride(1),
-        YQ.stride(1) if not transpose_bm else YQ.stride(0),
-        num_warps=2,
-    )
+    # Triton launches on the current device/stream. Select the operand's device so
+    # same-device tensors remain correct when another device is current.
+    with torch.cuda.device(X.device):
+        kernel[(M // 16, N // 32, B)](
+            X,
+            w_words,
+            YQ,
+            w_scale,
+            X.stride(0) if not transpose_bm_in else X.stride(1),
+            X.stride(1) if not transpose_bm_in else X.stride(0),
+            w_words.stride(0),
+            w_words.stride(1),
+            YQ.stride(0) if not transpose_bm else YQ.stride(1),
+            YQ.stride(1) if not transpose_bm else YQ.stride(0),
+            num_warps=2,
+            **launch_options,
+        )
 
 
 def batched_gemm_a8w8_a_per_token_group_prequant_w_per_batched_tensor_quant(
@@ -158,7 +218,10 @@ def batched_gemm_a8w8_a_per_token_group_prequant_w_per_batched_tensor_quant(
             Triton kernel otherwise. "gluon" forces it and takes no config; it needs gfx950,
             M % 16 == 0, BF16 X and output, contiguous FP8 e4m3 WQ, N % 32 == 0, K == 512,
             group_size == 128, no bias, unit stride in K for X and in N for YQ, 16-byte aligned X,
-            X rows and WQ, and X and the output each under 2 GiB.
+            X rows and WQ, addressed input/weight/output spans under 2 GiB, same-device
+            CUDA operands, a scalar FP32 weight scale and output not overlapping inputs.
+            Warm up eagerly before graph capture. A default compile failure falls back to
+            Triton; this does not guarantee recovery from a failed launch during capture.
 
     Returns:
         torch.Tensor: Output batch with shape (B, M, N) or (M, B, N) if transpose_bm=True.
@@ -192,7 +255,7 @@ def batched_gemm_a8w8_a_per_token_group_prequant_w_per_batched_tensor_quant(
             if config is None
             and M in _GLUON_SMALL_M.get((B, N, K), ())
             and not _gluon_small_m_failed
-            and _gluon_small_m_supports(X, WQ, YQ, M, group_size, bias, dtype)
+            and _gluon_small_m_supports(X, WQ, YQ, M, group_size, bias, dtype, w_scale)
             else "triton"
         )
     assert backend in (
@@ -204,7 +267,7 @@ def batched_gemm_a8w8_a_per_token_group_prequant_w_per_batched_tensor_quant(
             config is None
         ), "config applies to the Triton kernel; pass backend='triton' to use it"
         assert _gluon_small_m_supports(
-            X, WQ, YQ, M, group_size, bias, dtype
+            X, WQ, YQ, M, group_size, bias, dtype, w_scale
         ), "Gluon backend: unsupported arch, Triton, dtype, shape, size, bias, alignment or layout (see docstring)"
 
     WQ = WQ.transpose(1, 2)

@@ -1,6 +1,7 @@
 # SPDX-License-Identifier: MIT
 # Copyright (C) 2024-2026, Advanced Micro Devices, Inc. All rights reserved.
 
+import functools
 import types
 
 import pytest
@@ -94,6 +95,52 @@ def run_torch(x, weight, w_scale, bias=None, dtype=torch.bfloat16, transpose_bm=
     if transpose_bm:
         out = out.transpose(0, 1)
     return out.to(dtype)
+
+
+def run_group_quantized_fp32(x, weight, w_scale, transpose_bm=True):
+    """Independent oracle: exact FP8 group quantization, FP32 GEMM/accumulation."""
+    out = torch.zeros(
+        (x.shape[0], x.shape[1], weight.shape[1]), device=x.device, dtype=torch.float32
+    )
+    for group in range(4):
+        first, last = group * 128, (group + 1) * 128
+        a = x[..., first:last].float()
+        scale = a.abs().amax(-1, keepdim=True).clamp_min(1e-10) * (1.0 / 448.0)
+        quantized = (a * scale.reciprocal()).clamp(-448, 448).to(torch.float8_e4m3fn)
+        out += (
+            torch.bmm(
+                quantized.float(), weight[..., first:last].float().transpose(1, 2)
+            )
+            * scale
+        )
+    out *= w_scale
+    return out.transpose(0, 1) if transpose_bm else out
+
+
+def run_full_precision_fp32(x, weight, w_scale, transpose_bm=True):
+    """Diagnostic only: no activation quantization or BF16 intermediate rounding."""
+    out = torch.bmm(x.float(), weight.float().transpose(1, 2)) * w_scale
+    return out.transpose(0, 1) if transpose_bm else out
+
+
+def _nrmse(actual, reference):
+    return (
+        actual.float() - reference
+    ).square().mean().sqrt() / reference.square().mean().sqrt().clamp_min(1e-12)
+
+
+def check_group_quantized_fp32(actual, x, weight, scale, transpose_bm=True):
+    """Reusable untimed gate; full-precision error is a separate diagnostic."""
+    reference = run_group_quantized_fp32(x, weight, scale, transpose_bm)
+    torch.testing.assert_close(actual.float(), reference, atol=0.02, rtol=0.02)
+    error = _nrmse(actual, reference).item()
+    assert error <= 0.01, f"Quantized reference NRMSE {error} exceeds 1%"
+    full_precision = run_full_precision_fp32(x, weight, scale, transpose_bm)
+    return {
+        "quantized_nrmse": error,
+        "quantized_max_abs": (actual.float() - reference).abs().max().item(),
+        "full_precision_diagnostic_nrmse": _nrmse(actual, full_precision).item(),
+    }
 
 
 def run_triton(
@@ -197,6 +244,199 @@ SMALL_M_SHAPE = (8, 256, 512)
 SMALL_M_DISPATCH = (64,)
 
 
+class _TensorMetadata:
+    """CPU-only metadata stand-in; no kernel, CUDA query or backing allocation."""
+
+    def __init__(self, shape, dtype, pointer, device="cuda:0", strides=None):
+        self.shape = shape
+        self.dtype = dtype
+        self.device = torch.device(device)
+        self.is_cuda = self.device.type == "cuda"
+        self.pointer = pointer
+        if strides is None:
+            reversed_strides, span = [], 1
+            for size in reversed(shape):
+                reversed_strides.append(span)
+                span *= size
+            strides = tuple(reversed(reversed_strides))
+        self.strides = strides
+
+    def stride(self, axis=None):
+        return self.strides if axis is None else self.strides[axis]
+
+    def data_ptr(self):
+        return self.pointer
+
+    def numel(self):
+        product = 1
+        for size in self.shape:
+            product *= size
+        return product
+
+    def element_size(self):
+        return {
+            torch.bfloat16: 2,
+            torch.float16: 2,
+            torch.float32: 4,
+            torch.float8_e4m3fn: 1,
+        }[self.dtype]
+
+    def is_contiguous(self):
+        expected = _TensorMetadata(self.shape, self.dtype, self.pointer).stride()
+        return self.stride() == expected
+
+    def storage_offset(self):
+        return 0
+
+
+def _metadata_inputs(b=8):
+    return (
+        _TensorMetadata((64, b, 512), torch.bfloat16, 0x10000),
+        _TensorMetadata((b, 256, 512), torch.float8_e4m3fn, 0x100000000),
+        _TensorMetadata((), torch.float32, 0x10000000000),
+    )
+
+
+def _supports(x, weight, output, scale):
+    return op_module._gluon_small_m_supports(
+        x, weight, output, 64, 128, None, torch.bfloat16, scale
+    )
+
+
+@pytest.mark.parametrize(
+    "case",
+    [
+        "valid",
+        "x_span",
+        "y_span",
+        "x_alignment",
+        "weight_alignment",
+        "output_dtype",
+        "output_device",
+        "weight_device",
+        "scale_device",
+        "cpu_scale",
+        "scale_dtype",
+        "scale_vector",
+        "alias_x",
+        "alias_weight",
+        "alias_scale",
+        "output_overlap",
+    ],
+)
+def test_gluon_small_m_buffer_contract(case, monkeypatch):
+    monkeypatch.setattr(op_module, "_gluon_small_m_available", lambda: True)
+    x, weight, scale = _metadata_inputs()
+    output = _TensorMetadata((64, 8, 256), torch.bfloat16, 0x200000)
+    if case == "x_span":
+        x.strides = (2**25, 512, 1)
+    elif case == "y_span":
+        output.strides = (2**25, 256, 1)
+    elif case == "x_alignment":
+        x.pointer += 2
+    elif case == "weight_alignment":
+        weight.pointer += 1
+    elif case == "output_dtype":
+        output.dtype = torch.float32
+    elif case.endswith("device"):
+        {"output_device": output, "weight_device": weight, "scale_device": scale}[
+            case
+        ].device = torch.device("cuda:1")
+    elif case == "cpu_scale":
+        scale.is_cuda = False
+        scale.device = torch.device("cpu")
+    elif case == "scale_dtype":
+        scale.dtype = torch.bfloat16
+    elif case == "scale_vector":
+        scale.shape, scale.strides = (8,), (1,)
+    elif case.startswith("alias_"):
+        output.pointer = {"alias_x": x, "alias_weight": weight, "alias_scale": scale}[
+            case
+        ].pointer
+    elif case == "output_overlap":
+        output.strides = (256, 256, 1)
+    assert _supports(x, weight, output, scale) == (case == "valid")
+
+
+def test_gluon_small_m_strided_span_boundary(monkeypatch):
+    monkeypatch.setattr(op_module, "_gluon_small_m_available", lambda: True)
+    x, weight, scale = _metadata_inputs()
+    x.strides = (2**24, 512, 1)
+    assert x.numel() * x.element_size() < 2**31
+    assert _supports(x, weight, None, scale)
+    x.strides = (2**25, 512, 1)
+    assert x.numel() * x.element_size() < 2**31
+    assert op_module._addressed_byte_span(x) > 2**31
+    assert not _supports(x, weight, None, scale)
+
+
+def test_gluon_small_m_quantized_oracle_cpu():
+    """An exactly representable fixture proves scaling and group boundaries."""
+    x = torch.zeros((1, 16, 512), dtype=torch.bfloat16)
+    for group, magnitude in enumerate((1.0, 2.0, 4.0, 8.0)):
+        x[..., group * 128 : (group + 1) * 128] = magnitude
+    weight = torch.ones((1, 32, 512), dtype=torch.float32).to(torch.float8_e4m3fn)
+    scale = torch.tensor(0.25)
+    reference = run_group_quantized_fp32(x, weight, scale, transpose_bm=False)
+    # Each constant group quantizes to 448 exactly and dequantizes to its input.
+    expected = torch.full((1, 16, 32), 128 * (1 + 2 + 4 + 8) * 0.25)
+    torch.testing.assert_close(reference, expected, atol=1e-4, rtol=1e-6)
+    x.zero_()
+    assert torch.count_nonzero(run_group_quantized_fp32(x, weight, scale)) == 0
+
+
+def test_gluon_small_m_benchmark_median(monkeypatch):
+    """Exercise the native benchmark's actual clean path without a GPU timer."""
+    from op_tests.op_benchmarks.triton import (
+        bench_batched_gemm_a8w8_a_per_token_group_prequant_w_per_batched_tensor_quant as benchmark,
+    )
+
+    x = torch.zeros((8, 64, 512), dtype=torch.bfloat16)
+    weight = torch.zeros((8, 256, 512), dtype=torch.float8_e4m3fn)
+    output = torch.empty((64, 8, 256), dtype=torch.bfloat16)
+    monkeypatch.setattr(
+        benchmark,
+        "generate_batched_gemm_a8w8_per_token_group_inputs",
+        lambda *args, **kwargs: (x, weight, torch.ones(()), None, output),
+    )
+    calls = []
+
+    def operation(*args, **kwargs):
+        calls.append(kwargs)
+        return output
+
+    def do_bench(fn, **kwargs):
+        assert kwargs == {"warmup": 25, "rep": 100, "return_mode": "median"}
+        fn()
+        return 0.0123
+
+    monkeypatch.setattr(
+        benchmark,
+        "batched_gemm_a8w8_a_per_token_group_prequant_w_per_batched_tensor_quant",
+        operation,
+    )
+    monkeypatch.setattr(triton.testing, "do_bench", do_bench)
+    launch = op_module._gluon_small_m
+    result = benchmark.bench_gemm_fn(
+        8,
+        64,
+        256,
+        512,
+        "time",
+        "gluon",
+        "TN",
+        128,
+        False,
+        True,
+        True,
+        gluon_launch_config={"num_stages": 1, "waves_per_eu": 0},
+    )
+    assert result == 0.0123
+    assert calls[0]["backend"] == "gluon"
+    assert calls[0]["transpose_bm_in"] is True
+    assert op_module._gluon_small_m is launch
+
+
 def _require_gfx950():
     if DEVICE_ARCH != "gfx950":
         pytest.skip("The Gluon small-M kernel requires gfx950.")
@@ -248,31 +488,103 @@ def _count_launches(monkeypatch):
     return counts
 
 
-@pytest.mark.parametrize("m", [16, 32, 64, 128])
+@pytest.mark.parametrize("m", [16, 32, 64, 128, 256, 512, 1024])
 @pytest.mark.parametrize("transpose_bm_in", [True, False])
 @pytest.mark.parametrize("transpose_bm", [True, False])
-def test_gluon_small_m(m, transpose_bm_in, transpose_bm):
+@pytest.mark.parametrize("output", [True, False])
+def test_gluon_small_m(m, transpose_bm_in, transpose_bm, output):
     _require_gfx950()
     x, weight, w_scale, _, y = _small_m_inputs(m, transpose_bm=transpose_bm)
-    # Signed values, one large value in each 128-element group of the first batch
-    # entry, and an all-zero first row, which takes the 1e-10 scale floor.
-    x = x - 0.05
-    x[0, :, ::128] = 4.0
+    # Signed operands and independently scaled groups, including the zero-row floor.
+    x = torch.randn_like(x)
+    for group, magnitude in enumerate((0.001, 0.1, 1.0, 10.0)):
+        x[..., group * 128 : (group + 1) * 128] *= magnitude
     x[:, 0] = 0
+    weight = (
+        torch.randn(weight.shape, device=weight.device)
+        .mul_(40)
+        .clamp_(-448, 448)
+        .to(weight.dtype)
+    )
+    w_scale.fill_(0.0003792898787651211)
     x_in = x.transpose(0, 1).contiguous() if transpose_bm_in else x
+    originals = (x_in.clone(), weight.view(torch.uint8).clone(), w_scale.clone())
     kwargs = {"transpose_bm": transpose_bm, "transpose_bm_in": transpose_bm_in}
     actual = batched_gemm_a8w8_a_per_token_group_prequant_w_per_batched_tensor_quant(
-        x_in, weight, w_scale, YQ=y, backend="gluon", **kwargs
+        x_in, weight, w_scale, YQ=y if output else None, backend="gluon", **kwargs
     )
     expected = batched_gemm_a8w8_a_per_token_group_prequant_w_per_batched_tensor_quant(
         x_in, weight, w_scale, backend="triton", **kwargs
     )
-    reference = run_torch(x, weight, w_scale, transpose_bm=transpose_bm)
+    reference = run_group_quantized_fp32(x, weight, w_scale, transpose_bm=transpose_bm)
+    full_precision = run_full_precision_fp32(
+        x, weight, w_scale, transpose_bm=transpose_bm
+    )
 
-    assert actual is y
+    if output:
+        assert actual is y
     # Same quantization as the Triton kernel; only FP32 summation order differs.
     torch.testing.assert_close(actual, expected, atol=1e-2, rtol=1e-2)
-    triton.testing.assert_close(reference, actual, atol=0.1, rtol=0.1)
+    torch.testing.assert_close(actual.float(), reference, atol=0.02, rtol=0.02)
+    assert _nrmse(actual, reference) <= 0.01
+    torch.testing.assert_close(expected.float(), reference, atol=0.02, rtol=0.02)
+    assert _nrmse(expected, reference) <= 0.01
+    assert torch.isfinite(full_precision).all()
+    print(
+        f"M={m}: quantized NRMSE={_nrmse(actual, reference).item():.6g}; full-precision diagnostic NRMSE={_nrmse(actual, full_precision).item():.6g}"
+    )
+    for original, current in zip(originals, (x_in, weight.view(torch.uint8), w_scale)):
+        torch.testing.assert_close(current, original, atol=0, rtol=0)
+
+
+@pytest.mark.parametrize("b, n", [(1, 32), (3, 64)])
+def test_gluon_small_m_forced_general_domain(b, n):
+    _require_gfx950()
+    x, weight, scale, _, _ = generate_batched_gemm_a16w8_inputs(
+        b, 16, n, 512, torch.bfloat16, has_bias=False, output=False
+    )
+    actual = batched_gemm_a8w8_a_per_token_group_prequant_w_per_batched_tensor_quant(
+        x, weight, scale, backend="gluon", transpose_bm=False
+    )
+    check_group_quantized_fp32(actual, x, weight, scale, transpose_bm=False)
+
+
+@pytest.mark.parametrize("arm", ["native", "tile16x64", "tile16x32", "gluon_donor"])
+def test_gluon_small_m_comparator_accuracy(arm, monkeypatch):
+    _require_gfx950()
+    x, weight, scale, _, _ = _small_m_inputs(64)
+    x = (x - 0.05).contiguous()
+    weight = (weight.float() - 0.05).to(weight.dtype)
+    scale.fill_(0.125)
+    config = None
+    if arm.startswith("tile"):
+        config = dict(_get_config(64, 256, 512)[0])
+        config.update(
+            BLOCK_SIZE_M=16,
+            BLOCK_SIZE_N=64 if arm == "tile16x64" else 32,
+            GROUP_SIZE_M=1,
+            num_warps=4,
+            num_stages=2,
+            waves_per_eu=2 if arm == "tile16x64" else 1,
+            matrix_instr_nonkdim=16,
+            cache_modifier=".cg",
+        )
+    if arm == "gluon_donor":
+        monkeypatch.setattr(
+            op_module,
+            "_gluon_small_m",
+            functools.partial(op_module._gluon_small_m, num_stages=1, waves_per_eu=0),
+        )
+    actual = batched_gemm_a8w8_a_per_token_group_prequant_w_per_batched_tensor_quant(
+        x.transpose(0, 1).contiguous(),
+        weight,
+        scale,
+        backend="gluon" if arm == "gluon_donor" else "triton",
+        config=config,
+        transpose_bm=True,
+        transpose_bm_in=True,
+    )
+    check_group_quantized_fp32(actual, x, weight, scale)
 
 
 @pytest.mark.parametrize("m", [3, 4, 5, 8, 16, 32, 63, 64, 65, 128])
@@ -303,17 +615,36 @@ def test_gluon_small_m_dispatch(m, case, monkeypatch):
     torch.testing.assert_close(actual, expected, atol=0, rtol=0)
 
 
-@pytest.mark.parametrize("case", ["config", "misaligned", "m8"])
+@pytest.mark.parametrize(
+    "case",
+    [
+        "config",
+        "misaligned",
+        "m8",
+        "output_dtype",
+        "scale_dtype",
+        "scale_vector",
+        "alias_x",
+    ],
+)
 def test_gluon_small_m_forced_invalid(case):
     _require_gfx950()
     m = 8 if case == "m8" else 64
-    x, weight, w_scale, _, _ = _small_m_inputs(m)
+    x, weight, w_scale, _, y = _small_m_inputs(m)
     x = x.transpose(0, 1).contiguous()
     kwargs = {"transpose_bm": True, "transpose_bm_in": True, "backend": "gluon"}
     if case == "config":
         kwargs["config"] = _get_config(m, *SMALL_M_SHAPE[1:])[0]
     elif case == "misaligned":
         x = _misaligned_copy(x)
+    elif case == "output_dtype":
+        kwargs["YQ"] = y.float()
+    elif case == "scale_dtype":
+        w_scale = w_scale.to(torch.bfloat16)
+    elif case == "scale_vector":
+        w_scale = w_scale.expand(8).contiguous()
+    elif case == "alias_x":
+        kwargs["YQ"] = x[..., :256]
 
     with pytest.raises(AssertionError):
         batched_gemm_a8w8_a_per_token_group_prequant_w_per_batched_tensor_quant(
@@ -339,7 +670,8 @@ def test_gluon_small_m_graph_replay(m, monkeypatch):
         )
     assert launches == {"gluon": 1, "triton": 0}
     x.copy_((x.float() * 0.5).to(x.dtype))
-    graph.replay()
+    for _ in range(3):
+        graph.replay()
     expected = batched_gemm_a8w8_a_per_token_group_prequant_w_per_batched_tensor_quant(
         x, weight, w_scale, backend="gluon", **kwargs
     )
@@ -347,20 +679,96 @@ def test_gluon_small_m_graph_replay(m, monkeypatch):
     torch.testing.assert_close(y, expected, atol=0, rtol=0)
 
 
+def test_gluon_small_m_nondefault_stream():
+    _require_gfx950()
+    x, weight, scale, _, y = _small_m_inputs(64)
+    x = x.transpose(0, 1).contiguous()
+    torch.cuda.synchronize()
+    stream = torch.cuda.Stream()
+    with torch.cuda.stream(stream):
+        x.fill_(0.125)
+        batched_gemm_a8w8_a_per_token_group_prequant_w_per_batched_tensor_quant(
+            x,
+            weight,
+            scale,
+            YQ=y,
+            backend="gluon",
+            transpose_bm=True,
+            transpose_bm_in=True,
+        )
+        done = torch.cuda.Event()
+        done.record()
+    done.synchronize()
+    reference = run_group_quantized_fp32(x.transpose(0, 1), weight, scale)
+    torch.testing.assert_close(y.float(), reference, atol=0.02, rtol=0.02)
+    assert _nrmse(y, reference) <= 0.01
+
+
+def test_gluon_small_m_operand_device():
+    _require_gfx950()
+    if torch.cuda.device_count() < 2:
+        pytest.skip("Current-device mismatch check needs two visible GPUs.")
+    original_device = torch.cuda.current_device()
+    target_device = 1 if original_device == 0 else 0
+    with torch.cuda.device(target_device):
+        x, weight, scale, _, y = _small_m_inputs(64)
+        x = x.transpose(0, 1).contiguous()
+    batched_gemm_a8w8_a_per_token_group_prequant_w_per_batched_tensor_quant(
+        x, weight, scale, YQ=y, backend="gluon", transpose_bm=True, transpose_bm_in=True
+    )
+    assert torch.cuda.current_device() == original_device
+    with torch.cuda.device(target_device):
+        torch.cuda.synchronize()
+        reference = run_group_quantized_fp32(x.transpose(0, 1), weight, scale)
+        torch.testing.assert_close(y.float(), reference, atol=0.02, rtol=0.02)
+    with pytest.raises(AssertionError):
+        batched_gemm_a8w8_a_per_token_group_prequant_w_per_batched_tensor_quant(
+            x,
+            weight,
+            scale.to(f"cuda:{original_device}"),
+            backend="gluon",
+            transpose_bm_in=True,
+        )
+
+
+def test_gluon_small_m_fallback_graph_replay(monkeypatch):
+    """An eager failure disables Gluon before capture; the fallback graph replays."""
+    _require_gfx950()
+    x, weight, scale, _, y = _small_m_inputs(64)
+    x = x.transpose(0, 1).contiguous()
+    kwargs = {"transpose_bm": True, "transpose_bm_in": True, "YQ": y}
+
+    def failing_launch(*args, **kwargs):
+        raise RuntimeError("eager compile failure")
+
+    monkeypatch.setattr(op_module, "_gluon_small_m_failed", False)
+    monkeypatch.setattr(op_module, "_gluon_small_m", failing_launch)
+    batched_gemm_a8w8_a_per_token_group_prequant_w_per_batched_tensor_quant(
+        x, weight, scale, **kwargs
+    )
+    assert op_module._gluon_small_m_failed
+    launches = _count_launches(monkeypatch)
+    graph = torch.cuda.CUDAGraph()
+    with torch.cuda.graph(graph):
+        batched_gemm_a8w8_a_per_token_group_prequant_w_per_batched_tensor_quant(
+            x, weight, scale, **kwargs
+        )
+    assert launches == {"gluon": 0, "triton": 1}
+    x.mul_(0.5)
+    for _ in range(3):
+        graph.replay()
+    expected = batched_gemm_a8w8_a_per_token_group_prequant_w_per_batched_tensor_quant(
+        x, weight, scale, backend="triton", transpose_bm=True, transpose_bm_in=True
+    )
+    torch.testing.assert_close(y, expected, atol=0, rtol=0)
+
+
 @pytest.mark.parametrize("b, supported", [(16383, True), (16384, False)])
 def test_gluon_small_m_weight_size_bound(b, supported, monkeypatch):
-    """The kernel's int32 offsets need the weight under 2 GiB; no kernel runs."""
+    """Metadata tensors exercise actual support logic without large allocations."""
     monkeypatch.setattr(op_module, "_gluon_small_m_available", lambda: True)
-    _, n, k = SMALL_M_SHAPE
-    x = torch.empty((64, b, k), dtype=torch.bfloat16, device="meta")
-    weight = torch.empty((b, n, k), dtype=torch.float8_e4m3fn, device="meta")
-
-    assert (
-        op_module._gluon_small_m_supports(
-            x, weight, None, 64, 128, None, torch.bfloat16
-        )
-        == supported
-    )
+    x, weight, scale = _metadata_inputs(b=b)
+    assert _supports(x, weight, None, scale) == supported
 
 
 @pytest.mark.parametrize(
@@ -428,6 +836,7 @@ def test_gluon_small_m_failure_falls_back(monkeypatch):
 
     monkeypatch.setattr(op_module, "_gluon_small_m_failed", False)
     monkeypatch.setattr(op_module, "_gluon_small_m_available", lambda: True)
+    monkeypatch.setattr(op_module, "_gluon_small_m_supports", lambda *args: True)
     monkeypatch.setattr(op_module, "_gluon_small_m", failing_gluon_launch)
     monkeypatch.setattr(
         op_module,
