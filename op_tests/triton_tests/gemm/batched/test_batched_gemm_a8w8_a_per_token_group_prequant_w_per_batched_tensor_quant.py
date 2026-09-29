@@ -1,16 +1,26 @@
 # SPDX-License-Identifier: MIT
 # Copyright (C) 2024-2026, Advanced Micro Devices, Inc. All rights reserved.
 
+import types
+
 import pytest
 import torch
 import triton
 
+from aiter.ops.triton._triton_kernels.gemm.batched.batched_gemm_a8w8_a_per_token_group_prequant_w_per_batched_tensor_quant import (
+    _get_config,
+)
+from aiter.ops.triton.gemm.batched import (
+    batched_gemm_a8w8_a_per_token_group_prequant_w_per_batched_tensor_quant as op_module,
+)
 from aiter.ops.triton.gemm.batched.batched_gemm_a8w8_a_per_token_group_prequant_w_per_batched_tensor_quant import (
     batched_gemm_a8w8_a_per_token_group_prequant_w_per_batched_tensor_quant,
 )
+from aiter.ops.triton.utils._triton import arch_info
 from aiter.ops.triton.utils.types import get_fp8_dtypes, str_to_torch_dtype
 
 e5m2_type, e4m3_type = get_fp8_dtypes()
+DEVICE_ARCH = arch_info.get_arch()
 
 
 def generate_batched_gemm_a16w8_inputs(
@@ -180,3 +190,272 @@ def test_batched_gemm_a8w8_a_per_token_group_prequant_w_per_batched_tensor_quant
     )
 
     triton.testing.assert_close(a, b, atol=0.1, rtol=0.1)
+
+
+# (B, N, K) of the gfx950 Gluon small-M kernel's dispatch entry, and its M.
+SMALL_M_SHAPE = (8, 256, 512)
+SMALL_M_DISPATCH = (64,)
+
+
+def _require_gfx950():
+    if DEVICE_ARCH != "gfx950":
+        pytest.skip("The Gluon small-M kernel requires gfx950.")
+
+
+def _small_m_inputs(m, b=SMALL_M_SHAPE[0], has_bias=False, transpose_bm=True):
+    _, n, k = SMALL_M_SHAPE
+    return generate_batched_gemm_a16w8_inputs(
+        b,
+        m,
+        n,
+        k,
+        torch.bfloat16,
+        has_bias=has_bias,
+        output=True,
+        transpose_bm=transpose_bm,
+    )
+
+
+def _misaligned_copy(x):
+    """A copy of x whose data starts two bytes past a 16-byte boundary."""
+    buffer = torch.empty(x.numel() + 1, dtype=x.dtype, device=x.device)
+    return buffer[1:].view(x.shape).copy_(x)
+
+
+def _count_launches(monkeypatch):
+    """Counts, by backend, the kernels the op launches from here on."""
+    counts = {"gluon": 0, "triton": 0}
+    gluon_launch = op_module._gluon_small_m
+    triton_kernel = (
+        op_module._batched_gemm_a8w8_a_per_token_group_prequant_w_per_batched_tensor_quant_kernel
+    )
+
+    def counted_gluon_launch(*args, **kwargs):
+        counts["gluon"] += 1
+        return gluon_launch(*args, **kwargs)
+
+    class CountedTritonKernel:
+        def __getitem__(self, grid):
+            counts["triton"] += 1
+            return triton_kernel[grid]
+
+    monkeypatch.setattr(op_module, "_gluon_small_m", counted_gluon_launch)
+    monkeypatch.setattr(
+        op_module,
+        "_batched_gemm_a8w8_a_per_token_group_prequant_w_per_batched_tensor_quant_kernel",
+        CountedTritonKernel(),
+    )
+    return counts
+
+
+@pytest.mark.parametrize("m", [16, 32, 64, 128])
+@pytest.mark.parametrize("transpose_bm_in", [True, False])
+@pytest.mark.parametrize("transpose_bm", [True, False])
+def test_gluon_small_m(m, transpose_bm_in, transpose_bm):
+    _require_gfx950()
+    x, weight, w_scale, _, y = _small_m_inputs(m, transpose_bm=transpose_bm)
+    # Signed values, one large value in each 128-element group of the first batch
+    # entry, and an all-zero first row, which takes the 1e-10 scale floor.
+    x = x - 0.05
+    x[0, :, ::128] = 4.0
+    x[:, 0] = 0
+    x_in = x.transpose(0, 1).contiguous() if transpose_bm_in else x
+    kwargs = {"transpose_bm": transpose_bm, "transpose_bm_in": transpose_bm_in}
+    actual = batched_gemm_a8w8_a_per_token_group_prequant_w_per_batched_tensor_quant(
+        x_in, weight, w_scale, YQ=y, backend="gluon", **kwargs
+    )
+    expected = batched_gemm_a8w8_a_per_token_group_prequant_w_per_batched_tensor_quant(
+        x_in, weight, w_scale, backend="triton", **kwargs
+    )
+    reference = run_torch(x, weight, w_scale, transpose_bm=transpose_bm)
+
+    assert actual is y
+    # Same quantization as the Triton kernel; only FP32 summation order differs.
+    torch.testing.assert_close(actual, expected, atol=1e-2, rtol=1e-2)
+    triton.testing.assert_close(reference, actual, atol=0.1, rtol=0.1)
+
+
+@pytest.mark.parametrize("m", [3, 4, 5, 8, 16, 32, 63, 64, 65, 128])
+@pytest.mark.parametrize("case", ["default", "config", "bias", "batch16", "misaligned"])
+def test_gluon_small_m_dispatch(m, case, monkeypatch):
+    _require_gfx950()
+    b = 16 if case == "batch16" else SMALL_M_SHAPE[0]
+    x, weight, w_scale, bias, y = _small_m_inputs(m, b=b, has_bias=case == "bias")
+    x = x.transpose(0, 1).contiguous()
+    if case == "misaligned":
+        x = _misaligned_copy(x)
+    kwargs = {"bias": bias, "transpose_bm": True, "transpose_bm_in": True}
+    backend = "gluon" if case == "default" and m in SMALL_M_DISPATCH else "triton"
+    expected = batched_gemm_a8w8_a_per_token_group_prequant_w_per_batched_tensor_quant(
+        x, weight, w_scale, backend=backend, **kwargs
+    )
+    config = _get_config(m, *SMALL_M_SHAPE[1:])[0] if case == "config" else None
+
+    launches = _count_launches(monkeypatch)
+    actual = batched_gemm_a8w8_a_per_token_group_prequant_w_per_batched_tensor_quant(
+        x, weight, w_scale, YQ=y, config=config, **kwargs
+    )
+
+    assert launches == {
+        "gluon": int(backend == "gluon"),
+        "triton": int(backend == "triton"),
+    }
+    torch.testing.assert_close(actual, expected, atol=0, rtol=0)
+
+
+@pytest.mark.parametrize("case", ["config", "misaligned", "m8"])
+def test_gluon_small_m_forced_invalid(case):
+    _require_gfx950()
+    m = 8 if case == "m8" else 64
+    x, weight, w_scale, _, _ = _small_m_inputs(m)
+    x = x.transpose(0, 1).contiguous()
+    kwargs = {"transpose_bm": True, "transpose_bm_in": True, "backend": "gluon"}
+    if case == "config":
+        kwargs["config"] = _get_config(m, *SMALL_M_SHAPE[1:])[0]
+    elif case == "misaligned":
+        x = _misaligned_copy(x)
+
+    with pytest.raises(AssertionError):
+        batched_gemm_a8w8_a_per_token_group_prequant_w_per_batched_tensor_quant(
+            x, weight, w_scale, **kwargs
+        )
+
+
+@pytest.mark.parametrize("m", SMALL_M_DISPATCH)
+def test_gluon_small_m_graph_replay(m, monkeypatch):
+    _require_gfx950()
+    x, weight, w_scale, _, y = _small_m_inputs(m)
+    x = x.transpose(0, 1).contiguous()
+    kwargs = {"transpose_bm": True, "transpose_bm_in": True}
+    batched_gemm_a8w8_a_per_token_group_prequant_w_per_batched_tensor_quant(
+        x, weight, w_scale, YQ=y, **kwargs
+    )
+    torch.cuda.synchronize()
+    launches = _count_launches(monkeypatch)
+    graph = torch.cuda.CUDAGraph()
+    with torch.cuda.graph(graph):
+        batched_gemm_a8w8_a_per_token_group_prequant_w_per_batched_tensor_quant(
+            x, weight, w_scale, YQ=y, **kwargs
+        )
+    assert launches == {"gluon": 1, "triton": 0}
+    x.copy_((x.float() * 0.5).to(x.dtype))
+    graph.replay()
+    expected = batched_gemm_a8w8_a_per_token_group_prequant_w_per_batched_tensor_quant(
+        x, weight, w_scale, backend="gluon", **kwargs
+    )
+
+    torch.testing.assert_close(y, expected, atol=0, rtol=0)
+
+
+@pytest.mark.parametrize("b, supported", [(16383, True), (16384, False)])
+def test_gluon_small_m_weight_size_bound(b, supported, monkeypatch):
+    """The kernel's int32 offsets need the weight under 2 GiB; no kernel runs."""
+    monkeypatch.setattr(op_module, "_gluon_small_m_available", lambda: True)
+    _, n, k = SMALL_M_SHAPE
+    x = torch.empty((64, b, k), dtype=torch.bfloat16, device="meta")
+    weight = torch.empty((b, n, k), dtype=torch.float8_e4m3fn, device="meta")
+
+    assert (
+        op_module._gluon_small_m_supports(
+            x, weight, None, 64, 128, None, torch.bfloat16
+        )
+        == supported
+    )
+
+
+@pytest.mark.parametrize(
+    "missing", [None, "amd", "cdna4", "mfma", "load_shared_relaxed", "tiles_per_warp"]
+)
+def test_gluon_small_m_api_probe(missing, monkeypatch):
+    """A Gluon without one of the APIs the kernel uses selects the Triton kernel."""
+    gluon = pytest.importorskip("triton.experimental.gluon")
+
+    def api(*args, **kwargs):
+        pass
+
+    def AMDMFMALayout(version, instr_shape, transposed, warps_per_cta, tiles_per_warp):
+        pass
+
+    def AMDMFMALayoutWithoutTiles(version, instr_shape, transposed, warps_per_cta):
+        pass
+
+    async_copy = types.SimpleNamespace(
+        buffer_load_to_shared=api,
+        load_shared_relaxed=api,
+        commit_group=api,
+        wait_group=api,
+    )
+    cdna4 = types.SimpleNamespace(
+        compute_efficient_padded_shared_layout=api, mfma=api, async_copy=async_copy
+    )
+    amd = types.SimpleNamespace(cdna4=cdna4, AMDMFMALayout=AMDMFMALayout)
+    language = types.SimpleNamespace(amd=amd)
+    if missing == "amd":
+        del language.amd
+    elif missing == "cdna4":
+        del amd.cdna4
+    elif missing == "mfma":
+        del cdna4.mfma
+    elif missing == "load_shared_relaxed":
+        del async_copy.load_shared_relaxed
+    elif missing == "tiles_per_warp":
+        amd.AMDMFMALayout = AMDMFMALayoutWithoutTiles
+    monkeypatch.setattr(gluon, "language", language)
+    monkeypatch.setattr(op_module, "get_arch", lambda: "gfx950")
+
+    assert op_module._gluon_small_m_available.__wrapped__() == (missing is None)
+
+
+def test_gluon_small_m_failure_falls_back(monkeypatch):
+    """A Gluon failure on a default call runs the Triton kernel from then on; a
+    forced call, before or after, tries the Gluon kernel and raises its error.
+    Stub kernels on CPU tensors; no kernel runs."""
+    calls = {"gluon": 0, "triton": 0, "warnings": 0}
+
+    def failing_gluon_launch(*args, **kwargs):
+        calls["gluon"] += 1
+        raise RuntimeError("stub compile error")
+
+    class TritonKernel:
+        def __getitem__(self, grid):
+            def launch(*args, **kwargs):
+                calls["triton"] += 1
+
+            return launch
+
+    def warning(*args):
+        calls["warnings"] += 1
+
+    monkeypatch.setattr(op_module, "_gluon_small_m_failed", False)
+    monkeypatch.setattr(op_module, "_gluon_small_m_available", lambda: True)
+    monkeypatch.setattr(op_module, "_gluon_small_m", failing_gluon_launch)
+    monkeypatch.setattr(
+        op_module,
+        "_batched_gemm_a8w8_a_per_token_group_prequant_w_per_batched_tensor_quant_kernel",
+        TritonKernel(),
+    )
+    monkeypatch.setattr(op_module, "_get_config", lambda M, N, K: ({}, False))
+    monkeypatch.setattr(op_module._LOGGER, "warning", warning)
+    b, n, k = SMALL_M_SHAPE
+    x = torch.zeros((64, b, k), dtype=torch.bfloat16)
+    weight = torch.zeros((b, n, k), dtype=torch.float8_e4m3fn)
+    w_scale = torch.ones((), dtype=torch.float32)
+    kwargs = {"transpose_bm": True, "transpose_bm_in": True}
+
+    with pytest.raises(RuntimeError):
+        batched_gemm_a8w8_a_per_token_group_prequant_w_per_batched_tensor_quant(
+            x, weight, w_scale, backend="gluon", **kwargs
+        )
+    assert not op_module._gluon_small_m_failed
+    for _ in range(2):
+        batched_gemm_a8w8_a_per_token_group_prequant_w_per_batched_tensor_quant(
+            x, weight, w_scale, **kwargs
+        )
+    assert op_module._gluon_small_m_failed
+    # A forced call still tries the kernel, and raises its error.
+    with pytest.raises(RuntimeError):
+        batched_gemm_a8w8_a_per_token_group_prequant_w_per_batched_tensor_quant(
+            x, weight, w_scale, backend="gluon", **kwargs
+        )
+
+    assert calls == {"gluon": 3, "triton": 2, "warnings": 1}

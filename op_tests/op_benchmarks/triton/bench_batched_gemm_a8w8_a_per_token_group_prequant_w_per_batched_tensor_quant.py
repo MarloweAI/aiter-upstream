@@ -29,10 +29,12 @@ def bench_gemm_fn(
     N: int,
     K: int,
     metric: str,
+    backend: str | None,
     layout: str,
     group_size: int,
     has_bias: bool,
     transpose_bm: bool,
+    transpose_bm_in: bool,
 ):
     c_dtype = torch.bfloat16
     x, weight, w_scale, bias, y = generate_batched_gemm_a8w8_per_token_group_inputs(
@@ -46,6 +48,8 @@ def bench_gemm_fn(
         layout=layout,
         transpose_bm=transpose_bm,
     )
+    if transpose_bm_in:
+        x = x.transpose(0, 1).contiguous()
     # flops
     flops = 2.0 * batch * M * N * K
     # memory transfer
@@ -65,9 +69,11 @@ def bench_gemm_fn(
             w_scale,
             group_size=group_size,
             bias=bias,
+            backend=backend,
             dtype=c_dtype,
             YQ=y,
             transpose_bm=transpose_bm,
+            transpose_bm_in=transpose_bm_in,
         )
 
     ms = triton.testing.do_bench(fn, warmup=25, rep=100)
@@ -115,10 +121,12 @@ def run_model_benchmark(args):
             N,
             K,
             metric,
+            args.backend,
             args.layout,
             args.group_size,
             not args.no_bias,
             args.transpose_bm,
+            args.transpose_bm_in,
         )
 
     bench_batched_gemm_a8w8_per_token_group_prequant_w_per_batched_tensor_quant.run(
@@ -141,10 +149,12 @@ def run_shape_benchmark(args):
             N,
             K,
             metric,
+            args.backend,
             args.layout,
             args.group_size,
             not args.no_bias,
             args.transpose_bm,
+            args.transpose_bm_in,
         )
 
     bench_batched_gemm_a8w8_per_token_group_prequant_w_per_batched_tensor_quant.run(
@@ -166,6 +176,13 @@ def parse_args(args: list[str] | None = None):
     parser = add_argparse_ff(parser)
     parser.add_argument("-B", type=int, default=None, help="Batch size")
     parser.add_argument(
+        "--backend",
+        type=str,
+        choices=["triton", "gluon"],
+        default=None,
+        help="Kernel backend; default: the wrapper's own choice by arch and shape.",
+    )
+    parser.add_argument(
         "--group-size",
         type=int,
         default=128,
@@ -184,6 +201,13 @@ def parse_args(args: list[str] | None = None):
         default=False,
         dest="transpose_bm",
         help="Transpose batch and M dimensions in the output tensor.",
+    )
+    parser.add_argument(
+        "--transpose-bm-in",
+        action="store_true",
+        default=False,
+        dest="transpose_bm_in",
+        help="Transpose batch and M dimensions in the input tensor.",
     )
     return get_ff_args(parser, args=args)
 
