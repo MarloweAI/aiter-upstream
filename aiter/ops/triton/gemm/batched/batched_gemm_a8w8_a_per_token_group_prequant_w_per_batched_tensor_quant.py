@@ -266,9 +266,12 @@ def batched_gemm_a8w8_a_per_token_group_prequant_w_per_batched_tensor_quant(
         assert (
             config is None
         ), "config applies to the Triton kernel; pass backend='triton' to use it"
-        assert _gluon_small_m_supports(
-            X, WQ, YQ, M, group_size, bias, dtype, w_scale
-        ), "Gluon backend: unsupported arch, Triton, dtype, shape, size, bias, alignment or layout (see docstring)"
+        # Default selection already validated this call. Forced selection still
+        # checks every operand; no validation result is cached across calls.
+        if gluon_forced:
+            assert _gluon_small_m_supports(
+                X, WQ, YQ, M, group_size, bias, dtype, w_scale
+            ), "Gluon backend: unsupported arch, Triton, dtype, shape, size, bias, alignment or layout (see docstring)"
 
     WQ = WQ.transpose(1, 2)
 

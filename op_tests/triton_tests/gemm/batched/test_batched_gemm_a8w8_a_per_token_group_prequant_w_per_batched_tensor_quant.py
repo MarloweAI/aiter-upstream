@@ -288,6 +288,14 @@ class _TensorMetadata:
     def storage_offset(self):
         return 0
 
+    def transpose(self, first, second):
+        shape, strides = list(self.shape), list(self.strides)
+        shape[first], shape[second] = shape[second], shape[first]
+        strides[first], strides[second] = strides[second], strides[first]
+        return _TensorMetadata(
+            tuple(shape), self.dtype, self.pointer, self.device, tuple(strides)
+        )
+
 
 def _metadata_inputs(b=8):
     return (
@@ -368,6 +376,73 @@ def test_gluon_small_m_strided_span_boundary(monkeypatch):
     assert x.numel() * x.element_size() < 2**31
     assert op_module._addressed_byte_span(x) > 2**31
     assert not _supports(x, weight, None, scale)
+
+
+@pytest.mark.parametrize("backend", [None, "gluon"])
+@pytest.mark.parametrize(
+    "invalid", ["alignment", "output_dtype", "scale_dtype", "span", "alias"]
+)
+def test_gluon_small_m_validation_once_per_call(backend, invalid, monkeypatch):
+    """Actual metadata guards run once, and mutated inputs are checked anew."""
+    monkeypatch.setattr(op_module, "_gluon_small_m_available", lambda: True)
+    monkeypatch.setattr(op_module, "_gluon_small_m_failed", False)
+    supports = op_module._gluon_small_m_supports
+    validations, launches = [], []
+
+    def checked_supports(*args):
+        validations.append(supports(*args))
+        return validations[-1]
+
+    class TritonKernel:
+        def __getitem__(self, grid):
+            return lambda *args, **kwargs: launches.append("triton")
+
+    monkeypatch.setattr(op_module, "_gluon_small_m_supports", checked_supports)
+    monkeypatch.setattr(
+        op_module, "_gluon_small_m", lambda *args: launches.append("gluon")
+    )
+    monkeypatch.setattr(
+        op_module,
+        "_batched_gemm_a8w8_a_per_token_group_prequant_w_per_batched_tensor_quant_kernel",
+        TritonKernel(),
+    )
+    monkeypatch.setattr(op_module, "_get_config", lambda *args: ({}, False))
+    monkeypatch.setattr(
+        torch, "is_floating_point", lambda tensor: tensor.dtype.is_floating_point
+    )
+    x, weight, scale = _metadata_inputs()
+    output = _TensorMetadata((64, 8, 256), torch.bfloat16, 0x200000)
+    kwargs = {
+        "YQ": output,
+        "transpose_bm": True,
+        "transpose_bm_in": True,
+        "backend": backend,
+    }
+    operation = batched_gemm_a8w8_a_per_token_group_prequant_w_per_batched_tensor_quant
+    assert operation(x, weight, scale, **kwargs) is output
+    assert validations == [True]
+    assert launches == ["gluon"]
+
+    if invalid == "alignment":
+        x.pointer += 2
+    elif invalid == "output_dtype":
+        output.dtype = torch.float32
+    elif invalid == "scale_dtype":
+        scale.dtype = torch.bfloat16
+    elif invalid == "span":
+        x.strides = (2**25, 512, 1)
+    else:
+        output.pointer = x.pointer
+
+    if backend == "gluon":
+        with pytest.raises(AssertionError, match="Gluon backend: unsupported"):
+            operation(x, weight, scale, **kwargs)
+        assert launches == ["gluon"]
+    else:
+        assert operation(x, weight, scale, **kwargs) is output
+        assert launches == ["gluon", "triton"]
+    assert validations == [True, False]
+    assert not op_module._gluon_small_m_failed
 
 
 def test_gluon_small_m_quantized_oracle_cpu():
