@@ -121,18 +121,21 @@ def fused_gemm_a16w16_qk_rmsnorm(
         _gemm_a16w16_splitk_planes_kernel,
     )
 
-    m = x.shape[0]
-    partial = torch.empty(
-        (_SPLITK_PLANES, m, _OUT_DIM), device=x.device, dtype=torch.float32
-    )
-    _gemm_a16w16_splitk_planes_kernel[_GRID](
-        x,
-        weight,
-        partial,
-        BLOCK_M=m,
-        num_warps=4,
-        num_stages=1,
-        waves_per_eu=0,
-        matrix_instr_nonkdim=16,
-    )
-    return splitk_reduce_qk_rmsnorm(partial, q_weight, q_eps, k_weight, k_eps)
+    # Both stages must use the operand device's current stream. The HIP
+    # wrapper's own guard runs only after the Gluon producer has launched.
+    with torch.cuda.device(x.device):
+        m = x.shape[0]
+        partial = torch.empty(
+            (_SPLITK_PLANES, m, _OUT_DIM), device=x.device, dtype=torch.float32
+        )
+        _gemm_a16w16_splitk_planes_kernel[_GRID](
+            x,
+            weight,
+            partial,
+            BLOCK_M=m,
+            num_warps=4,
+            num_stages=1,
+            waves_per_eu=0,
+            matrix_instr_nonkdim=16,
+        )
+        return splitk_reduce_qk_rmsnorm(partial, q_weight, q_eps, k_weight, k_eps)
