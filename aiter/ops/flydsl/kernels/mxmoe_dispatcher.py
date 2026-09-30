@@ -290,7 +290,7 @@ def compile_gemm2_a4w4_port(
     tag = f"hmax{HIDDEN_MAX}_imax{INTER_MAX}_bm{BM}{tile_tag}{'_nt' if use_nt else ''}_{etag}{atag}{btag}{sbm_tag}{shared_scale_tag}{persist_tag}{bh_tag}{apf_tag}{spart_tag}{bf16lds_tag}{noil_tag}{dw_tag}{kst_tag}{pitch_tag}{sblk_tag}{out_tag}{compact_tag}{bias_tag}{output_range_tag}_v2_biasabi7{route_guard_tag}"
     name = f"gemm2_a4w4_port_{tag}" + ("_idpf" if g2_prefetch_ids else "")
     if g2_skip_padded_lds:
-        name += "_sparseepi"
+        name += "_sparseepi_mr1"
 
     @fx.struct
     class SharedStorage:

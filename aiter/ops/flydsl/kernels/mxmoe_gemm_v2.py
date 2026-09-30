@@ -1297,25 +1297,36 @@ def atomic_bf16_epilog(
             # Shared writes and CTA barriers above remain unconditional.
             lds_pre = []
             for mr in range_constexpr(M_REPS):
-                token_id = packed[mr] & fx.Int32(0x00FFFFFF)
-                wave_has_valid = fx.Int64(
-                    rocdl.ballot(T.i64, _raw(token_id < i32_M))
-                ) != fx.Int64(0)
+                if const_expr(mr == 0):
+                    # The baseline compiler already sinks this group under its
+                    # per-row validity branch. Preserve that source path instead
+                    # of adding another wave vote; emitted ISA must confirm it.
+                    lds_pre.append(
+                        [
+                            lds_pk_load(mr, s)
+                            for s in range_constexpr(BN // store_group_n)
+                        ]
+                    )
+                else:
+                    token_id = packed[mr] & fx.Int32(0x00FFFFFF)
+                    wave_has_valid = fx.Int64(
+                        rocdl.ballot(T.i64, _raw(token_id < i32_M))
+                    ) != fx.Int64(0)
 
-                @flyc.jit
-                def load_if_wave_has_valid(wave_has_valid, mr, s):
-                    values = fx.make_rmem_tensor(store_vec, BFloat16)
-                    values.store(Vec.filled(store_vec, 0.0, BFloat16))
-                    if wave_has_valid:
-                        values.store(lds_pk_load(mr, s))
-                    return Vec(values.load())
+                    @flyc.jit
+                    def load_if_wave_has_valid(wave_has_valid, mr, s):
+                        values = fx.make_rmem_tensor(store_vec, BFloat16)
+                        values.store(Vec.filled(store_vec, 0.0, BFloat16))
+                        if wave_has_valid:
+                            values.store(lds_pk_load(mr, s))
+                        return Vec(values.load())
 
-                lds_pre.append(
-                    [
-                        load_if_wave_has_valid(wave_has_valid, mr, s)
-                        for s in range_constexpr(BN // store_group_n)
-                    ]
-                )
+                    lds_pre.append(
+                        [
+                            load_if_wave_has_valid(wave_has_valid, mr, s)
+                            for s in range_constexpr(BN // store_group_n)
+                        ]
+                    )
         else:
             lds_pre = [
                 [lds_pk_load(mr, s) for s in range_constexpr(BN // store_group_n)]

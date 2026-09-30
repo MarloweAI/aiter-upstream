@@ -145,6 +145,20 @@ def test_wave_vote_retains_valid_rows_for_every_bm16_hole_pattern():
         )
 
 
+def test_mr1_only_variant_preserves_first_group_and_valid_second_group_rows():
+    for pattern in range(1 << 16):
+        valid = [bool(pattern & (1 << row)) for row in range(16)]
+        # MR0 deliberately retains its baseline source preload. MR1's wave
+        # vote must preserve either member of every pair, even with holes.
+        loaded_rows = set(range(8))
+        for row in range(8, 16, 2):
+            if valid[row] or valid[row + 1]:
+                loaded_rows.update((row, row + 1))
+        assert all(row in loaded_rows for row in range(16) if valid[row])
+        if pattern < 256:
+            assert loaded_rows == set(range(8))
+
+
 @pytest.mark.parametrize("valid_row", [0, 1, 7, 8, 14, 15])
 def test_single_valid_row_does_not_assume_prefix_or_one_lane(valid_row):
     loaded_rows = {
