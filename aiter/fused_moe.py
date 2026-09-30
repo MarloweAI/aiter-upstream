@@ -849,6 +849,8 @@ def fused_moe(
     quant_type_a: QuantType | None = None,
     quant_dtype_a: torch.dtype | None = None,
     quant_dtype_a2: torch.dtype | None = None,
+    *,
+    _stage2_override: Callable | None = None,
 ):
     if (
         any(
@@ -892,6 +894,43 @@ def fused_moe(
         )
     if not block_size_M:
         block_size_M = -1
+    if _stage2_override is not None:
+        # Python callbacks cannot cross the fused_moe_ torch.library schema.
+        # Opted-in graph capture uses the same native implementation directly;
+        # the default path below retains its existing custom-op/fake handling.
+        return _fused_moe_impl(
+            hidden_states=hidden_states,
+            w1=w1,
+            w2=w2,
+            topk_weight=topk_weight,
+            topk_ids=topk_ids,
+            expert_mask=expert_mask,
+            activation=activation.value,
+            quant_type=quant_type.value,
+            doweight_stage1=doweight_stage1,
+            w1_scale=w1_scale,
+            w2_scale=w2_scale,
+            a1_scale=a1_scale,
+            a2_scale=a2_scale,
+            block_size_M=block_size_M,
+            num_local_tokens=num_local_tokens,
+            moe_sorting_dispatch_policy=moe_sorting_dispatch_policy,
+            dtype=dtype,
+            hidden_pad=hidden_pad,
+            intermediate_pad=intermediate_pad,
+            bias1=bias1,
+            bias2=bias2,
+            swiglu_limit=swiglu_limit,
+            beta=beta,
+            linear_beta=linear_beta,
+            gate_mode=gate_mode,
+            stage2_scatter=stage2_scatter,
+            output=output,
+            quant_type_a=None if quant_type_a is None else quant_type_a.value,
+            quant_dtype_a=quant_dtype_a,
+            quant_dtype_a2=quant_dtype_a2,
+            _stage2_override=_stage2_override,
+        )
     enable_ep_scatter = stage2_scatter is not None
     scatter_source_map = stage2_scatter.source_token_map if enable_ep_scatter else None
     return fused_moe_(

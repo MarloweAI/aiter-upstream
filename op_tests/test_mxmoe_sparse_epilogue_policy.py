@@ -3,8 +3,11 @@
 """CPU guard and graph-stable callback tests; no ROCm runtime is required."""
 
 import importlib.util
+import ast
+import inspect
 from functools import partial
 from pathlib import Path
+from types import ModuleType, SimpleNamespace
 
 import pytest
 
@@ -174,6 +177,108 @@ def test_real_outer_ep_mask_disables_even_mxmoe_front_wrapper():
         stage2_kwargs=dict(sorted_weights=weights),
         expert_mask=object(),
     ) == (x, weights)
+
+
+def _public_api_with_stub_backends():
+    # Execute the actual public function body without importing Torch/ROCm.
+    # This catches missing public keywords and the schema-wrapped forwarding
+    # mistake that lower-helper tests cannot detect.
+    source = Path(__file__).resolve().parents[1] / "aiter/fused_moe.py"
+    function = next(
+        node
+        for node in ast.parse(source.read_text()).body
+        if isinstance(node, ast.FunctionDef) and node.name == "fused_moe"
+    )
+    future = ast.ImportFrom(
+        module="__future__", names=[ast.alias(name="annotations")], level=0
+    )
+    module = ast.fix_missing_locations(
+        ast.Module(body=[future, function], type_ignores=[])
+    )
+    calls = []
+    result = object()
+
+    def backend(name):
+        def record(**kwargs):
+            calls.append((name, kwargs))
+            return result
+
+        return record
+
+    namespace = dict(
+        ActivationType=SimpleNamespace(Silu=SimpleNamespace(value=1)),
+        QuantType=SimpleNamespace(No=SimpleNamespace(value=0)),
+        GateMode=SimpleNamespace(SEPARATED=SimpleNamespace(value="separated")),
+        fused_moe_=backend("custom_op"),
+        _fused_moe_impl=backend("native_impl"),
+    )
+    exec(compile(module, str(source), "exec"), namespace)
+    return namespace["fused_moe"], calls, result
+
+
+def test_public_default_preserves_custom_op_path_and_schema():
+    public, calls, result = _public_api_with_stub_backends()
+    parameter = inspect.signature(public).parameters["_stage2_override"]
+    assert parameter.kind is inspect.Parameter.KEYWORD_ONLY
+    assert parameter.default is None
+    assert public(*[object() for _ in range(5)]) is result
+    assert calls[0][0] == "custom_op"
+    assert "_stage2_override" not in calls[0][1]
+    assert calls[0][1]["block_size_M"] == -1
+    assert calls[0][1]["ep_world_size"] == 0
+
+
+def test_public_override_reaches_native_impl_with_actual_ep_and_output():
+    public, calls, result = _public_api_with_stub_backends()
+    args = [object() for _ in range(5)]
+    callback, mask, scatter, output = object(), object(), object(), object()
+    assert (
+        public(
+            *args,
+            expert_mask=mask,
+            stage2_scatter=scatter,
+            output=output,
+            block_size_M=16,
+            _stage2_override=callback,
+        )
+        is result
+    )
+    assert calls[0][0] == "native_impl"
+    forwarded = calls[0][1]
+    assert forwarded["_stage2_override"] is callback
+    assert forwarded["expert_mask"] is mask
+    assert forwarded["stage2_scatter"] is scatter
+    assert forwarded["output"] is output
+    assert forwarded["topk_ids"] is args[4]
+    assert forwarded["topk_weight"] is args[3]
+    assert forwarded["block_size_M"] == 16
+    assert forwarded["activation"] == 1
+    assert forwarded["quant_type"] == 0
+    assert "ep_world_size" not in forwarded
+
+
+def test_public_shared_specialization_retains_original_fallback(monkeypatch):
+    public, calls, _ = _public_api_with_stub_backends()
+    shared_calls = []
+    shared_result = object()
+    shared_module = ModuleType("aiter.fhmoe")
+    shared_module._fhmoe = lambda **kwargs: (
+        shared_calls.append(kwargs),
+        shared_result,
+    )[1]
+    monkeypatch.setitem(__import__("sys").modules, "aiter.fhmoe", shared_module)
+    shared_weight = object()
+    assert (
+        public(
+            *[object() for _ in range(5)],
+            shared_w1=shared_weight,
+            _stage2_override=object(),
+        )
+        is shared_result
+    )
+    assert not calls
+    assert shared_calls[0]["shared_w1"] is shared_weight
+    assert "_stage2_override" not in shared_calls[0]
 
 
 if __name__ == "__main__":
