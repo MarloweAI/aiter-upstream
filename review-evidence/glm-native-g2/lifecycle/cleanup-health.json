@@ -1,0 +1,13 @@
+{
+  "job": "86754",
+  "step": "7",
+  "host": "marlowe-mi355x-1",
+  "visible_devices": 1,
+  "device": "AMD Instinct MI355X",
+  "free_bytes": 308556070912,
+  "total_bytes": 309220868096,
+  "probe_process_allocated_bytes": 0,
+  "probe_process_reserved_bytes": 0,
+  "unix_time": 1790753254.0273812,
+  "phase": "all measurement steps terminal; cleanup probe before releasing allocation"
+}

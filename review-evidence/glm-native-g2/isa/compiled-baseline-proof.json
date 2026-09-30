@@ -1,0 +1,18 @@
+[
+  {
+    "path": "/tmp/glm-moe-native-agent1-cache-inspection/new-f332.pkl",
+    "symbol": "gemm2_a4w4_port_hmax8192_imax256_bm16_bn128_bk128_atomic_bhoist_apf_spart4x2_bf16lds_kst_v2_biasabi7",
+    "elf_bytes": 6552,
+    "text_sha256": "9ebe9d832b2f73ca8c47fe5c7ecf6ea0e30369d1d9184e79d611a82836dbf940",
+    "pristine_text_sha256": "9ebe9d832b2f73ca8c47fe5c7ecf6ea0e30369d1d9184e79d611a82836dbf940",
+    "text_identical": true
+  },
+  {
+    "path": "/tmp/glm-moe-native-agent1-cache-inspection/new-ffb5.pkl",
+    "symbol": "gemm2_a4w4_port_hmax8192_imax256_bm16_bn128_bk128_atomic_bhoist_apf_spart4x2_bf16lds_kst_v2_biasabi7_sparseepi",
+    "elf_bytes": 6576,
+    "text_sha256": "6606bd262677a6f60669e41d23b26a40c42f11ecff21cc72b474a56933222a1d",
+    "pristine_text_sha256": "9ebe9d832b2f73ca8c47fe5c7ecf6ea0e30369d1d9184e79d611a82836dbf940",
+    "text_identical": false
+  }
+]

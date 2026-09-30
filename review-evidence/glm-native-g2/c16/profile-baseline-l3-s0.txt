@@ -1,0 +1,12 @@
+Separate MoE replay profile (profiled durations are not clean latency)
+Clean mean of per-case medians: 47.25999943912029 us
+Profiled device span: 46.7587890625 us
+Profiled kernel sum: 46.756 us
+Profile minus clean: -0.5012103766202927 us
+Visible kernels: 4
+
+Order Stream Start(us) Duration(us) Kernel
+   0      0        0.000        4.599 void aiter::opus_moe_sorting_entry<aiter::MoeSortingMultiPhaseKernel_P0_v2<aiter::MoeSortingProblemMp<int, float, int, 1, false, false, true> >, aiter::MoeSortingMultiPhaseKernel_P0_v2<aiter::MoeSortingProblemMp<int, float, int, 1, false, false, true> >::Kargs>(aiter::MoeSortingMultiPhaseKernel_P0_v2<aiter::MoeSortingProblemMp<int, float, int, 1, false, false, true> >::Kargs)
+   1      0        4.600        4.119 void aiter::opus_moe_sorting_entry<aiter::MoeSortingMultiPhaseKernel_P23<aiter::MoeSortingProblemMp<int, float, int, 1, false, false, true> >, aiter::MoeSortingMultiPhaseKernel_P23<aiter::MoeSortingProblemMp<int, float, int, 1, false, false, true> >::Kargs>(aiter::MoeSortingMultiPhaseKernel_P23<aiter::MoeSortingProblemMp<int, float, int, 1, false, false, true> >::Kargs)
+   2      0        8.720       26.639 gemm1_a4w4_port_fp4_h6144_i256_ne257_bm16_iq_sep_native_scale
+   3      0       35.359       11.399 gemm2_a4w4_port_hmax8192_imax256_bm16_bn128_bk128_atomic_bhoist_apf_spart4x2_bf16lds_kst_v2_biasabi7

@@ -1,0 +1,9 @@
+86754|moe-native-agent1|CANCELLED by 2014|0:0|00:28:07|16|billing=16,cpu=16,gres/gpu=1,mem=128G,node=1|marlowe-mi355x-1
+86754.0|bash|COMPLETED|0:0|00:00:43|16|cpu=16,gres/gpu=1,mem=128G,node=1|marlowe-mi355x-1
+86754.1|bash|COMPLETED|0:0|00:02:12|16|cpu=16,gres/gpu=1,mem=128G,node=1|marlowe-mi355x-1
+86754.2|bash|COMPLETED|0:0|00:02:07|16|cpu=16,gres/gpu=1,mem=128G,node=1|marlowe-mi355x-1
+86754.3|bash|FAILED|1:0|00:00:20|16|cpu=16,gres/gpu=1,mem=128G,node=1|marlowe-mi355x-1
+86754.4|bash|COMPLETED|0:0|00:00:30|16|cpu=16,gres/gpu=1,mem=128G,node=1|marlowe-mi355x-1
+86754.5|llvm-objdump|COMPLETED|0:0|00:00:00|2|cpu=2,gres/gpu=1,mem=128G,node=1|marlowe-mi355x-1
+86754.6|bash|COMPLETED|0:0|00:02:04|16|cpu=16,gres/gpu=1,mem=128G,node=1|marlowe-mi355x-1
+86754.7|bash|COMPLETED|0:0|00:00:02|2|cpu=2,gres/gpu=1,mem=128G,node=1|marlowe-mi355x-1

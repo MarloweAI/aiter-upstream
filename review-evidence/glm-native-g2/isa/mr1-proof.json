@@ -1,0 +1,9 @@
+{
+  "pristine_baseline_text_sha256": "9ebe9d832b2f73ca8c47fe5c7ecf6ea0e30369d1d9184e79d611a82836dbf940",
+  "fresh_mr1_baseline_text_identical": true,
+  "candidate_text_sha256": "40e555d32074f22ca3caabf955b445a7e187edbf1017b4567e537ab8de874621",
+  "independent_review": "ELF64 little-endian .text section bytes parsed with stdlib struct, compared exactly; no pickle execution.",
+  "actual_mr0_lds": "unconditional ds_read2_b32 at0x1d58; pristine MR0 guard preservation hypothesis FAILED",
+  "actual_mr1_lds": "wave compare0x1d6c+s_cbranch_vccz0x1d70 guards ds_read2 at0x1d80",
+  "scope": "same BF16 operands/stores/barriers; actual generated compiler ordering, not source-based load-count assumption"
+}

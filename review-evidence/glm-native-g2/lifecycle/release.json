@@ -1,0 +1,14 @@
+{
+  "job": 86754,
+  "release_command": "scancel 86754 on marlowe-login1 after every owned step terminal",
+  "queue_absence_verified": true,
+  "remaining_owned_gpu_allocation": false,
+  "terminal_state": "CANCELLED by owner after completed steps; not experiment failure",
+  "allocated_gpu_count": 1,
+  "node": "marlowe-mi355x-1",
+  "elapsed_seconds": 1687,
+  "requested_limit_seconds": 7200,
+  "scope_budget_seconds": 3600,
+  "unrelated_jobs_preserved": true,
+  "unix_time_recorded": 1790753297.5686002
+}

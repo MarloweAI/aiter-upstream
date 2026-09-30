@@ -1,0 +1,48 @@
+{
+  "schema": 1,
+  "clean_mean_per_case_median_us": null,
+  "profiled_device_span_us": 28.6796875,
+  "profiled_kernel_sum_us": 28.677,
+  "profile_minus_clean_us": null,
+  "visible_kernels": 4,
+  "usable_kernel_breakdown": true,
+  "warning": null,
+  "kernels": [
+    {
+      "name": "void aiter::opus_moe_sorting_entry<aiter::MoeSortingMultiPhaseKernel_P0_v2<aiter::MoeSortingProblemMp<int, float, int, 1, false, false, true> >, aiter::MoeSortingMultiPhaseKernel_P0_v2<aiter::MoeSortingProblemMp<int, float, int, 1, false, false, true> >::Kargs>(aiter::MoeSortingMultiPhaseKernel_P0_v2<aiter::MoeSortingProblemMp<int, float, int, 1, false, false, true> >::Kargs)",
+      "start_us": 7784821657549.95,
+      "duration_us": 3.919,
+      "stream": 0,
+      "device": 2,
+      "order": 0,
+      "relative_start_us": 0.0
+    },
+    {
+      "name": "void aiter::opus_moe_sorting_entry<aiter::MoeSortingMultiPhaseKernel_P23<aiter::MoeSortingProblemMp<int, float, int, 1, false, false, true> >, aiter::MoeSortingMultiPhaseKernel_P23<aiter::MoeSortingProblemMp<int, float, int, 1, false, false, true> >::Kargs>(aiter::MoeSortingMultiPhaseKernel_P23<aiter::MoeSortingProblemMp<int, float, int, 1, false, false, true> >::Kargs)",
+      "start_us": 7784821657553.87,
+      "duration_us": 4.199,
+      "stream": 0,
+      "device": 2,
+      "order": 1,
+      "relative_start_us": 3.919921875
+    },
+    {
+      "name": "gemm1_a4w4_port_fp4_h6144_i256_ne257_bm16_iq_hpf_sep_native_scale_bn128_xcd4",
+      "start_us": 7784821657558.07,
+      "duration_us": 14.6,
+      "stream": 0,
+      "device": 2,
+      "order": 2,
+      "relative_start_us": 8.1201171875
+    },
+    {
+      "name": "gemm2_a4w4_port_hmax8192_imax256_bm16_bn128_bk128_atomic_bhoist_apf_spart4x2_bf16lds_kst_v2_biasabi7_sparseepi",
+      "start_us": 7784821657572.671,
+      "duration_us": 5.959,
+      "stream": 0,
+      "device": 2,
+      "order": 3,
+      "relative_start_us": 22.720703125
+    }
+  ]
+}

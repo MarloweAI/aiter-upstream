@@ -1,0 +1,379 @@
+{
+  "identity": {
+    "schema": 1,
+    "job": "86754",
+    "host": "marlowe-mi355x-1",
+    "device": "AMD Instinct MI355X",
+    "torch": "2.11.0+rocm7.2",
+    "hip": "7.2.26015",
+    "aiter_sha": "e497dbe9ff3a9947d1a20a6cc5f0b9eb16316908",
+    "aiter_source": "/workspace/hassane/moe-native-ports-20260929/source/aiter/aiter/fused_moe.py",
+    "sglang_sha": "46beacf13dbcd9d3aea456301f2d39ea3888540e",
+    "native_sglang_sorting_adapter": "/workspace/hassane/moe-native-ports-20260929/source/sglang/python/sglang/kernels/ops/moe/moe_sorting_small.py",
+    "native_sorting_callable": {
+      "module": "aiter.fused_moe",
+      "name": "_moe_sorting_impl",
+      "kwargs": {}
+    },
+    "library_digest": "f37741242aee52a3668ae6b68a6f76113980bd925d9498359997245fc4bf707f",
+    "variant_digest": "511f96e72bcc4f60273de312e736fa070f392e9e45782b468fd215bae069ba54",
+    "comparison_mode": "native-port",
+    "ordered_digest": null,
+    "native_port_manifest": {
+      "schema": 1,
+      "unit": "pr-a-v1",
+      "aiter_base_sha": "c8325e00c88f1b97af75150a311f6704c2729f9c",
+      "aiter_feature_sha": "e497dbe9ff3a9947d1a20a6cc5f0b9eb16316908",
+      "patch_sha256": "d46605f36a5729519fdae64e1b549f8f36c20c49a0845b10b79e850fdb85e8ee",
+      "source_files": {
+        "aiter/fused_moe.py": "b7b9c16f1c749c97d9756ce9bb8e7362e1a354d18b19a88876dded517a0c9a27",
+        "aiter/ops/flydsl/kernels/mxmoe_dispatcher.py": "3542e3283bd532bfc94002fd5a58213217ec4eebc06c0dce988e4fd739349424",
+        "aiter/ops/flydsl/kernels/mxmoe_gemm_v2.py": "af1e32650ad771207273bbd955f0e94f8040839b69c9b9d8d703a01c20eeb34c",
+        "aiter/ops/flydsl/kernels/mxmoe_sparse_epilogue.py": "f6aff27b7e1e528b957e4a6dece6cc53ad8c620bd7f9c2f3bf7e32149c425cf8",
+        "op_tests/test_mxmoe_sparse_epilogue_policy.py": "e37dde71ae1fb05c9437615ec6e0f613dd2f90b3e42cc41f97bdd0e8af87aae8",
+        "op_tests/flydsl_tests/test_mxmoe_sparse_epilogue.py": "6f3ef1de7bb39a5e5ee85ac9dcb53d562a4729911a7290dd65755a852776388d"
+      },
+      "stage2_factory": "aiter.ops.flydsl.kernels.mxmoe_sparse_epilogue.make_g2_sparse_epilogue_override",
+      "stage2_kwargs": {
+        "enabled": true
+      },
+      "concurrencies": [
+        8,
+        16,
+        32
+      ],
+      "expected_kernel_marker": "_sparseepi",
+      "unchanged_source_files": [
+        "aiter/ops/flydsl/kernels/mxfp4_gemm1.py",
+        "aiter/ops/flydsl/kernels/mxfp4_gemm2.py",
+        "aiter/ops/flydsl/kernels/mxfp4_gemm_common.py",
+        "aiter/configs/model_configs/glm5_fp4_tuned_fmoe.csv"
+      ],
+      "harness_files": {
+        "benchmarks/moe_replay/upstream_campaign.py": "e10ebb8c1e9d9a531ee9f66d3f611f4c5a1a2ff6f10d29905976d87772610734",
+        "benchmarks/moe_replay/upstream_native_port.py": "476a1218b5d84c09d1e8b664516310c90d782c9f82e33536a48306e478a0de8d",
+        "benchmarks/moe_replay/upstream_native_stage2.py": "ea9aea70e0efead200fa45b80be1cbae937422331cf74d411c174d083afc211c",
+        "benchmarks/moe_replay/upstream_reference.py": "20db9053f7ef45df19b17983e2671216849601f28f4557d7ae51d6ea67ff17ad",
+        "benchmarks/moe_replay/upstream_contract.py": "28fc6d19967d4457b965b2538700c357668c21e158564cdf4543ab106841bf72",
+        "benchmarks/moe_replay/upstream_profile.py": "609effa69e5db355d1da8858d966e64d1e5b74dae77ecbb3a39629e650bef6f2",
+        "benchmarks/moe_replay/reference.py": "3bce64272a5bda207c64a982f462ab1202ae0497c2d0990a58efa5b4e8fd83e2",
+        "benchmarks/moe_replay/events.py": "f6df59644aa5feca6b8a6df757b95dc5a510fb5fe98eec38afb6f80febf13479",
+        "benchmarks/moe_replay/kernels.py": "4f79af00bb7b674092c51d1723ba39d170ff7565303705c9a549f5e75dd6bfaa",
+        "benchmarks/moe_replay/upstream_replay_launch.sh": "788f990efeca2adea1991f354ebf61d51d98002fcd873c345121bbe8574f80ec"
+      },
+      "fallback": {
+        "1": "Generated legacy G2 already predicates padded LDS reads; unchanged dispatch",
+        "2": "Generated legacy G2 already predicates padded LDS reads; unchanged dispatch",
+        "4": "Generated legacy G2 already predicates padded LDS reads; unchanged dispatch",
+        "64": "Different BM32 configuration outside initial domain; preserved historical native accuracy failure"
+      },
+      "baseline_pristine_proof": {
+        "source_review": "Original defaultNone override; defaultFalse emitter branch retains original function/quantization/config; independent reviewer cleared CPU source",
+        "original_isa_sha256": "6995664cb9f534e52d405fd3d2131670373f1a6bacfcd2a99e7b5de453871d37",
+        "compiled_baseline_comparison": "Verified new defaultFalse and original c832 G2 ELF .text byte-identical: 2368 bytes, SHA256 9ebe9d832b2f73ca8c47fe5c7ecf6ea0e30369d1d9184e79d611a82836dbf940. See results/native-agent1/pr-a-v1/compiled-baseline-proof.json."
+      },
+      "precision": "Native BF16 hidden/output, MXFP4/E8M0, FP32 middle 0x7fffff and supplied FP32 route weights; FP8 KV capture provenance",
+      "sorting_adapter_actual_sha": "46beacf13dbcd9d3aea456301f2d39ea3888540e",
+      "sorting_adapter_current_plan_sha": "d3f8a8f4f57f0b058aa0e4eb0cff6b7da7c0b1ce",
+      "sorting_adapter_sha256": "16ecef99a80d2efef01885674a181829949f5c1b7dce7d61b722f4c53e256442",
+      "public_override_abi": "Optional callback stays outside torch.library schema: defaultNone retains exact decorated native wrapper; candidate/capture invoke the same _fused_moe_impl directly with native preparation."
+    },
+    "native_port_manifest_sha256": "03bcbed8eff8c9a37d01a8101ce066f8737c3c163c67acebe7f4b6b259b2d7e9",
+    "runner_sha256": "e10ebb8c1e9d9a531ee9f66d3f611f4c5a1a2ff6f10d29905976d87772610734",
+    "capture": "/workspace/hassane/moe-upstream-qualification-20260929/results/fp8-native-target-verify-capture",
+    "runtime": {
+      "job": "86527",
+      "host": "marlowe-mi355x-1",
+      "torch": "2.11.0+rocm7.2",
+      "hip": "7.2.26015",
+      "triton": "3.7.0",
+      "device": "AMD Instinct MI355X",
+      "aiter_sha": "c8325e00c88f1b97af75150a311f6704c2729f9c",
+      "aiter_module": "/workspace/hassane/moe-upstream-qualification-20260929/source/aiter/aiter/fused_moe.py",
+      "sglang_sha": "46beacf13dbcd9d3aea456301f2d39ea3888540e",
+      "flydsl": "0.3.4.1",
+      "purpose": "synthetic ABI initialization only; no performance cells",
+      "native_dispatch": {
+        "4": {
+          "stage1": {
+            "module": "aiter.fused_moe",
+            "name": "_mxfp4_a4w4_stage1_fw",
+            "kwargs": {
+              "kernelName1": "flydsl_mxmoe_g1_a4w4_16x128x256_f16in_hpf_nt_xcd4",
+              "interleave": "False"
+            }
+          },
+          "stage2": {
+            "module": "aiter.fused_moe",
+            "name": "_mxfp4_a4w4_stage2_fw",
+            "kwargs": {
+              "kernelName2": "flydsl_mxmoe_g2_a4w4_16x256x256_atomic"
+            }
+          },
+          "block_m": "16",
+          "ksplit": "0",
+          "fuse_quant": "fp4",
+          "output_aux": "opus",
+          "full_impl": "None",
+          "prequant": "False"
+        },
+        "32": {
+          "stage1": {
+            "module": "aiter.fused_moe",
+            "name": "_mxfp4_a4w4_stage1_fw",
+            "kwargs": {
+              "kernelName1": "flydsl_mxmoe_g1_a4w4_16x128x256_f16in_hpf_nt_xcd4",
+              "interleave": "False"
+            }
+          },
+          "stage2": {
+            "module": "aiter.fused_moe",
+            "name": "_mxfp4_a4w4_stage2_fw",
+            "kwargs": {
+              "kernelName2": "flydsl_moe2_layout_afp4_wfp4_bf16_t16x128x128_atomic_sbm16"
+            }
+          },
+          "block_m": "16",
+          "ksplit": "0",
+          "fuse_quant": "fp4",
+          "output_aux": "opus",
+          "full_impl": "None",
+          "prequant": "False"
+        },
+        "128": {
+          "stage1": {
+            "module": "aiter.fused_moe",
+            "name": "_mxfp4_a4w4_stage1_fw",
+            "kwargs": {
+              "kernelName1": "flydsl_mxmoe_g1_a4w4_16x128x256_f16in_hpf_nt_xcd4",
+              "interleave": "False"
+            }
+          },
+          "stage2": {
+            "module": "aiter.fused_moe",
+            "name": "_mxfp4_a4w4_stage2_fw",
+            "kwargs": {
+              "kernelName2": "flydsl_moe2_layout_afp4_wfp4_bf16_t16x128x128_atomic_sbm16"
+            }
+          },
+          "block_m": "16",
+          "ksplit": "0",
+          "fuse_quant": "fp4",
+          "output_aux": "opus",
+          "full_impl": "None",
+          "prequant": "False"
+        },
+        "256": {
+          "stage1": {
+            "module": "aiter.fused_moe",
+            "name": "_flydsl_stage1_wrapper",
+            "kwargs": {
+              "kernelName": "flydsl_moe1_afp4_wfp4_bf16_t32x64x256_w3_kw2_fp4",
+              "activation": "ActivationType.Silu",
+              "inter_dim_pad": "0",
+              "model_dim_pad": "0",
+              "out_dtype": "fp4"
+            }
+          },
+          "stage2": {
+            "module": "aiter.fused_moe",
+            "name": "_flydsl_v2_stage2_wrapper",
+            "kwargs": {
+              "kernelName": "flydsl_moe2_layout_afp4_wfp4_bf16_t32x256x256_atomic_nt_sbm32",
+              "model_dim": "6144",
+              "inter_dim": "256",
+              "num_experts": "257"
+            }
+          },
+          "block_m": "32",
+          "ksplit": "0",
+          "fuse_quant": "fp4",
+          "output_aux": "False",
+          "full_impl": "None",
+          "prequant": "True"
+        }
+      },
+      "capture_imports": {
+        "passed": true,
+        "sglang_module": "/workspace/hassane/moe-upstream-qualification-20260929/source/sglang/python/sglang/__init__.py"
+      },
+      "state": "completed"
+    },
+    "samples": 40,
+    "warmups": 10,
+    "boundary": "supplied native routes through complete local combination",
+    "estimator": "mean of per-case medians, randomized paired graph samples",
+    "scope": "one TP8/EP1 rank; captured sampled layers only; no collectives or router",
+    "group_meaning": "conditional selected-minus-group contribution; not additive upstream PR gains"
+  },
+  "receipts": [
+    {
+      "group": "pr-a-v1",
+      "concurrency": 1,
+      "status": "not_applicable",
+      "identical_dispatch": true,
+      "reason": "Generated legacy G2 already predicates padded LDS reads; unchanged dispatch",
+      "timing": "not rerun; native dispatch unchanged"
+    },
+    {
+      "group": "pr-a-v1",
+      "concurrency": 2,
+      "status": "not_applicable",
+      "identical_dispatch": true,
+      "reason": "Generated legacy G2 already predicates padded LDS reads; unchanged dispatch",
+      "timing": "not rerun; native dispatch unchanged"
+    },
+    {
+      "group": "pr-a-v1",
+      "concurrency": 4,
+      "status": "not_applicable",
+      "identical_dispatch": true,
+      "reason": "Generated legacy G2 already predicates padded LDS reads; unchanged dispatch",
+      "timing": "not rerun; native dispatch unchanged"
+    },
+    {
+      "group": "pr-a-v1",
+      "concurrency": 64,
+      "status": "historical_native_gate_failed",
+      "identical_dispatch": false,
+      "reason": "Different BM32 configuration outside initial domain; preserved historical native accuracy failure",
+      "timing": "not rerun; native dispatch unchanged"
+    },
+    {
+      "group": "pr-a-v1",
+      "concurrency": 8,
+      "rows": 32,
+      "status": "qualified",
+      "gate": {
+        "source": true,
+        "routes": true,
+        "dispatch": true,
+        "eager": true,
+        "graph": true,
+        "state": true
+      },
+      "baseline_us": 52.941334375645965,
+      "candidate_us": 52.7549875046437,
+      "cases": 480,
+      "independent_reference_cases_per_arm": 480,
+      "phase_seconds": {
+        "prepare_dispatch": 0.7297408349113539,
+        "independent_references": 19.84795602201484,
+        "eager_graph_state_gates": 2.2690320539986715,
+        "clean_and_profiles": 3.830472945002839
+      },
+      "comparison_semantics": "matched native source patch, unchanged quantizer/route/output contract",
+      "excluded_from_primary_ranking": false,
+      "cross_reference_parity_passed": true,
+      "total_wall_seconds": 31.14159104495775
+    },
+    {
+      "group": "pr-a-v1",
+      "concurrency": 16,
+      "rows": 64,
+      "status": "qualified",
+      "gate": {
+        "source": true,
+        "routes": true,
+        "dispatch": true,
+        "eager": true,
+        "graph": true,
+        "state": true
+      },
+      "baseline_us": 74.22135421462978,
+      "candidate_us": 73.92194473262255,
+      "cases": 480,
+      "independent_reference_cases_per_arm": 480,
+      "phase_seconds": {
+        "prepare_dispatch": 0.044492362067103386,
+        "independent_references": 23.457101900014095,
+        "eager_graph_state_gates": 2.1684764539822936,
+        "clean_and_profiles": 5.060797774000093
+      },
+      "comparison_semantics": "matched native source patch, unchanged quantizer/route/output contract",
+      "excluded_from_primary_ranking": false,
+      "cross_reference_parity_passed": true,
+      "total_wall_seconds": 35.065534561057575
+    },
+    {
+      "group": "pr-a-v1",
+      "concurrency": 32,
+      "rows": 128,
+      "status": "qualified",
+      "gate": {
+        "source": true,
+        "routes": true,
+        "dispatch": true,
+        "eager": true,
+        "graph": true,
+        "state": true
+      },
+      "baseline_us": 85.17502288644512,
+      "candidate_us": 84.81295310193673,
+      "cases": 480,
+      "independent_reference_cases_per_arm": 480,
+      "phase_seconds": {
+        "prepare_dispatch": 0.020983399008400738,
+        "independent_references": 25.92481899203267,
+        "eager_graph_state_gates": 2.664778994047083,
+        "clean_and_profiles": 5.574277358944528
+      },
+      "comparison_semantics": "matched native source patch, unchanged quantizer/route/output contract",
+      "excluded_from_primary_ranking": false,
+      "cross_reference_parity_passed": true,
+      "total_wall_seconds": 38.87616474297829
+    }
+  ],
+  "marginal_savings": {
+    "pr-a-v1": {
+      "cells": {
+        "1": {
+          "status": "not_applicable",
+          "saved_us": 0.0
+        },
+        "2": {
+          "status": "not_applicable",
+          "saved_us": 0.0
+        },
+        "4": {
+          "status": "not_applicable",
+          "saved_us": 0.0
+        },
+        "64": {
+          "status": "historical_native_gate_failed"
+        },
+        "8": {
+          "status": "qualified",
+          "baseline_us": 52.941334375645965,
+          "candidate_us": 52.7549875046437,
+          "saved_us": 0.18634687100226444,
+          "reduction_pct": 0.35198748425953463
+        },
+        "16": {
+          "status": "qualified",
+          "baseline_us": 74.22135421462978,
+          "candidate_us": 73.92194473262255,
+          "saved_us": 0.29940948200723483,
+          "reduction_pct": 0.40340072634812985
+        },
+        "32": {
+          "status": "qualified",
+          "baseline_us": 85.17502288644512,
+          "candidate_us": 84.81295310193673,
+          "saved_us": 0.36206978450839244,
+          "reduction_pct": 0.4250891543535033
+        }
+      },
+      "saved_us_sum": 0.8478261375178917,
+      "missing": [
+        64
+      ],
+      "measured_concurrencies": [
+        8,
+        16,
+        32
+      ],
+      "complete": false
+    }
+  }
+}

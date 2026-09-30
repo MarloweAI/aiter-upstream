@@ -1,0 +1,19 @@
+{
+  "schema": 1,
+  "source_sha": "296c72c1ed8b317cd00407f082ca6f743efe8978",
+  "job": 86754,
+  "disassembly_step": "86754.5",
+  "baseline_text_sha256": "9ebe9d832b2f73ca8c47fe5c7ecf6ea0e30369d1d9184e79d611a82836dbf940",
+  "baseline_text_bytes": 2368,
+  "baseline_matches_pristine": true,
+  "candidate_text_sha256": "40e555d32074f22ca3caabf955b445a7e187edbf1017b4567e537ab8de874621",
+  "candidate_elf_bytes": 6584,
+  "candidate_isa_sha256": "ac845715e427763a62423671da152accbff98d6da7aeb82f34eceeab3d4f16bc",
+  "candidate_symbol": "gemm2_a4w4_port_hmax8192_imax256_bm16_bn128_bk128_atomic_bhoist_apf_spart4x2_bf16lds_kst_v2_biasabi7_sparseepi_mr1",
+  "mr0_guard_preservation_hypothesis_passed": false,
+  "actual_mr0": "ds_read2_b32 at0x1d58 unconditional; per-row valid compare occurs at0x1da8",
+  "actual_mr1": "v_cmp at0x1d6c /s_cbranch_vccz at0x1d70 guards ds_read2_b32 at0x1d80",
+  "decision": "Evaluate actual arithmetic-safe mask-relocation/prefetch variant within the approved second/final variant budget. Preserve failed original hypothesis; no third variant or policy change.",
+  "independent_review": "source owner and serving-integration reviewer independently inspected emitted ISA",
+  "bulk_isa": "/workspace/hassane/moe-native-ports-20260929/isa/mr1-candidate.isa"
+}

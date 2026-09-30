@@ -1,0 +1,16 @@
+{
+  "status": "qualified",
+  "gate": {
+    "source": true,
+    "routes": true,
+    "dispatch": true,
+    "eager": true,
+    "graph": true,
+    "state": true
+  },
+  "cases": 480,
+  "same_g1_intermediates": true,
+  "baseline_us": 20.918247930239886,
+  "candidate_us": 20.747446868335828,
+  "secondary_only": true
+}

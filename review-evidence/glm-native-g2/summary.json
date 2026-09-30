@@ -1,0 +1,389 @@
+{
+  "identity": {
+    "schema": 1,
+    "job": "86754",
+    "host": "marlowe-mi355x-1",
+    "device": "AMD Instinct MI355X",
+    "torch": "2.11.0+rocm7.2",
+    "hip": "7.2.26015",
+    "aiter_sha": "296c72c1ed8b317cd00407f082ca6f743efe8978",
+    "aiter_source": "/workspace/hassane/moe-native-ports-20260929/source/aiter/aiter/fused_moe.py",
+    "sglang_sha": "46beacf13dbcd9d3aea456301f2d39ea3888540e",
+    "native_sglang_sorting_adapter": "/workspace/hassane/moe-native-ports-20260929/source/sglang/python/sglang/kernels/ops/moe/moe_sorting_small.py",
+    "native_sorting_callable": {
+      "module": "aiter.fused_moe",
+      "name": "_moe_sorting_impl",
+      "kwargs": {}
+    },
+    "library_digest": "f37741242aee52a3668ae6b68a6f76113980bd925d9498359997245fc4bf707f",
+    "variant_digest": "511f96e72bcc4f60273de312e736fa070f392e9e45782b468fd215bae069ba54",
+    "comparison_mode": "native-port",
+    "ordered_digest": null,
+    "native_port_manifest": {
+      "schema": 1,
+      "unit": "pr-a-mr1-v2",
+      "aiter_base_sha": "c8325e00c88f1b97af75150a311f6704c2729f9c",
+      "aiter_feature_sha": "296c72c1ed8b317cd00407f082ca6f743efe8978",
+      "patch_sha256": "aec20fd32c3f8dea81e158453a43821e8010f5c005e0b0579a93ceafdaf95662",
+      "source_files": {
+        "aiter/fused_moe.py": "b7b9c16f1c749c97d9756ce9bb8e7362e1a354d18b19a88876dded517a0c9a27",
+        "aiter/ops/flydsl/kernels/mxmoe_dispatcher.py": "94c55ee5b85cde77afd56f52e8ee49b9c32ae31292fbaeb8d6cdd7568ed02070",
+        "aiter/ops/flydsl/kernels/mxmoe_gemm_v2.py": "274031ae729455ed039eda584ff7d6de1a96937133a92cb25ed0a7948c2f5598",
+        "aiter/ops/flydsl/kernels/mxmoe_sparse_epilogue.py": "f6aff27b7e1e528b957e4a6dece6cc53ad8c620bd7f9c2f3bf7e32149c425cf8",
+        "op_tests/test_mxmoe_sparse_epilogue_policy.py": "1a7d0d481e6db182cc6b41e10b50c6e35056af9ce62673bf7d716e869778e099",
+        "op_tests/flydsl_tests/test_mxmoe_sparse_epilogue.py": "6f3ef1de7bb39a5e5ee85ac9dcb53d562a4729911a7290dd65755a852776388d"
+      },
+      "stage2_factory": "aiter.ops.flydsl.kernels.mxmoe_sparse_epilogue.make_g2_sparse_epilogue_override",
+      "stage2_kwargs": {
+        "enabled": true
+      },
+      "concurrencies": [
+        8,
+        16,
+        32
+      ],
+      "expected_kernel_marker": "_sparseepi_mr1",
+      "unchanged_source_files": [
+        "aiter/ops/flydsl/kernels/mxfp4_gemm1.py",
+        "aiter/ops/flydsl/kernels/mxfp4_gemm2.py",
+        "aiter/ops/flydsl/kernels/mxfp4_gemm_common.py",
+        "aiter/configs/model_configs/glm5_fp4_tuned_fmoe.csv"
+      ],
+      "harness_files": {
+        "benchmarks/moe_replay/upstream_campaign.py": "4366d0cfe31b2d8d1bb0018de3cf9d37adb43142609c4a18d75edbd7009951c9",
+        "benchmarks/moe_replay/upstream_native_port.py": "476a1218b5d84c09d1e8b664516310c90d782c9f82e33536a48306e478a0de8d",
+        "benchmarks/moe_replay/upstream_native_stage2.py": "ea9aea70e0efead200fa45b80be1cbae937422331cf74d411c174d083afc211c",
+        "benchmarks/moe_replay/upstream_reference.py": "20db9053f7ef45df19b17983e2671216849601f28f4557d7ae51d6ea67ff17ad",
+        "benchmarks/moe_replay/upstream_contract.py": "28fc6d19967d4457b965b2538700c357668c21e158564cdf4543ab106841bf72",
+        "benchmarks/moe_replay/upstream_profile.py": "609effa69e5db355d1da8858d966e64d1e5b74dae77ecbb3a39629e650bef6f2",
+        "benchmarks/moe_replay/reference.py": "3bce64272a5bda207c64a982f462ab1202ae0497c2d0990a58efa5b4e8fd83e2",
+        "benchmarks/moe_replay/events.py": "f6df59644aa5feca6b8a6df757b95dc5a510fb5fe98eec38afb6f80febf13479",
+        "benchmarks/moe_replay/kernels.py": "4f79af00bb7b674092c51d1723ba39d170ff7565303705c9a549f5e75dd6bfaa",
+        "benchmarks/moe_replay/upstream_replay_launch.sh": "8dea258af578f1b1292f351422dd49348bf0eb04148beb55262d86e8faebfa31"
+      },
+      "fallback": {
+        "1": "Generated legacy G2 already predicates padded LDS reads; unchanged dispatch",
+        "2": "Generated legacy G2 already predicates padded LDS reads; unchanged dispatch",
+        "4": "Generated legacy G2 already predicates padded LDS reads; unchanged dispatch",
+        "64": "Different BM32 configuration outside initial domain; preserved historical native accuracy failure"
+      },
+      "baseline_pristine_proof": {
+        "source_review": "Original defaultNone override; defaultFalse emitter branch retains original function/quantization/config; independent reviewer cleared CPU source",
+        "original_isa_sha256": "6995664cb9f534e52d405fd3d2131670373f1a6bacfcd2a99e7b5de453871d37",
+        "compiled_baseline_comparison": "Existing v1 .text proof; verify new defaultFalse emission still byte-identical before v2 admission."
+      },
+      "precision": "Native BF16 hidden/output, MXFP4/E8M0, FP32 middle 0x7fffff and supplied FP32 route weights; FP8 KV capture provenance",
+      "sorting_adapter_actual_sha": "46beacf13dbcd9d3aea456301f2d39ea3888540e",
+      "sorting_adapter_current_plan_sha": "d3f8a8f4f57f0b058aa0e4eb0cff6b7da7c0b1ce",
+      "sorting_adapter_sha256": "16ecef99a80d2efef01885674a181829949f5c1b7dce7d61b722f4c53e256442",
+      "public_override_abi": "Optional callback stays outside torch.library schema: defaultNone retains exact decorated native wrapper; candidate/capture invoke the same _fused_moe_impl directly with native preparation.",
+      "variant_reason": "Approved second/final variant is measured as actual MR1-mask relocation/prefetch. Source intended to preserve compiler MR0 guard, but emitted MR0 load is unconditional; MR1 is wave-guarded. Failed source/ISA hypothesis retained. Arithmetic/barriers/reference/gates unchanged; no claim MR0 guard preservation.",
+      "flydsl_cache_namespace": "Per-variant fresh cache /workspace/hassane/moe-native-ports-20260929/cache/flydsl-pr-a-mr1-296c72c1; required after stale v1 nested-emitter artifact was rejected by actual dispatch gate.",
+      "actual_emitted_isa": {
+        "mr0_load": "unconditional ds_read2 at 0x1d58 before validity compare0x1da8",
+        "mr1_load": "wave predicate compare0x1d6c and s_cbranch_vccz0x1d70 guards ds_read2 0x1d80",
+        "mr0_guard_preservation_hypothesis_passed": false,
+        "baseline_text_sha256": "9ebe9d832b2f73ca8c47fe5c7ecf6ea0e30369d1d9184e79d611a82836dbf940",
+        "candidate_text_sha256": "40e555d32074f22ca3caabf955b445a7e187edbf1017b4567e537ab8de874621",
+        "decision": "Parent explicitly approved actual safe mask-relocation evaluation within existing second-variant and60minute budget."
+      }
+    },
+    "native_port_manifest_sha256": "a5ad7137926113556816e86474ff6e32ccbe9b12e138a3b7fb18951367523d48",
+    "runner_sha256": "4366d0cfe31b2d8d1bb0018de3cf9d37adb43142609c4a18d75edbd7009951c9",
+    "capture": "/workspace/hassane/moe-upstream-qualification-20260929/results/fp8-native-target-verify-capture",
+    "runtime": {
+      "job": "86527",
+      "host": "marlowe-mi355x-1",
+      "torch": "2.11.0+rocm7.2",
+      "hip": "7.2.26015",
+      "triton": "3.7.0",
+      "device": "AMD Instinct MI355X",
+      "aiter_sha": "c8325e00c88f1b97af75150a311f6704c2729f9c",
+      "aiter_module": "/workspace/hassane/moe-upstream-qualification-20260929/source/aiter/aiter/fused_moe.py",
+      "sglang_sha": "46beacf13dbcd9d3aea456301f2d39ea3888540e",
+      "flydsl": "0.3.4.1",
+      "purpose": "synthetic ABI initialization only; no performance cells",
+      "native_dispatch": {
+        "4": {
+          "stage1": {
+            "module": "aiter.fused_moe",
+            "name": "_mxfp4_a4w4_stage1_fw",
+            "kwargs": {
+              "kernelName1": "flydsl_mxmoe_g1_a4w4_16x128x256_f16in_hpf_nt_xcd4",
+              "interleave": "False"
+            }
+          },
+          "stage2": {
+            "module": "aiter.fused_moe",
+            "name": "_mxfp4_a4w4_stage2_fw",
+            "kwargs": {
+              "kernelName2": "flydsl_mxmoe_g2_a4w4_16x256x256_atomic"
+            }
+          },
+          "block_m": "16",
+          "ksplit": "0",
+          "fuse_quant": "fp4",
+          "output_aux": "opus",
+          "full_impl": "None",
+          "prequant": "False"
+        },
+        "32": {
+          "stage1": {
+            "module": "aiter.fused_moe",
+            "name": "_mxfp4_a4w4_stage1_fw",
+            "kwargs": {
+              "kernelName1": "flydsl_mxmoe_g1_a4w4_16x128x256_f16in_hpf_nt_xcd4",
+              "interleave": "False"
+            }
+          },
+          "stage2": {
+            "module": "aiter.fused_moe",
+            "name": "_mxfp4_a4w4_stage2_fw",
+            "kwargs": {
+              "kernelName2": "flydsl_moe2_layout_afp4_wfp4_bf16_t16x128x128_atomic_sbm16"
+            }
+          },
+          "block_m": "16",
+          "ksplit": "0",
+          "fuse_quant": "fp4",
+          "output_aux": "opus",
+          "full_impl": "None",
+          "prequant": "False"
+        },
+        "128": {
+          "stage1": {
+            "module": "aiter.fused_moe",
+            "name": "_mxfp4_a4w4_stage1_fw",
+            "kwargs": {
+              "kernelName1": "flydsl_mxmoe_g1_a4w4_16x128x256_f16in_hpf_nt_xcd4",
+              "interleave": "False"
+            }
+          },
+          "stage2": {
+            "module": "aiter.fused_moe",
+            "name": "_mxfp4_a4w4_stage2_fw",
+            "kwargs": {
+              "kernelName2": "flydsl_moe2_layout_afp4_wfp4_bf16_t16x128x128_atomic_sbm16"
+            }
+          },
+          "block_m": "16",
+          "ksplit": "0",
+          "fuse_quant": "fp4",
+          "output_aux": "opus",
+          "full_impl": "None",
+          "prequant": "False"
+        },
+        "256": {
+          "stage1": {
+            "module": "aiter.fused_moe",
+            "name": "_flydsl_stage1_wrapper",
+            "kwargs": {
+              "kernelName": "flydsl_moe1_afp4_wfp4_bf16_t32x64x256_w3_kw2_fp4",
+              "activation": "ActivationType.Silu",
+              "inter_dim_pad": "0",
+              "model_dim_pad": "0",
+              "out_dtype": "fp4"
+            }
+          },
+          "stage2": {
+            "module": "aiter.fused_moe",
+            "name": "_flydsl_v2_stage2_wrapper",
+            "kwargs": {
+              "kernelName": "flydsl_moe2_layout_afp4_wfp4_bf16_t32x256x256_atomic_nt_sbm32",
+              "model_dim": "6144",
+              "inter_dim": "256",
+              "num_experts": "257"
+            }
+          },
+          "block_m": "32",
+          "ksplit": "0",
+          "fuse_quant": "fp4",
+          "output_aux": "False",
+          "full_impl": "None",
+          "prequant": "True"
+        }
+      },
+      "capture_imports": {
+        "passed": true,
+        "sglang_module": "/workspace/hassane/moe-upstream-qualification-20260929/source/sglang/python/sglang/__init__.py"
+      },
+      "state": "completed"
+    },
+    "samples": 40,
+    "warmups": 10,
+    "boundary": "supplied native routes through complete local combination",
+    "estimator": "mean of per-case medians, randomized paired graph samples",
+    "scope": "one TP8/EP1 rank; captured sampled layers only; no collectives or router",
+    "group_meaning": "matched native baseline-versus-source-patch comparison"
+  },
+  "receipts": [
+    {
+      "group": "pr-a-mr1-v2",
+      "concurrency": 1,
+      "status": "not_applicable",
+      "identical_dispatch": true,
+      "reason": "Generated legacy G2 already predicates padded LDS reads; unchanged dispatch",
+      "timing": "not rerun; native dispatch unchanged"
+    },
+    {
+      "group": "pr-a-mr1-v2",
+      "concurrency": 2,
+      "status": "not_applicable",
+      "identical_dispatch": true,
+      "reason": "Generated legacy G2 already predicates padded LDS reads; unchanged dispatch",
+      "timing": "not rerun; native dispatch unchanged"
+    },
+    {
+      "group": "pr-a-mr1-v2",
+      "concurrency": 4,
+      "status": "not_applicable",
+      "identical_dispatch": true,
+      "reason": "Generated legacy G2 already predicates padded LDS reads; unchanged dispatch",
+      "timing": "not rerun; native dispatch unchanged"
+    },
+    {
+      "group": "pr-a-mr1-v2",
+      "concurrency": 64,
+      "status": "historical_native_gate_failed",
+      "identical_dispatch": false,
+      "reason": "Different BM32 configuration outside initial domain; preserved historical native accuracy failure",
+      "timing": "not rerun; native dispatch unchanged"
+    },
+    {
+      "group": "pr-a-mr1-v2",
+      "concurrency": 8,
+      "rows": 32,
+      "status": "qualified",
+      "gate": {
+        "source": true,
+        "routes": true,
+        "dispatch": true,
+        "eager": true,
+        "graph": true,
+        "state": true
+      },
+      "baseline_us": 52.91201772245889,
+      "candidate_us": 52.55225100942577,
+      "cases": 480,
+      "independent_reference_cases_per_arm": 480,
+      "phase_seconds": {
+        "prepare_dispatch": 0.734116334002465,
+        "independent_references": 17.7724379299907,
+        "eager_graph_state_gates": 2.0992374098859727,
+        "clean_and_profiles": 3.8142470229649916
+      },
+      "comparison_semantics": "matched native source patch, unchanged quantizer/route/output contract",
+      "excluded_from_primary_ranking": false,
+      "cross_reference_parity_passed": true,
+      "total_wall_seconds": 28.89461219799705
+    },
+    {
+      "group": "pr-a-mr1-v2",
+      "concurrency": 16,
+      "rows": 64,
+      "status": "qualified",
+      "gate": {
+        "source": true,
+        "routes": true,
+        "dispatch": true,
+        "eager": true,
+        "graph": true,
+        "state": true
+      },
+      "baseline_us": 74.00302390645568,
+      "candidate_us": 73.57973435039942,
+      "cases": 480,
+      "independent_reference_cases_per_arm": 480,
+      "phase_seconds": {
+        "prepare_dispatch": 0.045586779015138745,
+        "independent_references": 23.353182048071176,
+        "eager_graph_state_gates": 2.2440046310657635,
+        "clean_and_profiles": 5.035400697030127
+      },
+      "comparison_semantics": "matched native source patch, unchanged quantizer/route/output contract",
+      "excluded_from_primary_ranking": false,
+      "cross_reference_parity_passed": true,
+      "total_wall_seconds": 35.0355064580217
+    },
+    {
+      "group": "pr-a-mr1-v2",
+      "concurrency": 32,
+      "rows": 128,
+      "status": "qualified",
+      "gate": {
+        "source": true,
+        "routes": true,
+        "dispatch": true,
+        "eager": true,
+        "graph": true,
+        "state": true
+      },
+      "baseline_us": 85.03555112984031,
+      "candidate_us": 84.70167605749641,
+      "cases": 480,
+      "independent_reference_cases_per_arm": 480,
+      "phase_seconds": {
+        "prepare_dispatch": 0.021518136956728995,
+        "independent_references": 26.13077390298713,
+        "eager_graph_state_gates": 2.6309696200769395,
+        "clean_and_profiles": 5.512625206960365
+      },
+      "comparison_semantics": "matched native source patch, unchanged quantizer/route/output contract",
+      "excluded_from_primary_ranking": false,
+      "cross_reference_parity_passed": true,
+      "total_wall_seconds": 38.949558252003044
+    }
+  ],
+  "marginal_savings": {
+    "pr-a-mr1-v2": {
+      "cells": {
+        "1": {
+          "status": "not_applicable",
+          "saved_us": 0.0
+        },
+        "2": {
+          "status": "not_applicable",
+          "saved_us": 0.0
+        },
+        "4": {
+          "status": "not_applicable",
+          "saved_us": 0.0
+        },
+        "64": {
+          "status": "historical_native_gate_failed"
+        },
+        "8": {
+          "status": "qualified",
+          "baseline_us": 52.91201772245889,
+          "candidate_us": 52.55225100942577,
+          "saved_us": 0.3597667130331246,
+          "reduction_pct": 0.6799338383204747
+        },
+        "16": {
+          "status": "qualified",
+          "baseline_us": 74.00302390645568,
+          "candidate_us": 73.57973435039942,
+          "saved_us": 0.42328955605626106,
+          "reduction_pct": 0.5719895400373434
+        },
+        "32": {
+          "status": "qualified",
+          "baseline_us": 85.03555112984031,
+          "candidate_us": 84.70167605749641,
+          "saved_us": 0.33387507234390057,
+          "reduction_pct": 0.3926299858209992
+        }
+      },
+      "saved_us_sum": 1.1169313414332862,
+      "missing": [
+        64
+      ],
+      "measured_concurrencies": [
+        8,
+        16,
+        32
+      ],
+      "complete": false
+    }
+  }
+}

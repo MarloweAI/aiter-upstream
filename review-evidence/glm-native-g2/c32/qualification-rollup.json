@@ -1,0 +1,47 @@
+{
+  "source_path": "/tmp/marlowe-kernels-moe-campaign-20260929/results/native-agent1/pr-a-mr1-full-v2/pr-a-mr1-v2-c32/qualification.json",
+  "source_sha256": "63a78c33d46c91b7c1b488b5a6f545070e3325c7529787ef1c30c0ba98b3b299",
+  "gate": {
+    "source": true,
+    "routes": true,
+    "dispatch": true,
+    "eager": true,
+    "graph": true,
+    "state": true
+  },
+  "arms": {
+    "baseline": {
+      "counts": {
+        "eager": 480,
+        "graph": 1440,
+        "state": 90
+      },
+      "all_numerical_checks_passed": true,
+      "all_finite": true,
+      "max_nrmse": 0.004789434759157881,
+      "max_mismatch_fraction": 0.0,
+      "tolerances": {
+        "rtol": 0.02,
+        "atol": 0.02,
+        "nrmse": 0.01
+      }
+    },
+    "candidate": {
+      "counts": {
+        "eager": 480,
+        "graph": 1440,
+        "state": 90
+      },
+      "all_numerical_checks_passed": true,
+      "all_finite": true,
+      "max_nrmse": 0.004789310602013383,
+      "max_mismatch_fraction": 0.0,
+      "tolerances": {
+        "rtol": 0.02,
+        "atol": 0.02,
+        "nrmse": 0.01
+      }
+    }
+  },
+  "cross_reference_parity_passed": true
+}

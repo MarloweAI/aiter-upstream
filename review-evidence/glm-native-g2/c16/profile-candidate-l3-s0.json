@@ -1,0 +1,48 @@
+{
+  "schema": 1,
+  "clean_mean_per_case_median_us": 46.02000117301941,
+  "profiled_device_span_us": 45.55859375,
+  "profiled_kernel_sum_us": 45.556,
+  "profile_minus_clean_us": -0.4614074230194092,
+  "visible_kernels": 4,
+  "usable_kernel_breakdown": true,
+  "warning": null,
+  "kernels": [
+    {
+      "name": "void aiter::opus_moe_sorting_entry<aiter::MoeSortingMultiPhaseKernel_P0_v2<aiter::MoeSortingProblemMp<int, float, int, 1, false, false, true> >, aiter::MoeSortingMultiPhaseKernel_P0_v2<aiter::MoeSortingProblemMp<int, float, int, 1, false, false, true> >::Kargs>(aiter::MoeSortingMultiPhaseKernel_P0_v2<aiter::MoeSortingProblemMp<int, float, int, 1, false, false, true> >::Kargs)",
+      "start_us": 7785287348200.599,
+      "duration_us": 4.559,
+      "stream": 0,
+      "device": 2,
+      "order": 0,
+      "relative_start_us": 0.0
+    },
+    {
+      "name": "void aiter::opus_moe_sorting_entry<aiter::MoeSortingMultiPhaseKernel_P23<aiter::MoeSortingProblemMp<int, float, int, 1, false, false, true> >, aiter::MoeSortingMultiPhaseKernel_P23<aiter::MoeSortingProblemMp<int, float, int, 1, false, false, true> >::Kargs>(aiter::MoeSortingMultiPhaseKernel_P23<aiter::MoeSortingProblemMp<int, float, int, 1, false, false, true> >::Kargs)",
+      "start_us": 7785287348205.159,
+      "duration_us": 4.159,
+      "stream": 0,
+      "device": 2,
+      "order": 1,
+      "relative_start_us": 4.560546875
+    },
+    {
+      "name": "gemm1_a4w4_port_fp4_h6144_i256_ne257_bm16_iq_sep_native_scale",
+      "start_us": 7785287348209.319,
+      "duration_us": 26.359,
+      "stream": 0,
+      "device": 2,
+      "order": 2,
+      "relative_start_us": 8.720703125
+    },
+    {
+      "name": "gemm2_a4w4_port_hmax8192_imax256_bm16_bn128_bk128_atomic_bhoist_apf_spart4x2_bf16lds_kst_v2_biasabi7_sparseepi_mr1",
+      "start_us": 7785287348235.679,
+      "duration_us": 10.479,
+      "stream": 0,
+      "device": 2,
+      "order": 3,
+      "relative_start_us": 35.080078125
+    }
+  ]
+}

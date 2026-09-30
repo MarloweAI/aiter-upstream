@@ -1,0 +1,9 @@
+{
+  "group": "pr-a-mr1-v2",
+  "concurrency": 16,
+  "rows": 64,
+  "status": "failed",
+  "error": "Traceback (most recent call last):\n  File \"/workspace/hassane/moe-native-ports-20260929/source/marlowe-kernels/benchmarks/moe_replay/upstream_campaign.py\", line 823, in main\n    gate = qualify(arms, bundle, snapshots, references, root)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/workspace/hassane/moe-native-ports-20260929/source/marlowe-kernels/benchmarks/moe_replay/upstream_campaign.py\", line 500, in qualify\n    engagement = check_engagement(port_manifest, engagement_profiles)\n                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/workspace/hassane/moe-native-ports-20260929/source/marlowe-kernels/benchmarks/moe_replay/upstream_native_port.py\", line 144, in check_engagement\n    raise QualificationFailure(\nbenchmarks.moe_replay.upstream_contract.QualificationFailure: Native candidate did not engage its distinct kernel\n",
+  "fatal_state_corruption": false,
+  "total_wall_seconds": 0.26731741696130484
+}

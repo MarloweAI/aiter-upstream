@@ -1,0 +1,28 @@
+{
+  "group": "pr-a-mr1-v2",
+  "concurrency": 8,
+  "rows": 32,
+  "status": "qualified",
+  "gate": {
+    "source": true,
+    "routes": true,
+    "dispatch": true,
+    "eager": true,
+    "graph": true,
+    "state": true
+  },
+  "baseline_us": 52.91201772245889,
+  "candidate_us": 52.55225100942577,
+  "cases": 480,
+  "independent_reference_cases_per_arm": 480,
+  "phase_seconds": {
+    "prepare_dispatch": 0.734116334002465,
+    "independent_references": 17.7724379299907,
+    "eager_graph_state_gates": 2.0992374098859727,
+    "clean_and_profiles": 3.8142470229649916
+  },
+  "comparison_semantics": "matched native source patch, unchanged quantizer/route/output contract",
+  "excluded_from_primary_ranking": false,
+  "cross_reference_parity_passed": true,
+  "total_wall_seconds": 28.89461219799705
+}
