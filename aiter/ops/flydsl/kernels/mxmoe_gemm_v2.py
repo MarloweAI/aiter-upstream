@@ -255,6 +255,7 @@ def gemm2_body_v2(
     g2_apre=False,
     enable_bias=False,
     g2_prefetch_ids=False,
+    g2_skip_padded_lds=False,
     reduce_store_cache_modifier=None,
     resolved_input_rows=(),
     output_n_base=0,
@@ -623,6 +624,7 @@ def gemm2_body_v2(
             topk=topk,
             SBM=SBM,
             g2_bf16_lds=g2_bf16_lds,
+            g2_skip_padded_lds=g2_skip_padded_lds,
             route_out_fp8=route_out_fp8,
             g2_defer_weight=g2_defer_weight,
             g2_out_pitch_align=g2_out_pitch_align,
@@ -885,6 +887,7 @@ def atomic_bf16_epilog(
     topk=1,
     SBM=None,
     g2_bf16_lds=False,
+    g2_skip_padded_lds=False,
     route_out_fp8=False,
     g2_defer_weight=0,
     g2_out_pitch_align=0,
@@ -1288,10 +1291,36 @@ def atomic_bf16_epilog(
     if const_expr(
         not (use_reduce and route_out_fp8) and reduce_store_cache_modifier is None
     ):
-        lds_pre = [
-            [lds_pk_load(mr, s) for s in range_constexpr(BN // store_group_n)]
-            for mr in range_constexpr(M_REPS)
-        ]
+        if const_expr(g2_skip_padded_lds):
+            # EPI_LANES=32: a wave owns two rows. Vote over both; a
+            # one-lane predicate would incorrectly discard holes in the sort.
+            # Shared writes and CTA barriers above remain unconditional.
+            lds_pre = []
+            for mr in range_constexpr(M_REPS):
+                token_id = packed[mr] & fx.Int32(0x00FFFFFF)
+                wave_has_valid = fx.Int64(
+                    rocdl.ballot(T.i64, _raw(token_id < i32_M))
+                ) != fx.Int64(0)
+
+                @flyc.jit
+                def load_if_wave_has_valid(wave_has_valid, mr, s):
+                    values = fx.make_rmem_tensor(store_vec, BFloat16)
+                    values.store(Vec.filled(store_vec, 0.0, BFloat16))
+                    if wave_has_valid:
+                        values.store(lds_pk_load(mr, s))
+                    return Vec(values.load())
+
+                lds_pre.append(
+                    [
+                        load_if_wave_has_valid(wave_has_valid, mr, s)
+                        for s in range_constexpr(BN // store_group_n)
+                    ]
+                )
+        else:
+            lds_pre = [
+                [lds_pk_load(mr, s) for s in range_constexpr(BN // store_group_n)]
+                for mr in range_constexpr(M_REPS)
+            ]
 
     if const_expr(prefetched_ids is not None or (use_reduce and route_out_fp8)):
         rocdl.s_waitcnt(vmcnt=0)

@@ -568,7 +568,7 @@ def _flydsl_moe_sorting(
     # accumulates (or EP w/ expert_mask), else a (0,0) placeholder for FlyDSL
     # stage2 reduce mode. The kernel no-ops its zero pass on an empty buffer
     # (moe_buf_elems == 0), so reduce mode skips zeroing the [M, model_dim]
-    # buffer entirely — the caller owns the [M, topk, model_dim] intermediate.
+    # buffer entirely -- the caller owns the [M, topk, model_dim] intermediate.
     # As in _moe_sorting_impl, a caller buffer can stand in.
     if (expert_mask is not None) or accumulate:
         moe_buf = (
@@ -2529,6 +2529,7 @@ def _mxfp4_a4w4_stage2_fw(
     bias2=None,
     kernelName2="",
     reverse_sorted=None,
+    g2_skip_padded_lds=False,
     **_kwargs,
 ):
 
@@ -2578,6 +2579,7 @@ def _mxfp4_a4w4_stage2_fw(
             topk_weights=topk_weights,
             bias2=bias2,
             block_m=block_m,
+            g2_skip_padded_lds=g2_skip_padded_lds,
         )
     if bias2 is not None:
         raise ValueError(f"MXMOE GEMM2 {kernelName2!r} does not support bias")
@@ -2654,6 +2656,7 @@ def _flydsl_v2_stage2_wrapper(
     expert_mask=None,
     topk_ids=None,
     topk_weights=None,
+    g2_skip_padded_lds=False,
     **_kwargs,
 ):
     from aiter.ops.flydsl.kernels.mxmoe_dispatcher import (
@@ -2758,6 +2761,7 @@ def _flydsl_v2_stage2_wrapper(
         out_dtype="fp8" if _s2_fp8_inter else "bf16",
         bias=bias2,
         is_ep=expert_mask is not None,
+        g2_skip_padded_lds=g2_skip_padded_lds,
     )
     if epilog == "reduce":
         from aiter.ops.flydsl.moe_kernels import _run_moe_reduction
@@ -4429,11 +4433,17 @@ def fused_moe_2stages(
             **stage2_kwargs,
         )
     else:
+        override_context = {}
+        if getattr(_stage2_override, "_uses_sparse_g2_epilogue", False):
+            # MXMOE's front stage-two wrapper does not forward expert_mask.
+            # Supply the real outer EP context only to this opted-in callback.
+            override_context["expert_mask"] = expert_mask
         _stage2_call = functools.partial(
             _stage2_override,
             ordinary_stage2=metadata.stage2,
             stage2_args=stage2_args,
             stage2_kwargs=stage2_kwargs,
+            **override_context,
         )
     if kernel_bench_callable is not None:
         kernel_bench_callable.append(("stage2", _stage2_call))

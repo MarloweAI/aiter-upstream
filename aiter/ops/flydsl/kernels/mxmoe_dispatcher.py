@@ -9,7 +9,7 @@ import flydsl.expr as fx
 from flydsl.expr import const_expr, gpu, range_constexpr, rocdl
 from flydsl.expr.typing import Int8, T
 
-from aiter.jit.utils.chip_info import get_cu_num
+from aiter.jit.utils.chip_info import get_cu_num, get_gfx
 
 from .mxfp4_gemm_common import _udiv
 from .mxmoe_gemm_v2 import (
@@ -18,6 +18,7 @@ from .mxmoe_gemm_v2 import (
     issue_a_load_lds_dt,
     kStages,
 )
+from .mxmoe_sparse_epilogue import g2_sparse_epilogue_supported
 from .tensor_shim import _run_compiled as run_compiled
 
 __all__ = [
@@ -130,6 +131,7 @@ def compile_gemm2_a4w4_port(
     out_dtype="bf16",
     enable_bias=False,
     g2_prefetch_ids=False,
+    g2_skip_padded_lds=False,
     _composition=None,
     _reduce_store_cache_modifier=None,
     _input_row_resolver=None,
@@ -201,6 +203,16 @@ def compile_gemm2_a4w4_port(
         g2_bf16_lds = os.environ.get("MXFP4_G2_BF16_LDS", default_bf16_lds) == "1"
     g2_bf16_lds = bool(g2_bf16_lds)
     g2_prefetch_ids = bool(g2_prefetch_ids and g2_bf16_lds)
+    if g2_skip_padded_lds and not (
+        (BM, BN, BK, SBM, INTER_MAX) == (16, 128, 128, 16, 256)
+        and a_dtype == b_dtype == "fp4"
+        and epilog == "atomic"
+        and out_dtype == "bf16"
+        and g2_bf16_lds
+        and g2_kstatic
+        and not (persist or enable_bias or _composition is not None)
+    ):
+        raise ValueError("sparse G2 epilogue requires the guarded BM16 GLM config")
     KH_TILE_A = BK // (1 if is_f8 else 2)  # A LDS K-tile bytes (fp8 256, fp4 128)
     slot_bytes = BM * KH_TILE_A
     c_lds_bytes = BM * BN * (2 if g2_bf16_lds else 4)
@@ -277,6 +289,8 @@ def compile_gemm2_a4w4_port(
     g2_epi_lanes = _pick_epi_lanes(BM, BN, route_out_fp8, g2_scale_blk)
     tag = f"hmax{HIDDEN_MAX}_imax{INTER_MAX}_bm{BM}{tile_tag}{'_nt' if use_nt else ''}_{etag}{atag}{btag}{sbm_tag}{shared_scale_tag}{persist_tag}{bh_tag}{apf_tag}{spart_tag}{bf16lds_tag}{noil_tag}{dw_tag}{kst_tag}{pitch_tag}{sblk_tag}{out_tag}{compact_tag}{bias_tag}{output_range_tag}_v2_biasabi7{route_guard_tag}"
     name = f"gemm2_a4w4_port_{tag}" + ("_idpf" if g2_prefetch_ids else "")
+    if g2_skip_padded_lds:
+        name += "_sparseepi"
 
     @fx.struct
     class SharedStorage:
@@ -395,6 +409,7 @@ def compile_gemm2_a4w4_port(
                 g2_apre=g2_apre,
                 enable_bias=enable_bias,
                 g2_prefetch_ids=g2_prefetch_ids,
+                g2_skip_padded_lds=g2_skip_padded_lds,
                 mn_idx=mn_idx,
                 reduce_store_cache_modifier=_reduce_store_cache_modifier,
                 resolved_input_rows=resolved_input_rows,
@@ -638,6 +653,7 @@ def get_g2(
     g2_kstatic=False,
     enable_bias=False,
     g2_prefetch_ids=False,
+    g2_skip_padded_lds=False,
 ):
     # Cache key uses compile-time buckets; runtime inter_dim/model_dim share a
     # launcher while remaining within their respective caps.
@@ -678,6 +694,7 @@ def get_g2(
         out_dtype,
         enable_bias,
         g2_prefetch_ids,
+        bool(g2_skip_padded_lds),
     )
     launch = G2_CACHE.get(key)
     if launch is None:
@@ -703,6 +720,7 @@ def get_g2(
             out_dtype=out_dtype,
             enable_bias=enable_bias,
             g2_prefetch_ids=g2_prefetch_ids,
+            g2_skip_padded_lds=g2_skip_padded_lds,
         )
         G2_CACHE[key] = launch
     return launch
@@ -744,6 +762,7 @@ def mxfp4_moe_gemm2(
     stream=None,
     bias=None,
     is_ep=False,
+    g2_skip_padded_lds=False,
 ):
     """Stage-2 down-proj gemm for unpadded dimensions."""
     import torch
@@ -804,6 +823,35 @@ def mxfp4_moe_gemm2(
         and bias is None
         and os.environ.get("MXFP4_G2_PREFETCH_IDS", "1") == "1"
     )
+    # Resolve the original LDS policy before applying the opt-in shape guard.
+    # The real topk must be checked here: get_g2 folds atomic topk to one.
+    if g2_skip_padded_lds:
+        resolved_bf16_lds = g2_bf16_lds
+        if resolved_bf16_lds is None:
+            resolved_bf16_lds = (
+                os.environ.get("MXFP4_G2_BF16_LDS", "1" if _kstatic else "0") == "1"
+            )
+        g2_skip_padded_lds = g2_sparse_epilogue_supported(
+            gfx=get_gfx(),
+            M=M_logical,
+            hidden=D_HIDDEN,
+            intermediate=D_INTER,
+            experts=NE,
+            topk=topk,
+            BM=BM,
+            BN=BN,
+            BK=BK,
+            SBM=SBM,
+            a_dtype=a_dtype,
+            b_dtype=b_dtype,
+            epilog=epilog,
+            out_dtype=str(out_dtype).strip().lower(),
+            bf16_lds=bool(resolved_bf16_lds),
+            kstatic=_kstatic,
+            persist=persist,
+            bias=bias is not None,
+            is_ep=is_ep,
+        )
     launch = get_g2(
         BM,
         BN,
@@ -824,6 +872,7 @@ def mxfp4_moe_gemm2(
         g2_spart=g2_spart,
         enable_bias=bias is not None,
         g2_prefetch_ids=g2_prefetch_ids,
+        g2_skip_padded_lds=g2_skip_padded_lds,
     )
     max_m_blocks = (max_sorted + BM - 1) // BM
     if persist:
