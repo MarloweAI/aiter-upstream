@@ -115,3 +115,71 @@ Save all candidate results (not just the best) to this file.
 
 ### `-v, --verbose`
 Enable detailed logging output.
+
+## Fixed BF16 query GEMMs on gfx950
+
+For `X[M,2048] @ W[2048,2048].T`, the M64 and M128 kernels use canonical
+weights and the existing `triton` provider. Their named model-table rows require
+the exact actual M, BF16 input/output, no bias/scales and the required Gluon
+compiler features. Unsupported rows continue the usual lookup; rejected canonical
+operand layouts use the ordinary Triton route. Compilation errors propagate.
+The generic Triton GEMM API and its tuning controls are unchanged.
+
+The two CSV `us` values are clean warm-graph medians on MI355X, rounded to
+four decimal places. They are not the native tuner's filtered profiler means.
+`TFLOPS` and `bw` are derived consistently from those values; `bw` is nominal
+matrix-byte throughput, not measured HBM traffic. M16/M32 use existing providers.
+
+Run the focused selector and kernel checks with:
+```bash
+python3 -m pytest -q op_tests/test_tuned_gemm_query_variants.py \
+  op_tests/triton_tests/gemm/basic/test_gemm_a16w16_small_m.py \
+  op_tests/triton_tests/gemm/basic/test_gemm_a16w16_xcd_reuse.py \
+  op_tests/test_query_gemm_benchmark.py
+```
+
+For a fresh kernel comparison on Triton 3.7, supply the complete pristine native
+dispatch table saved **before** adding the two named rows. Snapshot the installed
+`tuned_gemm.tgemm.tune_path`, which includes the actual merged default/model rows;
+a standalone model CSV may omit incumbent fallback rows. Ordered source CSV
+inputs are acceptable only if their merged selection is proven equivalent.
+For example, before installing this change:
+
+```bash
+python3 - <<'PY'
+import shutil
+from aiter import tuned_gemm
+shutil.copyfile(tuned_gemm.tgemm.tune_path, "pristine-merged-bf16.csv")
+PY
+```
+
+Optional FlyDSL CSV inputs must
+contain selected rows legal in the installed native catalogue; no search is run.
+The driver uses shared operands, keeps unavailable or numerically rejected
+providers visible, and retains each provider's established numerical policy.
+Candidate checks use the stricter kernel policy documented in the tests.
+
+```bash
+python3 op_tests/op_benchmarks/triton/bench_gemm_a16w16_query.py \
+  -M 64 128 --incumbent-csv pristine-merged-bf16.csv \
+  --flydsl-rows selected-native-flydsl.csv --output results/clean \
+  --code-commit "$(git rev-parse HEAD)"
+
+# Collect profiles in a separate process, bound to the same clean receipts:
+python3 op_tests/op_benchmarks/triton/bench_gemm_a16w16_query.py \
+  -M 64 128 --incumbent-csv pristine-merged-bf16.csv \
+  --flydsl-rows selected-native-flydsl.csv --output results/profiles \
+  --code-commit "$(git rev-parse HEAD)" --profile-only --clean-root results/clean
+
+# Cheap existing-provider screen: no specialized calls or profiles.
+python3 op_tests/op_benchmarks/triton/bench_gemm_a16w16_query.py \
+  -M 4 8 16 32 64 128 256 512 1024 --incumbent-csv pristine-merged-bf16.csv \
+  --output results/screen --code-commit "$(git rev-parse HEAD)" --screen
+```
+
+Cold/L2-cleared and warm graph timings are separate: three interleaved rounds
+with incumbent bookends, raw samples, run medians/ranges and same-round paired
+gains. Clean timing runs never enable profiling. Profiles contain one selected
+call and do not replace clean timings. The JSON receipts record the actual
+source/configuration, common error metrics, numerical gates and canonical-weight/validation-snapshot memory.
+This driver measures one GEMM, not a whole attention block or serving workload.

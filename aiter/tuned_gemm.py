@@ -143,6 +143,24 @@ def get_GEMM_A16W16_config(
             None,
         )
         if config is not None:
+            if config["libtype"] == "triton":
+                supported = None
+                if config.get("kernelName") == "gemm_a16w16_small_m":
+                    from aiter.ops.triton.gemm.basic.gemm_a16w16_small_m import (
+                        gemm_a16w16_small_m_supported as supported,
+                    )
+                elif config.get("kernelName") == "gemm_a16w16_xcd_reuse":
+                    from aiter.ops.triton.gemm.basic.gemm_a16w16_xcd_reuse import (
+                        gemm_a16w16_xcd_reuse_supported as supported,
+                    )
+                if supported is not None and (
+                    scaleAB
+                    or bpreshuffle
+                    or not supported(M, N, K, bias, eval(dtype), eval(otype))
+                ):
+                    # These fixed kernels require actual M, not the padded row M.
+                    config = None
+                    continue
             if config["libtype"] == "flydsl":
                 flydsl_config = (
                     _get_flydsl_gemm_kernels().get_flydsl_hgemm_kernel_params(
@@ -639,6 +657,23 @@ def triton_gemm(
         scale_a is None and scale_b is None and scale_c is None
     ), "Triton gemm_a16w16 does not support scaling yet"
     assert not bpreshuffle, "Triton gemm_a16w16 does not support bpreshuffle yet."
+    if bias is None and otype in (None, torch.bfloat16) and config is not None:
+        if config.get("kernelName") == "gemm_a16w16_small_m":
+            from aiter.ops.triton.gemm.basic.gemm_a16w16_small_m import (
+                gemm_a16w16_small_m,
+                gemm_a16w16_small_m_accepts,
+            )
+
+            if gemm_a16w16_small_m_accepts(inp, weights):
+                return gemm_a16w16_small_m(inp, weights)
+        elif config.get("kernelName") == "gemm_a16w16_xcd_reuse":
+            from aiter.ops.triton.gemm.basic.gemm_a16w16_xcd_reuse import (
+                gemm_a16w16_xcd_reuse,
+                gemm_a16w16_xcd_reuse_accepts,
+            )
+
+            if gemm_a16w16_xcd_reuse_accepts(inp, weights):
+                return gemm_a16w16_xcd_reuse(inp, weights)
     return gemm_a16w16(inp, weights, bias=bias, dtype=otype)
 
 
