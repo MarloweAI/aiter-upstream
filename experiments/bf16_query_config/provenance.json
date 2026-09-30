@@ -1,6 +1,6 @@
 {
   "schema": "bf16-query-config-study-v1",
-  "status": "research-only baseline snapshot; not automatically loaded",
+  "status": "research-only measured overlay; not automatically loaded",
   "aiter_source_commit": "80a3b0b09448bb5b8ade9a5946bec7549601331a",
   "workload": {
     "architecture": "gfx950",
@@ -17,7 +17,310 @@
     "shape_json_sha256": "c9407bf2c303613d878bcfaa7187bad27115890d7b29abfd48c83d73e1579c48"
   },
   "files": {
-    "native-config.csv": "a3eb71800f5e97e7c4ed7abe38a8d7bcf0b16c78cf1d0194c6f67c58867e2c6d",
-    "native-config.json": "c9407bf2c303613d878bcfaa7187bad27115890d7b29abfd48c83d73e1579c48"
+    "native-config.csv": "6952fecd651a3b0086571249c5a73c15956b8d12c6738ca34a4a79f31b1d2fe5",
+    "native-config.json": "016979da21a6b1ae1dc3c416b2f8e9fc51f8e00f786e2e65a65656cae281ed31"
+  },
+  "baseline_commit": "78dc14cc12e62f93910866d87e7fb0faf6b406b8",
+  "measurement_summary_sha256": {
+    "phase_a_baseline": "45522188b8e3000aecdaf9d192ca809bc4b33e161976245be9191b68bda8ef55",
+    "phase_a_optional": "caa6f0e31268ae36bd37ffc3b8bb39dd4620445ceabb8b99063adc98e0b7537a",
+    "phase_b_clean": "1e4113426b47f475b2f1ece0658d4961af3dfa95adfd9f2ef1abef63acc6b1ae"
+  },
+  "measured_overlay": {
+    "csv_rows": 4131,
+    "original_csv_rows": 4127,
+    "non_query_csv_lines_byte_identical": true,
+    "exact_query_keys": [
+      [
+        "gfx950",
+        "256",
+        "4",
+        "2048",
+        "2048",
+        "False",
+        "torch.bfloat16",
+        "torch.bfloat16",
+        "False",
+        "False"
+      ],
+      [
+        "gfx950",
+        "256",
+        "8",
+        "2048",
+        "2048",
+        "False",
+        "torch.bfloat16",
+        "torch.bfloat16",
+        "False",
+        "False"
+      ],
+      [
+        "gfx950",
+        "256",
+        "16",
+        "2048",
+        "2048",
+        "False",
+        "torch.bfloat16",
+        "torch.bfloat16",
+        "False",
+        "False"
+      ],
+      [
+        "gfx950",
+        "256",
+        "32",
+        "2048",
+        "2048",
+        "False",
+        "torch.bfloat16",
+        "torch.bfloat16",
+        "False",
+        "False"
+      ],
+      [
+        "gfx950",
+        "256",
+        "64",
+        "2048",
+        "2048",
+        "False",
+        "torch.bfloat16",
+        "torch.bfloat16",
+        "False",
+        "False"
+      ],
+      [
+        "gfx950",
+        "256",
+        "128",
+        "2048",
+        "2048",
+        "False",
+        "torch.bfloat16",
+        "torch.bfloat16",
+        "False",
+        "False"
+      ]
+    ],
+    "json_changed_buckets": [
+      "M_LEQ_128",
+      "M_LEQ_4",
+      "M_LEQ_64",
+      "M_LEQ_8"
+    ],
+    "other_json_values_identical": true,
+    "csv_us_protocol": "clean warm graph; research-only metadata, not native-tuner or profiler timing",
+    "native_winners": {
+      "4": {
+        "provider": "triton",
+        "row": {
+          "gfx": "gfx950",
+          "cu_num": "256",
+          "M": "4",
+          "N": "2048",
+          "K": "2048",
+          "bias": "False",
+          "dtype": "torch.bfloat16",
+          "outdtype": "torch.bfloat16",
+          "scaleAB": "False",
+          "bpreshuffle": "False",
+          "libtype": "triton",
+          "solidx": 0,
+          "splitK": 1,
+          "kernelName": "",
+          "us": 3.994828064509302
+        },
+        "configuration": {
+          "BLOCK_SIZE_M": 16,
+          "BLOCK_SIZE_N": 16,
+          "BLOCK_SIZE_K": 256,
+          "GROUP_SIZE_M": 1,
+          "num_warps": 4,
+          "num_stages": 3,
+          "waves_per_eu": 6,
+          "matrix_instr_nonkdim": 16,
+          "cache_modifier": ".cg",
+          "NUM_KSPLIT": 1,
+          "SPLITK_BLOCK_SIZE": 2048
+        }
+      },
+      "8": {
+        "provider": "triton",
+        "row": {
+          "gfx": "gfx950",
+          "cu_num": "256",
+          "M": "8",
+          "N": "2048",
+          "K": "2048",
+          "bias": "False",
+          "dtype": "torch.bfloat16",
+          "outdtype": "torch.bfloat16",
+          "scaleAB": "False",
+          "bpreshuffle": "False",
+          "libtype": "triton",
+          "solidx": 0,
+          "splitK": 1,
+          "kernelName": "",
+          "us": 4.324596436297307
+        },
+        "configuration": {
+          "BLOCK_SIZE_M": 16,
+          "BLOCK_SIZE_N": 16,
+          "BLOCK_SIZE_K": 256,
+          "GROUP_SIZE_M": 1,
+          "num_warps": 4,
+          "num_stages": 3,
+          "waves_per_eu": 6,
+          "matrix_instr_nonkdim": 16,
+          "cache_modifier": ".cg",
+          "NUM_KSPLIT": 1,
+          "SPLITK_BLOCK_SIZE": 2048
+        }
+      },
+      "16": {
+        "provider": "triton",
+        "row": {
+          "gfx": "gfx950",
+          "cu_num": "256",
+          "M": "16",
+          "N": "2048",
+          "K": "2048",
+          "bias": "False",
+          "dtype": "torch.bfloat16",
+          "outdtype": "torch.bfloat16",
+          "scaleAB": "False",
+          "bpreshuffle": "False",
+          "libtype": "triton",
+          "solidx": 0,
+          "splitK": 1,
+          "kernelName": "",
+          "us": 3.704234457656041
+        },
+        "configuration": {
+          "BLOCK_SIZE_M": 16,
+          "BLOCK_SIZE_N": 16,
+          "BLOCK_SIZE_K": 256,
+          "GROUP_SIZE_M": 1,
+          "num_warps": 4,
+          "num_stages": 3,
+          "waves_per_eu": 6,
+          "matrix_instr_nonkdim": 16,
+          "cache_modifier": ".cg",
+          "NUM_KSPLIT": 1,
+          "SPLITK_BLOCK_SIZE": 2048
+        }
+      },
+      "32": {
+        "provider": "flydsl",
+        "row": {
+          "gfx": "gfx950",
+          "cu_num": "256",
+          "M": "32",
+          "N": "2048",
+          "K": "2048",
+          "bias": "False",
+          "dtype": "torch.bfloat16",
+          "outdtype": "torch.bfloat16",
+          "scaleAB": "False",
+          "bpreshuffle": "False",
+          "libtype": "flydsl",
+          "solidx": 0,
+          "splitK": 1,
+          "us": 3.8760728639650672,
+          "kernelName": "flydsl_hgemm_abf16_wbf16_bf16_t16x16x256x4_ks1_w1x1x2_bias0_ktail0_gm0_pft_gfx950",
+          "err_ratio": "",
+          "tflops": "",
+          "bw": ""
+        },
+        "configuration": {
+          "gfx": "gfx950",
+          "cu_num": "256",
+          "M": "32",
+          "N": "2048",
+          "K": "2048",
+          "bias": "False",
+          "dtype": "torch.bfloat16",
+          "outdtype": "torch.bfloat16",
+          "scaleAB": "False",
+          "bpreshuffle": "False",
+          "libtype": "flydsl",
+          "solidx": 0,
+          "splitK": 1,
+          "us": "",
+          "kernelName": "flydsl_hgemm_abf16_wbf16_bf16_t16x16x256x4_ks1_w1x1x2_bias0_ktail0_gm0_pft_gfx950",
+          "err_ratio": "",
+          "tflops": "",
+          "bw": ""
+        }
+      },
+      "64": {
+        "provider": "triton",
+        "row": {
+          "gfx": "gfx950",
+          "cu_num": "256",
+          "M": "64",
+          "N": "2048",
+          "K": "2048",
+          "bias": "False",
+          "dtype": "torch.bfloat16",
+          "outdtype": "torch.bfloat16",
+          "scaleAB": "False",
+          "bpreshuffle": "False",
+          "libtype": "triton",
+          "solidx": 0,
+          "splitK": 1,
+          "kernelName": "",
+          "us": 5.216666940127195
+        },
+        "configuration": {
+          "BLOCK_SIZE_M": 32,
+          "BLOCK_SIZE_N": 32,
+          "BLOCK_SIZE_K": 512,
+          "GROUP_SIZE_M": 2,
+          "num_warps": 4,
+          "num_stages": 2,
+          "waves_per_eu": 0,
+          "matrix_instr_nonkdim": 16,
+          "cache_modifier": ".cg",
+          "NUM_KSPLIT": 1,
+          "SPLITK_BLOCK_SIZE": 2048
+        }
+      },
+      "128": {
+        "provider": "triton",
+        "row": {
+          "gfx": "gfx950",
+          "cu_num": "256",
+          "M": "128",
+          "N": "2048",
+          "K": "2048",
+          "bias": "False",
+          "dtype": "torch.bfloat16",
+          "outdtype": "torch.bfloat16",
+          "scaleAB": "False",
+          "bpreshuffle": "False",
+          "libtype": "triton",
+          "solidx": 0,
+          "splitK": 1,
+          "kernelName": "",
+          "us": 5.323042313990629
+        },
+        "configuration": {
+          "BLOCK_SIZE_M": 32,
+          "BLOCK_SIZE_N": 32,
+          "BLOCK_SIZE_K": 512,
+          "GROUP_SIZE_M": 4,
+          "num_warps": 4,
+          "num_stages": 2,
+          "waves_per_eu": 0,
+          "matrix_instr_nonkdim": 16,
+          "cache_modifier": ".cg",
+          "NUM_KSPLIT": 1,
+          "SPLITK_BLOCK_SIZE": 2048
+        }
+      }
+    }
   }
 }
