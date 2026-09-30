@@ -1,0 +1,23 @@
+{
+  "schema": "bf16-query-config-study-v1",
+  "status": "research-only baseline snapshot; not automatically loaded",
+  "aiter_source_commit": "80a3b0b09448bb5b8ade9a5946bec7549601331a",
+  "workload": {
+    "architecture": "gfx950",
+    "compute_units": 256,
+    "dtype": "torch.bfloat16",
+    "output_dtype": "torch.bfloat16",
+    "N": 2048,
+    "K": 2048
+  },
+  "baseline": {
+    "merged_bf16_rows": 4127,
+    "merged_bf16_sha256": "a3eb71800f5e97e7c4ed7abe38a8d7bcf0b16c78cf1d0194c6f67c58867e2c6d",
+    "shape_json_source": "aiter/ops/triton/configs/gfx950/triton/gemm/gemm_a16w16/GEMM-A16W16-N=2048-K=2048.json",
+    "shape_json_sha256": "c9407bf2c303613d878bcfaa7187bad27115890d7b29abfd48c83d73e1579c48"
+  },
+  "files": {
+    "native-config.csv": "a3eb71800f5e97e7c4ed7abe38a8d7bcf0b16c78cf1d0194c6f67c58867e2c6d",
+    "native-config.json": "c9407bf2c303613d878bcfaa7187bad27115890d7b29abfd48c83d73e1579c48"
+  }
+}
