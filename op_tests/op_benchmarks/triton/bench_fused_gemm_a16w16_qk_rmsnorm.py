@@ -20,6 +20,18 @@ import torch
 import torch.nn.functional as F
 import triton
 
+BASELINE_PROJECTION_POLICY = {
+    "name": "aiter_assertAllclose_bf16_projection_v1",
+    "reference": "independent FP32 GEMM rounded once to BF16, then upcast",
+    "argument_order": "actual, rounded_reference",
+    "atol": 0.01,
+    "rtol": 0.01,
+    "tol_err_ratio": 0.05,
+    "catastrophic_check": True,
+    "finite_required": True,
+    "unrounded_fp32_nrmse_limit": 0.01,
+}
+
 
 def file_sha256(path):
     return hashlib.sha256(Path(path).read_bytes()).hexdigest()
@@ -58,7 +70,60 @@ def operand_hashes(operands):
 class GateFailure(RuntimeError):
     def __init__(self, m, arm, field, metadata):
         self.metadata = {"m": m, "arm": arm, "field": field, **metadata}
-        super().__init__(f"M{m} {arm} {field}: unchanged correctness gate failed")
+        super().__init__(f"M{m} {arm} {field}: documented correctness gate failed")
+
+
+def check_baseline_projection(m, draw, actual, expected):
+    """Use AITER's BF16 outlier policy, plus the existing aggregate bound.
+
+    AITER's native BF16 tuner uses a cast-back FP32 reference and explicitly
+    filters mismatch fractions. This public-helper .01/.01 policy is stricter
+    than the tuner's .05/.05 BF16 tolerance. It does not require the incumbent
+    split-K BF16 atomics to reproduce the candidate's FP32 reduction order.
+    """
+    from aiter.test_common import assertAllclose
+
+    metadata = {"draw": draw, "policy": BASELINE_PROJECTION_POLICY}
+
+    def reject(reason):
+        raise GateFailure(m, "separate", "projection", {**metadata, "reason": reason})
+
+    if actual.shape != expected.shape or actual.dtype != torch.bfloat16:
+        reject("Expected equal projection shapes and BF16 incumbent output")
+    if not bool(torch.isfinite(actual).all()) or not bool(
+        torch.isfinite(expected).all()
+    ):
+        reject("Nonfinite projection or independent reference")
+    ratio = nrmse(actual, expected)
+    difference = (actual.float() - expected).abs()
+    original_failed = difference > (0.02 + 0.02 * expected.abs())
+    metadata.update(
+        nrmse=ratio if math.isfinite(ratio) else None,
+        nrmse_limit=0.01,
+        original_all_element_02_02_diagnostic={
+            "passed": not bool(original_failed.any()),
+            "failed_elements": int(original_failed.sum()),
+            "element_count": actual.numel(),
+            "max_abs_error": float(difference.max()),
+            "timing_admission": False,
+        },
+    )
+    try:
+        mismatch = assertAllclose(
+            actual.float(),
+            expected.bfloat16().float(),
+            rtol=0.01,
+            atol=0.01,
+            tol_err_ratio=0.05,
+            catastrophic_check=True,
+            msg=f"M{m} separate projection ({draw})",
+        )
+    except AssertionError as exc:
+        reject(str(exc))
+    metadata["upstream_mismatch_ratio"] = float(mismatch)
+    if not math.isfinite(ratio) or ratio > 0.01:
+        reject("Unrounded independent FP32 NRMSE exceeds unchanged 1% limit")
+    return ratio
 
 
 def check_outputs(m, arm, draw, outputs, refs):
@@ -66,6 +131,9 @@ def check_outputs(m, arm, draw, outputs, refs):
     for field, actual, expected in zip(
         ("projection", "q_norm", "kv_norm"), outputs, refs
     ):
+        if arm == "separate" and field == "projection":
+            ratios.append(check_baseline_projection(m, draw, actual, expected))
+            continue
         ratio = nrmse(actual, expected)
         try:
             torch.testing.assert_close(actual.float(), expected, atol=0.02, rtol=0.02)
@@ -355,10 +423,17 @@ def main():
         "aiter.ops.flydsl.kernels.gemm_a16w16_gfx950"
     )
     flydsl_parser_module = importlib.import_module("aiter.ops.flydsl.gemm_kernels")
+    numerical_helper_module = importlib.import_module("aiter.test_common")
 
     actual_config = Path(AITER_CONFIGS.AITER_CONFIG_GEMM_BF16_FILE).resolve(strict=True)
     if actual_config != args.gemm_config:
         raise ValueError("Imported AITER uses a different GEMM config")
+    allow_tf32 = torch.backends.cuda.matmul.allow_tf32
+    float32_matmul_precision = torch.get_float32_matmul_precision()
+    if allow_tf32 or float32_matmul_precision != "highest":
+        raise ValueError(
+            "Independent FP32 references require TF32 off and highest precision"
+        )
     identity = {
         "torch": torch.__version__,
         "triton": triton.__version__,
@@ -376,6 +451,10 @@ def main():
         "flydsl_kernel_sha256": file_sha256(flydsl_module.__file__),
         "flydsl_parser_sha256": file_sha256(flydsl_parser_module.__file__),
         "benchmark_sha256": file_sha256(__file__),
+        "baseline_projection_policy": BASELINE_PROJECTION_POLICY,
+        "numerical_helper_sha256": file_sha256(numerical_helper_module.__file__),
+        "reference_allow_tf32": allow_tf32,
+        "reference_float32_matmul_precision": float32_matmul_precision,
         "warmup_ms": args.warmup,
         "rep_ms": args.rep,
         "timing_mode": args.timing_mode,
