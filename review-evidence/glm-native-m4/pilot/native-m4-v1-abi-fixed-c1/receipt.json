@@ -1,0 +1,28 @@
+{
+  "group": "native-m4-v1-abi-fixed",
+  "concurrency": 1,
+  "rows": 4,
+  "status": "qualified",
+  "gate": {
+    "source": true,
+    "routes": true,
+    "dispatch": true,
+    "eager": true,
+    "graph": true,
+    "state": true
+  },
+  "baseline_us": 21.739999763667583,
+  "candidate_us": 14.830500353127718,
+  "cases": 4,
+  "independent_reference_cases_per_arm": 4,
+  "phase_seconds": {
+    "prepare_dispatch": 0.6951298019848764,
+    "independent_references": 2.5807532479520887,
+    "eager_graph_state_gates": 0.33368406002409756,
+    "clean_and_profiles": 0.5377552208956331
+  },
+  "comparison_semantics": "matched native source patch, unchanged quantizer/route/output contract",
+  "excluded_from_primary_ranking": false,
+  "cross_reference_parity_passed": true,
+  "total_wall_seconds": 4.151780318003148
+}

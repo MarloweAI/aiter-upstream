@@ -1,0 +1,14 @@
+{
+  "job": 86952,
+  "step": "86952.1",
+  "node": "marlowe-mi355x-1",
+  "feature_sha": "612b70be7ce115e15651c4a85db18165e640d555",
+  "phase": "fixture prepare before candidate compile",
+  "status": "failed",
+  "classification": "FlyDSL MLIR Context API",
+  "reason": "fx.make_layout invoked outside compilation context",
+  "clean_timing_collected": false,
+  "profiles_collected": false,
+  "source_owner_notified": true,
+  "allocation_reused": true
+}

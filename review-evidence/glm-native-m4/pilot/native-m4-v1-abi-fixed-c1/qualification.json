@@ -1,0 +1,899 @@
+{
+  "gate": {
+    "source": true,
+    "routes": true,
+    "dispatch": true,
+    "eager": true,
+    "graph": true,
+    "state": true
+  },
+  "eager": {
+    "baseline": [
+      {
+        "layer": 3,
+        "step": 0,
+        "passed": true,
+        "finite": true,
+        "mismatch_fraction": 0.0,
+        "nrmse": 0.0031871917950538954,
+        "global_difference_D": 5.079073599903822e-06,
+        "max_abs_error": 2.288818359375e-05,
+        "tolerances": {
+          "rtol": 0.02,
+          "atol": 0.02,
+          "nrmse": 0.01
+        }
+      },
+      {
+        "layer": 77,
+        "step": 0,
+        "passed": true,
+        "finite": true,
+        "mismatch_fraction": 0.0,
+        "nrmse": 0.0031252981488584016,
+        "global_difference_D": 4.883683497284658e-06,
+        "max_abs_error": 0.0625,
+        "tolerances": {
+          "rtol": 0.02,
+          "atol": 0.02,
+          "nrmse": 0.01
+        }
+      },
+      {
+        "layer": 3,
+        "step": 1,
+        "passed": true,
+        "finite": true,
+        "mismatch_fraction": 0.0,
+        "nrmse": 0.003932674910682555,
+        "global_difference_D": 7.73291390794408e-06,
+        "max_abs_error": 1.52587890625e-05,
+        "tolerances": {
+          "rtol": 0.02,
+          "atol": 0.02,
+          "nrmse": 0.01
+        }
+      },
+      {
+        "layer": 77,
+        "step": 1,
+        "passed": true,
+        "finite": true,
+        "mismatch_fraction": 0.0,
+        "nrmse": 0.003360745079759344,
+        "global_difference_D": 5.645168885309258e-06,
+        "max_abs_error": 0.0625,
+        "tolerances": {
+          "rtol": 0.02,
+          "atol": 0.02,
+          "nrmse": 0.01
+        }
+      }
+    ],
+    "candidate": [
+      {
+        "layer": 3,
+        "step": 0,
+        "passed": true,
+        "finite": true,
+        "mismatch_fraction": 0.0,
+        "nrmse": 0.0029473070909894093,
+        "global_difference_D": 4.3432293792131534e-06,
+        "max_abs_error": 7.62939453125e-06,
+        "tolerances": {
+          "rtol": 0.02,
+          "atol": 0.02,
+          "nrmse": 0.01
+        }
+      },
+      {
+        "layer": 77,
+        "step": 0,
+        "passed": true,
+        "finite": true,
+        "mismatch_fraction": 0.0,
+        "nrmse": 0.002993685858660994,
+        "global_difference_D": 4.481892481943097e-06,
+        "max_abs_error": 0.0625,
+        "tolerances": {
+          "rtol": 0.02,
+          "atol": 0.02,
+          "nrmse": 0.01
+        }
+      },
+      {
+        "layer": 3,
+        "step": 1,
+        "passed": true,
+        "finite": true,
+        "mismatch_fraction": 0.0,
+        "nrmse": 0.0028110569525050927,
+        "global_difference_D": 3.950894901676973e-06,
+        "max_abs_error": 7.62939453125e-06,
+        "tolerances": {
+          "rtol": 0.02,
+          "atol": 0.02,
+          "nrmse": 0.01
+        }
+      },
+      {
+        "layer": 77,
+        "step": 1,
+        "passed": true,
+        "finite": true,
+        "mismatch_fraction": 0.0,
+        "nrmse": 0.003116621242674308,
+        "global_difference_D": 4.857132526849524e-06,
+        "max_abs_error": 0.0625,
+        "tolerances": {
+          "rtol": 0.02,
+          "atol": 0.02,
+          "nrmse": 0.01
+        }
+      }
+    ]
+  },
+  "graph": {
+    "baseline": [
+      {
+        "replay": 0,
+        "case": 0,
+        "passed": true,
+        "finite": true,
+        "mismatch_fraction": 0.0,
+        "nrmse": 0.0033566895297062554,
+        "global_difference_D": 5.633743898567e-06,
+        "max_abs_error": 7.62939453125e-06,
+        "tolerances": {
+          "rtol": 0.02,
+          "atol": 0.02,
+          "nrmse": 0.01
+        }
+      },
+      {
+        "replay": 0,
+        "case": 1,
+        "passed": true,
+        "finite": true,
+        "mismatch_fraction": 0.0,
+        "nrmse": 0.0028623011233046224,
+        "global_difference_D": 4.095682844724211e-06,
+        "max_abs_error": 0.0625,
+        "tolerances": {
+          "rtol": 0.02,
+          "atol": 0.02,
+          "nrmse": 0.01
+        }
+      },
+      {
+        "replay": 0,
+        "case": 2,
+        "passed": true,
+        "finite": true,
+        "mismatch_fraction": 0.0,
+        "nrmse": 0.0036878534633629193,
+        "global_difference_D": 6.800065257605777e-06,
+        "max_abs_error": 1.52587890625e-05,
+        "tolerances": {
+          "rtol": 0.02,
+          "atol": 0.02,
+          "nrmse": 0.01
+        }
+      },
+      {
+        "replay": 0,
+        "case": 3,
+        "passed": true,
+        "finite": true,
+        "mismatch_fraction": 0.0,
+        "nrmse": 0.0035110551943618915,
+        "global_difference_D": 6.165187341954386e-06,
+        "max_abs_error": 0.0625,
+        "tolerances": {
+          "rtol": 0.02,
+          "atol": 0.02,
+          "nrmse": 0.01
+        }
+      },
+      {
+        "replay": 1,
+        "case": 0,
+        "passed": true,
+        "finite": true,
+        "mismatch_fraction": 0.0,
+        "nrmse": 0.0034128544564886202,
+        "global_difference_D": 5.8237324358734585e-06,
+        "max_abs_error": 1.52587890625e-05,
+        "tolerances": {
+          "rtol": 0.02,
+          "atol": 0.02,
+          "nrmse": 0.01
+        }
+      },
+      {
+        "replay": 1,
+        "case": 1,
+        "passed": true,
+        "finite": true,
+        "mismatch_fraction": 0.0,
+        "nrmse": 0.0033880999351037907,
+        "global_difference_D": 5.739653148944597e-06,
+        "max_abs_error": 0.0625,
+        "tolerances": {
+          "rtol": 0.02,
+          "atol": 0.02,
+          "nrmse": 0.01
+        }
+      },
+      {
+        "replay": 1,
+        "case": 2,
+        "passed": true,
+        "finite": true,
+        "mismatch_fraction": 0.0,
+        "nrmse": 0.0037060641224436314,
+        "global_difference_D": 6.8672612134028735e-06,
+        "max_abs_error": 1.52587890625e-05,
+        "tolerances": {
+          "rtol": 0.02,
+          "atol": 0.02,
+          "nrmse": 0.01
+        }
+      },
+      {
+        "replay": 1,
+        "case": 3,
+        "passed": true,
+        "finite": true,
+        "mismatch_fraction": 0.0,
+        "nrmse": 0.0035097259256433033,
+        "global_difference_D": 6.158858087553169e-06,
+        "max_abs_error": 0.0625,
+        "tolerances": {
+          "rtol": 0.02,
+          "atol": 0.02,
+          "nrmse": 0.01
+        }
+      },
+      {
+        "replay": 2,
+        "case": 0,
+        "passed": true,
+        "finite": true,
+        "mismatch_fraction": 0.0,
+        "nrmse": 0.0034052974894766583,
+        "global_difference_D": 5.79778533392909e-06,
+        "max_abs_error": 1.52587890625e-05,
+        "tolerances": {
+          "rtol": 0.02,
+          "atol": 0.02,
+          "nrmse": 0.01
+        }
+      },
+      {
+        "replay": 2,
+        "case": 1,
+        "passed": true,
+        "finite": true,
+        "mismatch_fraction": 0.0,
+        "nrmse": 0.003187028189918811,
+        "global_difference_D": 5.077924570482836e-06,
+        "max_abs_error": 0.0625,
+        "tolerances": {
+          "rtol": 0.02,
+          "atol": 0.02,
+          "nrmse": 0.01
+        }
+      },
+      {
+        "replay": 2,
+        "case": 2,
+        "passed": true,
+        "finite": true,
+        "mismatch_fraction": 0.0,
+        "nrmse": 0.0038705033336862726,
+        "global_difference_D": 7.490257988515143e-06,
+        "max_abs_error": 7.62939453125e-06,
+        "tolerances": {
+          "rtol": 0.02,
+          "atol": 0.02,
+          "nrmse": 0.01
+        }
+      },
+      {
+        "replay": 2,
+        "case": 3,
+        "passed": true,
+        "finite": true,
+        "mismatch_fraction": 0.0,
+        "nrmse": 0.0034624428859268068,
+        "global_difference_D": 5.994915850058381e-06,
+        "max_abs_error": 0.0625,
+        "tolerances": {
+          "rtol": 0.02,
+          "atol": 0.02,
+          "nrmse": 0.01
+        }
+      }
+    ],
+    "candidate": [
+      {
+        "replay": 0,
+        "case": 0,
+        "passed": true,
+        "finite": true,
+        "mismatch_fraction": 0.0,
+        "nrmse": 0.0029620724605232897,
+        "global_difference_D": 4.386857635256538e-06,
+        "max_abs_error": 1.52587890625e-05,
+        "tolerances": {
+          "rtol": 0.02,
+          "atol": 0.02,
+          "nrmse": 0.01
+        }
+      },
+      {
+        "replay": 0,
+        "case": 1,
+        "passed": true,
+        "finite": true,
+        "mismatch_fraction": 0.0,
+        "nrmse": 0.0025427172206031533,
+        "global_difference_D": 3.232701932860096e-06,
+        "max_abs_error": 0.03125,
+        "tolerances": {
+          "rtol": 0.02,
+          "atol": 0.02,
+          "nrmse": 0.01
+        }
+      },
+      {
+        "replay": 0,
+        "case": 2,
+        "passed": true,
+        "finite": true,
+        "mismatch_fraction": 0.0,
+        "nrmse": 0.0030226196382886336,
+        "global_difference_D": 4.5681777793804064e-06,
+        "max_abs_error": 7.62939453125e-06,
+        "tolerances": {
+          "rtol": 0.02,
+          "atol": 0.02,
+          "nrmse": 0.01
+        }
+      },
+      {
+        "replay": 0,
+        "case": 3,
+        "passed": true,
+        "finite": true,
+        "mismatch_fraction": 0.0,
+        "nrmse": 0.0033574477428552425,
+        "global_difference_D": 5.636435608069986e-06,
+        "max_abs_error": 0.0625,
+        "tolerances": {
+          "rtol": 0.02,
+          "atol": 0.02,
+          "nrmse": 0.01
+        }
+      },
+      {
+        "replay": 1,
+        "case": 0,
+        "passed": true,
+        "finite": true,
+        "mismatch_fraction": 0.0,
+        "nrmse": 0.002927548672813685,
+        "global_difference_D": 4.285262084179462e-06,
+        "max_abs_error": 7.62939453125e-06,
+        "tolerances": {
+          "rtol": 0.02,
+          "atol": 0.02,
+          "nrmse": 0.01
+        }
+      },
+      {
+        "replay": 1,
+        "case": 1,
+        "passed": true,
+        "finite": true,
+        "mismatch_fraction": 0.0,
+        "nrmse": 0.0029452925858442073,
+        "global_difference_D": 4.338197954973488e-06,
+        "max_abs_error": 0.0625,
+        "tolerances": {
+          "rtol": 0.02,
+          "atol": 0.02,
+          "nrmse": 0.01
+        }
+      },
+      {
+        "replay": 1,
+        "case": 2,
+        "passed": true,
+        "finite": true,
+        "mismatch_fraction": 0.0,
+        "nrmse": 0.0029729725406364774,
+        "global_difference_D": 4.4191553210741704e-06,
+        "max_abs_error": 7.62939453125e-06,
+        "tolerances": {
+          "rtol": 0.02,
+          "atol": 0.02,
+          "nrmse": 0.01
+        }
+      },
+      {
+        "replay": 1,
+        "case": 3,
+        "passed": true,
+        "finite": true,
+        "mismatch_fraction": 0.0,
+        "nrmse": 0.002884039528949441,
+        "global_difference_D": 4.159056601673066e-06,
+        "max_abs_error": 0.03125,
+        "tolerances": {
+          "rtol": 0.02,
+          "atol": 0.02,
+          "nrmse": 0.01
+        }
+      },
+      {
+        "replay": 2,
+        "case": 0,
+        "passed": true,
+        "finite": true,
+        "mismatch_fraction": 0.0,
+        "nrmse": 0.0029029661176728006,
+        "global_difference_D": 4.213551476607363e-06,
+        "max_abs_error": 7.62939453125e-06,
+        "tolerances": {
+          "rtol": 0.02,
+          "atol": 0.02,
+          "nrmse": 0.01
+        }
+      },
+      {
+        "replay": 2,
+        "case": 1,
+        "passed": true,
+        "finite": true,
+        "mismatch_fraction": 0.0,
+        "nrmse": 0.0028086774366952207,
+        "global_difference_D": 3.944302503222193e-06,
+        "max_abs_error": 0.0625,
+        "tolerances": {
+          "rtol": 0.02,
+          "atol": 0.02,
+          "nrmse": 0.01
+        }
+      },
+      {
+        "replay": 2,
+        "case": 2,
+        "passed": true,
+        "finite": true,
+        "mismatch_fraction": 0.0,
+        "nrmse": 0.0030345595969311213,
+        "global_difference_D": 4.604194653381386e-06,
+        "max_abs_error": 1.52587890625e-05,
+        "tolerances": {
+          "rtol": 0.02,
+          "atol": 0.02,
+          "nrmse": 0.01
+        }
+      },
+      {
+        "replay": 2,
+        "case": 3,
+        "passed": true,
+        "finite": true,
+        "mismatch_fraction": 0.0,
+        "nrmse": 0.0031259331711439436,
+        "global_difference_D": 4.884464141282364e-06,
+        "max_abs_error": 0.0625,
+        "tolerances": {
+          "rtol": 0.02,
+          "atol": 0.02,
+          "nrmse": 0.01
+        }
+      }
+    ]
+  },
+  "state": {
+    "baseline": [
+      {
+        "layer": 3,
+        "case": 2,
+        "output": {
+          "passed": true,
+          "finite": true,
+          "mismatch_fraction": 0.0,
+          "nrmse": 0.0037739080479297377,
+          "global_difference_D": 7.1213057566179165e-06,
+          "max_abs_error": 7.62939453125e-06,
+          "tolerances": {
+            "rtol": 0.02,
+            "atol": 0.02,
+            "nrmse": 0.01
+          }
+        },
+        "state": {
+          "passed": true,
+          "scratch_contract": "native API checked through alternating-input and zero-input replay"
+        },
+        "passed": true
+      },
+      {
+        "layer": 3,
+        "case": 0,
+        "output": {
+          "passed": true,
+          "finite": true,
+          "mismatch_fraction": 0.0,
+          "nrmse": 0.0031925815268941866,
+          "global_difference_D": 5.096126643908437e-06,
+          "max_abs_error": 1.52587890625e-05,
+          "tolerances": {
+            "rtol": 0.02,
+            "atol": 0.02,
+            "nrmse": 0.01
+          }
+        },
+        "state": {
+          "passed": true,
+          "scratch_contract": "native API checked through alternating-input and zero-input replay"
+        },
+        "passed": true
+      },
+      {
+        "layer": 3,
+        "zero": {
+          "passed": true,
+          "finite": true,
+          "mismatch_fraction": 0.0,
+          "nrmse": 0.0,
+          "global_difference_D": 0.0,
+          "max_abs_error": 0.0,
+          "tolerances": {
+            "rtol": 0.02,
+            "atol": 0.02,
+            "nrmse": 0.01
+          }
+        },
+        "restored": {
+          "passed": true,
+          "finite": true,
+          "mismatch_fraction": 0.0,
+          "nrmse": 0.0033033233712108333,
+          "global_difference_D": 5.455957293902671e-06,
+          "max_abs_error": 1.52587890625e-05,
+          "tolerances": {
+            "rtol": 0.02,
+            "atol": 0.02,
+            "nrmse": 0.01
+          }
+        },
+        "passed": true
+      },
+      {
+        "layer": 77,
+        "case": 3,
+        "output": {
+          "passed": true,
+          "finite": true,
+          "mismatch_fraction": 0.0,
+          "nrmse": 0.003046479687918911,
+          "global_difference_D": 4.64094669480989e-06,
+          "max_abs_error": 0.03125,
+          "tolerances": {
+            "rtol": 0.02,
+            "atol": 0.02,
+            "nrmse": 0.01
+          }
+        },
+        "state": {
+          "passed": true,
+          "scratch_contract": "native API checked through alternating-input and zero-input replay"
+        },
+        "passed": true
+      },
+      {
+        "layer": 77,
+        "case": 1,
+        "output": {
+          "passed": true,
+          "finite": true,
+          "mismatch_fraction": 0.0,
+          "nrmse": 0.0032864037311008793,
+          "global_difference_D": 5.402099774605452e-06,
+          "max_abs_error": 0.0625,
+          "tolerances": {
+            "rtol": 0.02,
+            "atol": 0.02,
+            "nrmse": 0.01
+          }
+        },
+        "state": {
+          "passed": true,
+          "scratch_contract": "native API checked through alternating-input and zero-input replay"
+        },
+        "passed": true
+      },
+      {
+        "layer": 77,
+        "zero": {
+          "passed": true,
+          "finite": true,
+          "mismatch_fraction": 0.0,
+          "nrmse": 0.0,
+          "global_difference_D": 0.0,
+          "max_abs_error": 0.0,
+          "tolerances": {
+            "rtol": 0.02,
+            "atol": 0.02,
+            "nrmse": 0.01
+          }
+        },
+        "restored": {
+          "passed": true,
+          "finite": true,
+          "mismatch_fraction": 0.0,
+          "nrmse": 0.002906907737222343,
+          "global_difference_D": 4.225254171922814e-06,
+          "max_abs_error": 0.0625,
+          "tolerances": {
+            "rtol": 0.02,
+            "atol": 0.02,
+            "nrmse": 0.01
+          }
+        },
+        "passed": true
+      }
+    ],
+    "candidate": [
+      {
+        "layer": 3,
+        "case": 2,
+        "output": {
+          "passed": true,
+          "finite": true,
+          "mismatch_fraction": 0.0,
+          "nrmse": 0.0029237874620746084,
+          "global_difference_D": 4.27421542966095e-06,
+          "max_abs_error": 7.62939453125e-06,
+          "tolerances": {
+            "rtol": 0.02,
+            "atol": 0.02,
+            "nrmse": 0.01
+          }
+        },
+        "state": {
+          "passed": true,
+          "partial_shape": [
+            6,
+            36,
+            512
+          ],
+          "output_shape": [
+            4,
+            6144
+          ],
+          "reset": "producer slot0 clears all output; every split partial overwritten",
+          "workspace": "owned per prepared operator; concurrent graph instances require separate operators"
+        },
+        "passed": true
+      },
+      {
+        "layer": 3,
+        "case": 0,
+        "output": {
+          "passed": true,
+          "finite": true,
+          "mismatch_fraction": 0.0,
+          "nrmse": 0.0029505765276497467,
+          "global_difference_D": 4.352817218345305e-06,
+          "max_abs_error": 1.52587890625e-05,
+          "tolerances": {
+            "rtol": 0.02,
+            "atol": 0.02,
+            "nrmse": 0.01
+          }
+        },
+        "state": {
+          "passed": true,
+          "partial_shape": [
+            6,
+            36,
+            512
+          ],
+          "output_shape": [
+            4,
+            6144
+          ],
+          "reset": "producer slot0 clears all output; every split partial overwritten",
+          "workspace": "owned per prepared operator; concurrent graph instances require separate operators"
+        },
+        "passed": true
+      },
+      {
+        "layer": 3,
+        "zero": {
+          "passed": true,
+          "finite": true,
+          "mismatch_fraction": 0.0,
+          "nrmse": 0.0,
+          "global_difference_D": 0.0,
+          "max_abs_error": 0.0,
+          "tolerances": {
+            "rtol": 0.02,
+            "atol": 0.02,
+            "nrmse": 0.01
+          }
+        },
+        "restored": {
+          "passed": true,
+          "finite": true,
+          "mismatch_fraction": 0.0,
+          "nrmse": 0.0029205489566868008,
+          "global_difference_D": 4.264805876608297e-06,
+          "max_abs_error": 7.62939453125e-06,
+          "tolerances": {
+            "rtol": 0.02,
+            "atol": 0.02,
+            "nrmse": 0.01
+          }
+        },
+        "passed": true
+      },
+      {
+        "layer": 77,
+        "case": 3,
+        "output": {
+          "passed": true,
+          "finite": true,
+          "mismatch_fraction": 0.0,
+          "nrmse": 0.0031324154330144736,
+          "global_difference_D": 4.906796601393385e-06,
+          "max_abs_error": 0.0625,
+          "tolerances": {
+            "rtol": 0.02,
+            "atol": 0.02,
+            "nrmse": 0.01
+          }
+        },
+        "state": {
+          "passed": true,
+          "partial_shape": [
+            6,
+            36,
+            512
+          ],
+          "output_shape": [
+            4,
+            6144
+          ],
+          "reset": "producer slot0 clears all output; every split partial overwritten",
+          "workspace": "owned per prepared operator; concurrent graph instances require separate operators"
+        },
+        "passed": true
+      },
+      {
+        "layer": 77,
+        "case": 1,
+        "output": {
+          "passed": true,
+          "finite": true,
+          "mismatch_fraction": 0.0,
+          "nrmse": 0.0027765528052666882,
+          "global_difference_D": 3.8551759833841995e-06,
+          "max_abs_error": 0.0625,
+          "tolerances": {
+            "rtol": 0.02,
+            "atol": 0.02,
+            "nrmse": 0.01
+          }
+        },
+        "state": {
+          "passed": true,
+          "partial_shape": [
+            6,
+            36,
+            512
+          ],
+          "output_shape": [
+            4,
+            6144
+          ],
+          "reset": "producer slot0 clears all output; every split partial overwritten",
+          "workspace": "owned per prepared operator; concurrent graph instances require separate operators"
+        },
+        "passed": true
+      },
+      {
+        "layer": 77,
+        "zero": {
+          "passed": true,
+          "finite": true,
+          "mismatch_fraction": 0.0,
+          "nrmse": 0.0,
+          "global_difference_D": 0.0,
+          "max_abs_error": 0.0,
+          "tolerances": {
+            "rtol": 0.02,
+            "atol": 0.02,
+            "nrmse": 0.01
+          }
+        },
+        "restored": {
+          "passed": true,
+          "finite": true,
+          "mismatch_fraction": 0.0,
+          "nrmse": 0.00285258014472304,
+          "global_difference_D": 4.069037644776482e-06,
+          "max_abs_error": 0.0625,
+          "tolerances": {
+            "rtol": 0.02,
+            "atol": 0.02,
+            "nrmse": 0.01
+          }
+        },
+        "passed": true
+      }
+    ]
+  },
+  "cross_reference_parity": [
+    {
+      "passed": true,
+      "finite": true,
+      "mismatch_fraction": 0.0,
+      "nrmse": 0.0,
+      "global_difference_D": 0.0,
+      "max_abs_error": 0.0,
+      "tolerances": {
+        "rtol": 0.02,
+        "atol": 0.02,
+        "nrmse": 0.01
+      }
+    },
+    {
+      "passed": true,
+      "finite": true,
+      "mismatch_fraction": 0.0,
+      "nrmse": 0.0,
+      "global_difference_D": 0.0,
+      "max_abs_error": 0.0,
+      "tolerances": {
+        "rtol": 0.02,
+        "atol": 0.02,
+        "nrmse": 0.01
+      }
+    },
+    {
+      "passed": true,
+      "finite": true,
+      "mismatch_fraction": 0.0,
+      "nrmse": 0.0,
+      "global_difference_D": 0.0,
+      "max_abs_error": 0.0,
+      "tolerances": {
+        "rtol": 0.02,
+        "atol": 0.02,
+        "nrmse": 0.01
+      }
+    },
+    {
+      "passed": true,
+      "finite": true,
+      "mismatch_fraction": 0.0,
+      "nrmse": 0.0,
+      "global_difference_D": 0.0,
+      "max_abs_error": 0.0,
+      "tolerances": {
+        "rtol": 0.02,
+        "atol": 0.02,
+        "nrmse": 0.01
+      }
+    }
+  ],
+  "cross_reference_parity_passed": true
+}

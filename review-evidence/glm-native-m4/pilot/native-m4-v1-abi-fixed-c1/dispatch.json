@@ -1,0 +1,224 @@
+{
+  "baseline": {
+    "3": {
+      "backend": "current AITER",
+      "native_override": null,
+      "static_kwargs": {},
+      "metadata": {
+        "stage1": {
+          "module": "aiter.fused_moe",
+          "name": "_mxfp4_a4w4_stage1_fw",
+          "kwargs": {
+            "kernelName1": "flydsl_mxmoe_g1_a4w4_16x128x256_f16in_hpf_nt_xcd4",
+            "interleave": "False"
+          }
+        },
+        "stage2": {
+          "module": "aiter.fused_moe",
+          "name": "_mxfp4_a4w4_stage2_fw",
+          "kwargs": {
+            "kernelName2": "flydsl_mxmoe_g2_a4w4_16x256x256_atomic"
+          }
+        },
+        "block_m": "16",
+        "ksplit": "0",
+        "fuse_quant": "fp4",
+        "output_aux": "opus",
+        "full_impl": "None",
+        "prequant": "False"
+      },
+      "resolution_sequence": [
+        {
+          "stage1": {
+            "module": "aiter.fused_moe",
+            "name": "_mxfp4_a4w4_stage1_fw",
+            "kwargs": {
+              "kernelName1": "flydsl_mxmoe_g1_a4w4_16x128x256_f16in_hpf_nt_xcd4",
+              "interleave": "False"
+            }
+          },
+          "stage2": {
+            "module": "aiter.fused_moe",
+            "name": "_mxfp4_a4w4_stage2_fw",
+            "kwargs": {
+              "kernelName2": "flydsl_mxmoe_g2_a4w4_16x256x256_atomic"
+            }
+          },
+          "block_m": "16",
+          "ksplit": "0",
+          "fuse_quant": "fp4",
+          "output_aux": "opus",
+          "full_impl": "None",
+          "prequant": "False"
+        },
+        {
+          "stage1": {
+            "module": "aiter.fused_moe",
+            "name": "_mxfp4_a4w4_stage1_fw",
+            "kwargs": {
+              "kernelName1": "flydsl_mxmoe_g1_a4w4_16x128x256_f16in_hpf_nt_xcd4",
+              "interleave": "False"
+            }
+          },
+          "stage2": {
+            "module": "aiter.fused_moe",
+            "name": "_mxfp4_a4w4_stage2_fw",
+            "kwargs": {
+              "kernelName2": "flydsl_mxmoe_g2_a4w4_16x256x256_atomic"
+            }
+          },
+          "block_m": "16",
+          "ksplit": "0",
+          "fuse_quant": "fp4",
+          "output_aux": "opus",
+          "full_impl": "None",
+          "prequant": "False"
+        }
+      ],
+      "reference_contract": {
+        "input_rounding": "flydsl_roundup_0x7fffff",
+        "middle_rounding": "flydsl_roundup_0x7fffff",
+        "fp32_middle": true,
+        "output": "bf16_expert_operands"
+      }
+    },
+    "77": {
+      "backend": "current AITER",
+      "native_override": null,
+      "static_kwargs": {},
+      "metadata": {
+        "stage1": {
+          "module": "aiter.fused_moe",
+          "name": "_mxfp4_a4w4_stage1_fw",
+          "kwargs": {
+            "kernelName1": "flydsl_mxmoe_g1_a4w4_16x128x256_f16in_hpf_nt_xcd4",
+            "interleave": "False"
+          }
+        },
+        "stage2": {
+          "module": "aiter.fused_moe",
+          "name": "_mxfp4_a4w4_stage2_fw",
+          "kwargs": {
+            "kernelName2": "flydsl_mxmoe_g2_a4w4_16x256x256_atomic"
+          }
+        },
+        "block_m": "16",
+        "ksplit": "0",
+        "fuse_quant": "fp4",
+        "output_aux": "opus",
+        "full_impl": "None",
+        "prequant": "False"
+      },
+      "resolution_sequence": [
+        {
+          "stage1": {
+            "module": "aiter.fused_moe",
+            "name": "_mxfp4_a4w4_stage1_fw",
+            "kwargs": {
+              "kernelName1": "flydsl_mxmoe_g1_a4w4_16x128x256_f16in_hpf_nt_xcd4",
+              "interleave": "False"
+            }
+          },
+          "stage2": {
+            "module": "aiter.fused_moe",
+            "name": "_mxfp4_a4w4_stage2_fw",
+            "kwargs": {
+              "kernelName2": "flydsl_mxmoe_g2_a4w4_16x256x256_atomic"
+            }
+          },
+          "block_m": "16",
+          "ksplit": "0",
+          "fuse_quant": "fp4",
+          "output_aux": "opus",
+          "full_impl": "None",
+          "prequant": "False"
+        },
+        {
+          "stage1": {
+            "module": "aiter.fused_moe",
+            "name": "_mxfp4_a4w4_stage1_fw",
+            "kwargs": {
+              "kernelName1": "flydsl_mxmoe_g1_a4w4_16x128x256_f16in_hpf_nt_xcd4",
+              "interleave": "False"
+            }
+          },
+          "stage2": {
+            "module": "aiter.fused_moe",
+            "name": "_mxfp4_a4w4_stage2_fw",
+            "kwargs": {
+              "kernelName2": "flydsl_mxmoe_g2_a4w4_16x256x256_atomic"
+            }
+          },
+          "block_m": "16",
+          "ksplit": "0",
+          "fuse_quant": "fp4",
+          "output_aux": "opus",
+          "full_impl": "None",
+          "prequant": "False"
+        }
+      ],
+      "reference_contract": {
+        "input_rounding": "flydsl_roundup_0x7fffff",
+        "middle_rounding": "flydsl_roundup_0x7fffff",
+        "fp32_middle": true,
+        "output": "bf16_expert_operands"
+      }
+    }
+  },
+  "candidate": {
+    "3": {
+      "algorithm": "exact M4 direct split6 producer/consumer",
+      "input": "native BF16 MXFP4 group32",
+      "middle": "FP32 SiLU, native 0x7fffff",
+      "g1_reduction": "six K1024 MFMA partials, padded8 halves/quarters/pairs",
+      "bit_identical_native_g1": false,
+      "scratch_bytes": 491520,
+      "down_n": 128,
+      "down_waves": 4,
+      "markers": [
+        "marlowe_native_m4_split6_g1_iq7fffff_v1",
+        "marlowe_native_m4_split6_g2_fp32mid7fffff_n128_w4_v1"
+      ],
+      "backend": "source-pinned coupled native operator",
+      "operator_factory": "aiter.ops.flydsl.kernels.mxmoe_tiny_m4.make_operator",
+      "static_kwargs": {
+        "down_n": 128,
+        "down_waves": 4
+      },
+      "rows": 4,
+      "reference_contract": {
+        "input_rounding": "flydsl_roundup_0x7fffff",
+        "middle_rounding": "flydsl_roundup_0x7fffff",
+        "fp32_middle": true,
+        "output": "bf16_expert_operands"
+      }
+    },
+    "77": {
+      "algorithm": "exact M4 direct split6 producer/consumer",
+      "input": "native BF16 MXFP4 group32",
+      "middle": "FP32 SiLU, native 0x7fffff",
+      "g1_reduction": "six K1024 MFMA partials, padded8 halves/quarters/pairs",
+      "bit_identical_native_g1": false,
+      "scratch_bytes": 491520,
+      "down_n": 128,
+      "down_waves": 4,
+      "markers": [
+        "marlowe_native_m4_split6_g1_iq7fffff_v1",
+        "marlowe_native_m4_split6_g2_fp32mid7fffff_n128_w4_v1"
+      ],
+      "backend": "source-pinned coupled native operator",
+      "operator_factory": "aiter.ops.flydsl.kernels.mxmoe_tiny_m4.make_operator",
+      "static_kwargs": {
+        "down_n": 128,
+        "down_waves": 4
+      },
+      "rows": 4,
+      "reference_contract": {
+        "input_rounding": "flydsl_roundup_0x7fffff",
+        "middle_rounding": "flydsl_roundup_0x7fffff",
+        "fp32_middle": true,
+        "output": "bf16_expert_operands"
+      }
+    }
+  }
+}

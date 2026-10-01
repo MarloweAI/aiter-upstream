@@ -1,0 +1,16 @@
+{
+  "passed": true,
+  "markers": [
+    "marlowe_native_m4_split6_g1_iq7fffff_v1",
+    "marlowe_native_m4_split6_g2_fp32mid7fffff_n128_w4_v1"
+  ],
+  "baseline_kernels": [
+    "void aiter::mxfp4_moe::moe_sort_quant::sort_quant_kernel_impl<257, 9, 16, 6144, 128, 1024, true, false>(int, __hip_bfloat16 const*, int const*, float const*, int*, int*, int*, int*, float*, unsigned char*, unsigned char*, int*, __hip_bfloat16*, void*, long long)",
+    "gemm1_a4w4_port_fp4_h6144_i256_ne257_bm16_iq_hpf_sep_native_scale_bn128_xcd4",
+    "gemm2_a4w4_port_ne257_h6144_i256_bm16_atomic"
+  ],
+  "candidate_kernels": [
+    "marlowe_native_m4_split6_g1_iq7fffff_v1",
+    "marlowe_native_m4_split6_g2_fp32mid7fffff_n128_w4_v1"
+  ]
+}

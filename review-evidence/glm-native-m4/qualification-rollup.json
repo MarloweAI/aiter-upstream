@@ -1,0 +1,25 @@
+{
+  "baseline": {
+    "eager_checks": 480,
+    "graph_checks": 1440,
+    "state_checks": 90,
+    "worst_graph_nrmse": 0.004673059653706294
+  },
+  "candidate": {
+    "eager_checks": 480,
+    "graph_checks": 1440,
+    "state_checks": 90,
+    "worst_graph_nrmse": 0.004785858827250728
+  },
+  "gate": {
+    "source": true,
+    "routes": true,
+    "dispatch": true,
+    "eager": true,
+    "graph": true,
+    "state": true
+  },
+  "cross_reference_parity_passed": true,
+  "actual_source_production_lines": 544,
+  "measured_manifest_production_loc_estimate": 538
+}

@@ -1,0 +1,10 @@
+Separate MoE replay profile (profiled durations are not clean latency)
+Clean mean of per-case medians: 16.55999943614006 us
+Profiled device span: 13.359004974365234 us
+Profiled kernel sum: 13.358 us
+Profile minus clean: -3.200994461774826 us
+Visible kernels: 2
+
+Order Stream Start(us) Duration(us) Kernel
+   0      0        0.000        7.639 marlowe_native_m4_split6_g1_iq7fffff_v1
+   1      0        7.640        5.719 marlowe_native_m4_split6_g2_fp32mid7fffff_n128_w4_v1

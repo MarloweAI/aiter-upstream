@@ -1,0 +1,30 @@
+{
+  "schema": 1,
+  "clean_mean_per_case_median_us": null,
+  "profiled_device_span_us": 13.359001159667969,
+  "profiled_kernel_sum_us": 13.358,
+  "profile_minus_clean_us": null,
+  "visible_kernels": 2,
+  "usable_kernel_breakdown": true,
+  "warning": null,
+  "kernels": [
+    {
+      "name": "marlowe_native_m4_split6_g1_iq7fffff_v1",
+      "start_us": 22799863960.653,
+      "duration_us": 7.679,
+      "stream": 0,
+      "device": 2,
+      "order": 0,
+      "relative_start_us": 0.0
+    },
+    {
+      "name": "marlowe_native_m4_split6_g2_fp32mid7fffff_n128_w4_v1",
+      "start_us": 22799863968.333,
+      "duration_us": 5.679,
+      "stream": 0,
+      "device": 2,
+      "order": 1,
+      "relative_start_us": 7.680000305175781
+    }
+  ]
+}
