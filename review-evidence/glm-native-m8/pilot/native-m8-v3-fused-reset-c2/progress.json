@@ -1,0 +1,6 @@
+{
+  "group": "native-m8-v3-fused-reset",
+  "concurrency": 2,
+  "phase": "clean_then_profile",
+  "elapsed_seconds": 3.6567602700088173
+}

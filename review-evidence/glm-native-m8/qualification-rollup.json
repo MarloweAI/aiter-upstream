@@ -1,0 +1,55 @@
+{
+  "measured_source_sha": "9b145e0de47daacc939b8730d145138f182bdb24",
+  "review_source_sha": "34795206af96156f6c61930ec8d2100e80bef3d7",
+  "official_base_sha": "569d981db738682668ac97db457f5423382f9bd2",
+  "gates": {
+    "source": true,
+    "routes": true,
+    "dispatch": true,
+    "eager": true,
+    "graph": true,
+    "state": true
+  },
+  "counts": {
+    "eager": {
+      "baseline": {
+        "cases": 480,
+        "all_passed": true
+      },
+      "candidate": {
+        "cases": 480,
+        "all_passed": true
+      }
+    },
+    "graph": {
+      "baseline": {
+        "cases": 1440,
+        "all_passed": true
+      },
+      "candidate": {
+        "cases": 1440,
+        "all_passed": true
+      }
+    },
+    "state": {
+      "baseline": {
+        "cases": 90,
+        "all_passed": true
+      },
+      "candidate": {
+        "cases": 90,
+        "all_passed": true
+      }
+    }
+  },
+  "native_capture_parity_checks": 480,
+  "native_capture_parity_all_passed": true,
+  "clean_estimator": "mean of480 per-case medians from40 randomized paired samples;10 warmups",
+  "clean_us": {
+    "baseline": 33.35120420282086,
+    "candidate": 30.166782304877415
+  },
+  "saving_us": 3.1844218979434444,
+  "saving_pct": 9.548146683333567,
+  "profile_table_source": false
+}

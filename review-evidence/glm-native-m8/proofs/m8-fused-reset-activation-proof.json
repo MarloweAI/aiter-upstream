@@ -1,0 +1,113 @@
+{
+  "passed": true,
+  "feature_sha": "9b145e0de47daacc939b8730d145138f182bdb24",
+  "observed_native_host_normalization": [
+    {
+      "input_limit": null,
+      "activation": "silu",
+      "normalized_limit": "+inf"
+    },
+    {
+      "input_limit": null,
+      "activation": "silu",
+      "normalized_limit": "+inf"
+    },
+    {
+      "input_limit": null,
+      "activation": "silu",
+      "normalized_limit": "+inf"
+    },
+    {
+      "input_limit": null,
+      "activation": "silu",
+      "normalized_limit": "+inf"
+    },
+    {
+      "input_limit": null,
+      "activation": "silu",
+      "normalized_limit": "+inf"
+    },
+    {
+      "input_limit": null,
+      "activation": "silu",
+      "normalized_limit": "+inf"
+    },
+    {
+      "input_limit": null,
+      "activation": "silu",
+      "normalized_limit": "+inf"
+    },
+    {
+      "input_limit": null,
+      "activation": "silu",
+      "normalized_limit": "+inf"
+    },
+    {
+      "input_limit": null,
+      "activation": "silu",
+      "normalized_limit": "+inf"
+    },
+    {
+      "input_limit": null,
+      "activation": "silu",
+      "normalized_limit": "+inf"
+    },
+    {
+      "input_limit": null,
+      "activation": "silu",
+      "normalized_limit": "+inf"
+    },
+    {
+      "input_limit": null,
+      "activation": "silu",
+      "normalized_limit": "+inf"
+    },
+    {
+      "input_limit": null,
+      "activation": "silu",
+      "normalized_limit": "+inf"
+    },
+    {
+      "input_limit": null,
+      "activation": "silu",
+      "normalized_limit": "+inf"
+    },
+    {
+      "input_limit": null,
+      "activation": "silu",
+      "normalized_limit": "+inf"
+    },
+    {
+      "input_limit": null,
+      "activation": "silu",
+      "normalized_limit": "+inf"
+    },
+    {
+      "input_limit": null,
+      "activation": "silu",
+      "normalized_limit": "+inf"
+    },
+    {
+      "input_limit": null,
+      "activation": "silu",
+      "normalized_limit": "+inf"
+    },
+    {
+      "input_limit": null,
+      "activation": "silu",
+      "normalized_limit": "+inf"
+    },
+    {
+      "input_limit": null,
+      "activation": "silu",
+      "normalized_limit": "+inf"
+    },
+    {
+      "input_limit": null,
+      "activation": "silu",
+      "normalized_limit": "+inf"
+    }
+  ],
+  "source": "aiter.ops.flydsl.moe_kernels.runtime_swiglu_limit; actual public fused_moe native calls",
+  "high_activation_fixture": "x=1/4; gate/up approximately12 > old clamp7"
+}

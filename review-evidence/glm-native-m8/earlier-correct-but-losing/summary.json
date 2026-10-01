@@ -1,0 +1,247 @@
+{
+  "identity": {
+    "schema": 1,
+    "job": "86952",
+    "host": "marlowe-mi355x-1",
+    "device": "AMD Instinct MI355X",
+    "torch": "2.11.0+rocm7.2",
+    "hip": "7.2.26015",
+    "aiter_sha": "9a701a02b69933b65309d6d1868f315acad75b8b",
+    "aiter_source": "/workspace/hassane/moe-native-tiny-20261001/source/aiter-m8-v1/aiter/fused_moe.py",
+    "sglang_sha": "a0fcebb3bb7043e62b6ca8885b9e723f2262e091",
+    "native_sglang_sorting_adapter": "/workspace/hassane/moe-native-tiny-20261001/source/sglang/python/sglang/kernels/ops/moe/moe_sorting_small.py",
+    "native_sorting_callable": {
+      "module": "aiter.fused_moe",
+      "name": "_moe_sorting_impl",
+      "kwargs": {}
+    },
+    "library_digest": "f37741242aee52a3668ae6b68a6f76113980bd925d9498359997245fc4bf707f",
+    "variant_digest": "511f96e72bcc4f60273de312e736fa070f392e9e45782b468fd215bae069ba54",
+    "comparison_mode": "native-port",
+    "ordered_digest": null,
+    "native_port_manifest": {
+      "schema": 2,
+      "unit": "native-m8-v2-native-silu",
+      "selection_kind": "full_operator",
+      "aiter_base_sha": "569d981db738682668ac97db457f5423382f9bd2",
+      "aiter_feature_sha": "9a701a02b69933b65309d6d1868f315acad75b8b",
+      "patch_sha256": "dce571070b15fa1aefb8b89dd12a54d0599863b1eced8ac9ea2101723323d3e5",
+      "source_files": {
+        "aiter/ops/flydsl/kernels/mxfp4_gemm1.py": "f1154a9ffb7b6223fae07be9478dc14c5064910af4df5243428fe348ff25019d",
+        "aiter/ops/flydsl/kernels/mxfp4_gemm2.py": "b55c9d57721502c85d15b83df1848d36ba8cca3f22d602e195e40afbbc53b938",
+        "aiter/ops/flydsl/kernels/mxmoe_routes8.py": "784a0d3dd981fba023cdefab8e4390cf68a8806f223f7b8694e9a1ff98f14086",
+        "aiter/ops/flydsl/mxmoe_tiny_m8.py": "a6c929c975e42d099e6c4272079cb450857a5ff1d13630bdab8d8cf6279e5ce7",
+        "op_tests/flydsl_tests/test_mxmoe_tiny_m8.py": "daaa66d10eeb5aff2f1d4d97ba53948770631e905b857680432331edaa1e61f9",
+        "op_tests/test_mxmoe_tiny_m8_policy.py": "4967fa33006dbd1130bf6dec457bff2d667ea07ba9d3ec21ed92357efe7b8ea4"
+      },
+      "operator_factory": "aiter.ops.flydsl.mxmoe_tiny_m8.make_operator",
+      "operator_kwargs": {
+        "prefetch_hidden": false,
+        "use_nt_g2": true
+      },
+      "reference_contract": {
+        "input_rounding": "flydsl_roundup_0x7fffff",
+        "middle_rounding": "flydsl_roundup_0x7fffff",
+        "fp32_middle": true,
+        "output": "bf16_expert_operands"
+      },
+      "concurrencies": [
+        2
+      ],
+      "expected_kernel_marker": "gemm1_a4w4_port_fp4_h6144_i256_ne257_bm16_iq_sep_native_scale_merge8",
+      "expected_kernel_markers": [
+        "gemm1_a4w4_port_fp4_h6144_i256_ne257_bm16_iq_sep_native_scale_merge8",
+        "gemm2_a4w4_port_ne257_h6144_i256_bm16_nt_atomic_merge8"
+      ],
+      "unchanged_source_files": [
+        "aiter/fused_moe.py",
+        "aiter/ops/flydsl/kernels/mxfp4_gemm_common.py",
+        "aiter/ops/flydsl/kernels/mxmoe_dispatcher.py",
+        "aiter/ops/flydsl/kernels/mxmoe_gemm_v2.py",
+        "aiter/configs/model_configs/glm5_fp4_tuned_fmoe.csv"
+      ],
+      "harness_files": {
+        "benchmarks/moe_replay/upstream_campaign.py": "012340e58a9b0307cc71eaaf3cd102cbeb56e925fc40a3cd1e3da25fec102e79",
+        "benchmarks/moe_replay/upstream_native_port.py": "52a7497571386476e7bbab61333b0297965008d9100fe76150b538fb36794073",
+        "benchmarks/moe_replay/upstream_native_stage2.py": "ea9aea70e0efead200fa45b80be1cbae937422331cf74d411c174d083afc211c",
+        "benchmarks/moe_replay/upstream_reference.py": "20db9053f7ef45df19b17983e2671216849601f28f4557d7ae51d6ea67ff17ad",
+        "benchmarks/moe_replay/upstream_contract.py": "28fc6d19967d4457b965b2538700c357668c21e158564cdf4543ab106841bf72",
+        "benchmarks/moe_replay/upstream_profile.py": "609effa69e5db355d1da8858d966e64d1e5b74dae77ecbb3a39629e650bef6f2",
+        "benchmarks/moe_replay/reference.py": "3bce64272a5bda207c64a982f462ab1202ae0497c2d0990a58efa5b4e8fd83e2",
+        "benchmarks/moe_replay/events.py": "f6df59644aa5feca6b8a6df757b95dc5a510fb5fe98eec38afb6f80febf13479",
+        "benchmarks/moe_replay/kernels.py": "4f79af00bb7b674092c51d1723ba39d170ff7565303705c9a549f5e75dd6bfaa",
+        "benchmarks/moe_replay/upstream_replay_launch.sh": "61d96620c0896fc98cbb5d3b56f97340c601ab06fe1d2164e4043b18512a68ec"
+      },
+      "fallback": {
+        "1": "Exact-M8 prepared factory only; public native unchanged; merge flags defaultFalse outside factory",
+        "4": "Exact-M8 prepared factory only; public native unchanged; merge flags defaultFalse outside factory",
+        "8": "Exact-M8 prepared factory only; public native unchanged; merge flags defaultFalse outside factory",
+        "16": "Exact-M8 prepared factory only; public native unchanged; merge flags defaultFalse outside factory",
+        "32": "Exact-M8 prepared factory only; public native unchanged; merge flags defaultFalse outside factory",
+        "64": "Exact-M8 prepared factory only; public native unchanged; merge flags defaultFalse outside factory; historical C64 native failure retained"
+      },
+      "sorting_adapter_sha256": "16ecef99a80d2efef01885674a181829949f5c1b7dce7d61b722f4c53e256442",
+      "sorting_adapter_actual_sha": "a0fcebb3bb7043e62b6ca8885b9e723f2262e091",
+      "baseline_pristine_proof": "Existing G1/G2 bodies receive default-False route-merge options; helper/config/public API bytes unchanged. Actual compiled baseline .text equivalence required before admission.",
+      "candidate_reduction": "Existing native GEMM/quantization/expert BF16 atomic math; consumer-local full9 supplied route merge. Private compact middle ABI changes.",
+      "production_loc": 330,
+      "gpu_budget_seconds": 5400,
+      "max_variants": 3,
+      "campaign_code_sha": "6220c182c9f30290b595528697732f676f5d46e1",
+      "activation_contract": "Native ordinary SiLU with host-normalized swiglu_limit=+inf; candidate explicit +inf. Failed finite-clamp f00 receipts preserved."
+    },
+    "native_port_manifest_sha256": "44824f1cc8d5f8e76785590cf1bf9660d8bc10b862d0d37b01a1067358e00ae5",
+    "runner_sha256": "012340e58a9b0307cc71eaaf3cd102cbeb56e925fc40a3cd1e3da25fec102e79",
+    "capture": "/workspace/hassane/moe-upstream-qualification-20260929/results/fp8-native-target-verify-capture",
+    "runtime": {
+      "job": "86952",
+      "step": "15",
+      "host": "marlowe-mi355x-1",
+      "devices": 1,
+      "device": "AMD Instinct MI355X",
+      "torch": "2.11.0+rocm7.2",
+      "hip": "7.2.26015",
+      "aiter": "/workspace/hassane/moe-native-tiny-20261001/source/aiter-m8-v1/aiter/__init__.py",
+      "feature_sha": "9a701a02b69933b65309d6d1868f315acad75b8b",
+      "base_sha": "569d981db738682668ac97db457f5423382f9bd2",
+      "sglang_sha": "a0fcebb3bb7043e62b6ca8885b9e723f2262e091",
+      "sorting_adapter_sha256": "16ecef99a80d2efef01885674a181829949f5c1b7dce7d61b722f4c53e256442",
+      "flydsl": "0.3.4.1",
+      "pyhip": "1.0.1.dev485+g270225149",
+      "image_path": "/workspace/hassane/attention-image-mi355x-8da12b8b-20260917-r3/raw/sglang-rocm-8da12b8b.sqsh",
+      "image_sha256": "8375b26f6360f877628a363a3093173ac63b9e780f48e23389f10bdfd67cb5e4",
+      "image_bytes": 60567834624,
+      "capture": "/workspace/hassane/moe-upstream-qualification-20260929/results/fp8-native-target-verify-capture",
+      "capture_native_source": "AITER c8325e00 / SGLang46beacf; fresh standalone current569d981/a0fcebb3 control, no recapture",
+      "flydsl_cache": "/workspace/hassane/moe-native-tiny-20261001/cache/flydsl-m8-9a701a0"
+    },
+    "samples": 40,
+    "warmups": 10,
+    "boundary": "supplied native routes through complete local combination",
+    "estimator": "mean of per-case medians, randomized paired graph samples",
+    "scope": "one TP8/EP1 rank; captured sampled layers only; no collectives or router",
+    "group_meaning": "matched native baseline-versus-source-patch comparison"
+  },
+  "receipts": [
+    {
+      "group": "native-m8-v2-native-silu",
+      "concurrency": 1,
+      "status": "not_applicable",
+      "identical_dispatch": true,
+      "reason": "Exact-M8 prepared factory only; public native unchanged; merge flags defaultFalse outside factory",
+      "timing": "not rerun; native dispatch unchanged"
+    },
+    {
+      "group": "native-m8-v2-native-silu",
+      "concurrency": 4,
+      "status": "not_applicable",
+      "identical_dispatch": true,
+      "reason": "Exact-M8 prepared factory only; public native unchanged; merge flags defaultFalse outside factory",
+      "timing": "not rerun; native dispatch unchanged"
+    },
+    {
+      "group": "native-m8-v2-native-silu",
+      "concurrency": 8,
+      "status": "not_applicable",
+      "identical_dispatch": true,
+      "reason": "Exact-M8 prepared factory only; public native unchanged; merge flags defaultFalse outside factory",
+      "timing": "not rerun; native dispatch unchanged"
+    },
+    {
+      "group": "native-m8-v2-native-silu",
+      "concurrency": 16,
+      "status": "not_applicable",
+      "identical_dispatch": true,
+      "reason": "Exact-M8 prepared factory only; public native unchanged; merge flags defaultFalse outside factory",
+      "timing": "not rerun; native dispatch unchanged"
+    },
+    {
+      "group": "native-m8-v2-native-silu",
+      "concurrency": 32,
+      "status": "not_applicable",
+      "identical_dispatch": true,
+      "reason": "Exact-M8 prepared factory only; public native unchanged; merge flags defaultFalse outside factory",
+      "timing": "not rerun; native dispatch unchanged"
+    },
+    {
+      "group": "native-m8-v2-native-silu",
+      "concurrency": 64,
+      "status": "historical_native_gate_failed",
+      "identical_dispatch": false,
+      "reason": "Exact-M8 prepared factory only; public native unchanged; merge flags defaultFalse outside factory; historical C64 native failure retained",
+      "timing": "not rerun; native dispatch unchanged"
+    },
+    {
+      "group": "native-m8-v2-native-silu",
+      "concurrency": 2,
+      "rows": 8,
+      "status": "qualified",
+      "gate": {
+        "source": true,
+        "routes": true,
+        "dispatch": true,
+        "eager": true,
+        "graph": true,
+        "state": true
+      },
+      "baseline_us": 33.456473981883995,
+      "candidate_us": 34.54018750150377,
+      "cases": 480,
+      "independent_reference_cases_per_arm": 480,
+      "phase_seconds": {
+        "prepare_dispatch": 1.9184980529826134,
+        "independent_references": 10.854643743019551,
+        "eager_graph_state_gates": 1.7772350371815264,
+        "clean_and_profiles": 2.9515782759990543
+      },
+      "comparison_semantics": "matched native source patch, unchanged quantizer/route/output contract",
+      "excluded_from_primary_ranking": false,
+      "cross_reference_parity_passed": true,
+      "total_wall_seconds": 17.72232563304715
+    }
+  ],
+  "marginal_savings": {
+    "native-m8-v2-native-silu": {
+      "cells": {
+        "1": {
+          "status": "not_applicable",
+          "saved_us": 0.0
+        },
+        "4": {
+          "status": "not_applicable",
+          "saved_us": 0.0
+        },
+        "8": {
+          "status": "not_applicable",
+          "saved_us": 0.0
+        },
+        "16": {
+          "status": "not_applicable",
+          "saved_us": 0.0
+        },
+        "32": {
+          "status": "not_applicable",
+          "saved_us": 0.0
+        },
+        "64": {
+          "status": "historical_native_gate_failed"
+        },
+        "2": {
+          "status": "qualified",
+          "baseline_us": 33.456473981883995,
+          "candidate_us": 34.54018750150377,
+          "saved_us": -1.0837135196197778,
+          "reduction_pct": -3.2391743379968454
+        }
+      },
+      "saved_us_sum": -1.0837135196197778,
+      "missing": [
+        64
+      ],
+      "measured_concurrencies": [
+        2
+      ],
+      "complete": false
+    }
+  }
+}

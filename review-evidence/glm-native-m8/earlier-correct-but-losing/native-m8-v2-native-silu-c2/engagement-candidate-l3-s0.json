@@ -1,0 +1,39 @@
+{
+  "schema": 1,
+  "clean_mean_per_case_median_us": null,
+  "profiled_device_span_us": 26.118999481201172,
+  "profiled_kernel_sum_us": 26.117,
+  "profile_minus_clean_us": null,
+  "visible_kernels": 3,
+  "usable_kernel_breakdown": true,
+  "warning": null,
+  "kernels": [
+    {
+      "name": "void at::native::vectorized_elementwise_kernel<8, at::native::FillFunctor<c10::BFloat16>, std::array<char*, 1ul> >(int, at::native::FillFunctor<c10::BFloat16>, std::array<char*, 1ul>)",
+      "start_us": 24322899050.959,
+      "duration_us": 3.039,
+      "stream": 0,
+      "device": 2,
+      "order": 0,
+      "relative_start_us": 0.0
+    },
+    {
+      "name": "gemm1_a4w4_port_fp4_h6144_i256_ne257_bm16_iq_sep_native_scale_merge8",
+      "start_us": 24322899053.999,
+      "duration_us": 18.559,
+      "stream": 0,
+      "device": 2,
+      "order": 1,
+      "relative_start_us": 3.0400009155273438
+    },
+    {
+      "name": "gemm2_a4w4_port_ne257_h6144_i256_bm16_nt_atomic_merge8",
+      "start_us": 24322899072.559,
+      "duration_us": 4.519,
+      "stream": 0,
+      "device": 2,
+      "order": 2,
+      "relative_start_us": 21.599998474121094
+    }
+  ]
+}

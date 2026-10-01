@@ -1,0 +1,17 @@
+{
+  "job": "86952",
+  "released": true,
+  "release_time_utc": "Thu Oct  1 19:11:48 UTC 2026",
+  "queue_absent": true,
+  "pre_release_probe": "cleanup-pre-release.json",
+  "pre_release_assigned_gpu_free_fraction": 0.9978500895230861,
+  "scheduler_receipt": "Thu Oct  1 19:11:48 UTC 2026\n             86952    mi355x glm-nati  hassane CG      48:27      1 marlowe-mi355x-1\n         STEPID     NAME PARTITION     USER      TIME NODELIST\n86952|CANCELLED by 2014|00:48:27|0:0\n86952.0|COMPLETED|00:00:28|0:0\n86952.1|FAILED|00:00:54|1:0\n86952.2|COMPLETED|00:00:12|0:0\n86952.3|FAILED|00:00:01|128:0\n86952.4|FAILED|00:00:47|1:0\n86952.5|FAILED|00:00:40|1:0\n86952.6|FAILED|00:00:00|128:0\n86952.7|FAILED|00:00:56|1:0\n86952.8|COMPLETED|00:02:39|0:0\n86952.9|COMPLETED|00:01:41|0:0\n86952.10|COMPLETED|00:00:02|0:0\n86952.11|COMPLETED|00:02:44|0:0\n86952.12|COMPLETED|00:00:44|0:0\n86952.13|FAILED|00:01:13|1:0\n86952.14|COMPLETED|00:00:02|0:0\n86952.15|COMPLETED|00:02:50|0:0\n86952.16|COMPLETED|00:00:43|0:0\n86952.17|FAILED|00:01:08|1:0\n86952.18|COMPLETED|00:00:02|0:0\n86952.19|COMPLETED|00:00:52|0:0\n86952.20|COMPLETED|00:00:41|0:0\n86952.21|COMPLETED|00:01:11|0:0\n86952.22|COMPLETED|00:00:36|0:0\n",
+  "owned_benchmark_steps_terminal": true,
+  "other_jobs_untouched": true,
+  "notes": "All measurement steps terminated; assigned GPU free>99%. Cancelled only owned allocation by jobID. No server launched in this campaign. Initial cancellation probe saw completing(CG); follow-up explicitly verifies empty job and step listings.",
+  "queue_absence_verified": {
+    "time_utc": "2026-10-01T19:12:06.668131+00:00",
+    "queue": "",
+    "steps": ""
+  }
+}

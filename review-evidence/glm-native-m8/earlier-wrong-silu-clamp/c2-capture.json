@@ -1,0 +1,4480 @@
+{
+  "source": "/workspace/hassane/moe-upstream-qualification-20260929/results/fp8-native-target-verify-capture/c2-d4-s355052",
+  "hashes": {
+    "metadata": "973556cd968f4bdf5421812369803adc591aefacc3b0d9bbc75d3e8aac346a7b",
+    "tensors": "d69e6ee4256605edae9faf6635c5572a9b60c68b1e37871bd3637f41ee18126f",
+    "weights-3": "e515ca4730513dbdba18717950e0535f3f7a47b887663b3074abe2c5f865b66f",
+    "weights-77": "0646a92ea7c2c0ba7f4f70606ecea1ead214c1221bf835211bbbd93d56284844"
+  },
+  "cases": 4,
+  "excluded_steps": [],
+  "metadata": {
+    "mode": "capture",
+    "forward_mode": "target_verify",
+    "rank": 0,
+    "layers": [
+      3,
+      5,
+      8,
+      11,
+      13,
+      16,
+      18,
+      21,
+      23,
+      26,
+      29,
+      31,
+      34,
+      36,
+      39,
+      40,
+      44,
+      46,
+      48,
+      51,
+      54,
+      56,
+      59,
+      61,
+      64,
+      66,
+      69,
+      72,
+      74,
+      77
+    ],
+    "steps": [
+      {
+        "decode_step": 0,
+        "request_ids": [],
+        "live_rows": [
+          true,
+          true
+        ],
+        "scheduled_rows": 8,
+        "output_lengths": [],
+        "generated_token_ids": [],
+        "forward_mode": "target_verify",
+        "draft_token_num": 4,
+        "moe_rows": 8,
+        "target_frame_id": 0,
+        "can_run_graph": true,
+        "actual_request_count": 2,
+        "request_graph_rows": 2,
+        "actual_token_count": 8,
+        "graph_rows": 8,
+        "raw_bs": 2,
+        "capture_bs": [
+          1,
+          2,
+          4,
+          8,
+          16,
+          32,
+          64
+        ],
+        "captured_req_width": 4,
+        "ragged_verify_mode": false,
+        "slot": 0
+      },
+      {
+        "decode_step": 1,
+        "request_ids": [],
+        "live_rows": [
+          true,
+          true
+        ],
+        "scheduled_rows": 8,
+        "output_lengths": [],
+        "generated_token_ids": [],
+        "forward_mode": "target_verify",
+        "draft_token_num": 4,
+        "moe_rows": 8,
+        "target_frame_id": 1,
+        "can_run_graph": true,
+        "actual_request_count": 2,
+        "request_graph_rows": 2,
+        "actual_token_count": 8,
+        "graph_rows": 8,
+        "raw_bs": 2,
+        "capture_bs": [
+          1,
+          2,
+          4,
+          8,
+          16,
+          32,
+          64
+        ],
+        "captured_req_width": 4,
+        "ragged_verify_mode": false,
+        "slot": 1
+      },
+      {
+        "decode_step": 2,
+        "request_ids": [],
+        "live_rows": [
+          true,
+          true
+        ],
+        "scheduled_rows": 8,
+        "output_lengths": [],
+        "generated_token_ids": [],
+        "forward_mode": "target_verify",
+        "draft_token_num": 4,
+        "moe_rows": 8,
+        "target_frame_id": 2,
+        "can_run_graph": true,
+        "actual_request_count": 2,
+        "request_graph_rows": 2,
+        "actual_token_count": 8,
+        "graph_rows": 8,
+        "raw_bs": 2,
+        "capture_bs": [
+          1,
+          2,
+          4,
+          8,
+          16,
+          32,
+          64
+        ],
+        "captured_req_width": 4,
+        "ragged_verify_mode": false,
+        "slot": 2
+      },
+      {
+        "decode_step": 3,
+        "request_ids": [],
+        "live_rows": [
+          true,
+          true
+        ],
+        "scheduled_rows": 8,
+        "output_lengths": [],
+        "generated_token_ids": [],
+        "forward_mode": "target_verify",
+        "draft_token_num": 4,
+        "moe_rows": 8,
+        "target_frame_id": 3,
+        "can_run_graph": true,
+        "actual_request_count": 2,
+        "request_graph_rows": 2,
+        "actual_token_count": 8,
+        "graph_rows": 8,
+        "raw_bs": 2,
+        "capture_bs": [
+          1,
+          2,
+          4,
+          8,
+          16,
+          32,
+          64
+        ],
+        "captured_req_width": 4,
+        "ragged_verify_mode": false,
+        "slot": 3
+      },
+      {
+        "decode_step": 4,
+        "request_ids": [],
+        "live_rows": [
+          true,
+          true
+        ],
+        "scheduled_rows": 8,
+        "output_lengths": [],
+        "generated_token_ids": [],
+        "forward_mode": "target_verify",
+        "draft_token_num": 4,
+        "moe_rows": 8,
+        "target_frame_id": 4,
+        "can_run_graph": true,
+        "actual_request_count": 2,
+        "request_graph_rows": 2,
+        "actual_token_count": 8,
+        "graph_rows": 8,
+        "raw_bs": 2,
+        "capture_bs": [
+          1,
+          2,
+          4,
+          8,
+          16,
+          32,
+          64
+        ],
+        "captured_req_width": 4,
+        "ragged_verify_mode": false,
+        "slot": 4
+      },
+      {
+        "decode_step": 5,
+        "request_ids": [],
+        "live_rows": [
+          true,
+          true
+        ],
+        "scheduled_rows": 8,
+        "output_lengths": [],
+        "generated_token_ids": [],
+        "forward_mode": "target_verify",
+        "draft_token_num": 4,
+        "moe_rows": 8,
+        "target_frame_id": 5,
+        "can_run_graph": true,
+        "actual_request_count": 2,
+        "request_graph_rows": 2,
+        "actual_token_count": 8,
+        "graph_rows": 8,
+        "raw_bs": 2,
+        "capture_bs": [
+          1,
+          2,
+          4,
+          8,
+          16,
+          32,
+          64
+        ],
+        "captured_req_width": 4,
+        "ragged_verify_mode": false,
+        "slot": 5
+      },
+      {
+        "decode_step": 6,
+        "request_ids": [],
+        "live_rows": [
+          true,
+          true
+        ],
+        "scheduled_rows": 8,
+        "output_lengths": [],
+        "generated_token_ids": [],
+        "forward_mode": "target_verify",
+        "draft_token_num": 4,
+        "moe_rows": 8,
+        "target_frame_id": 6,
+        "can_run_graph": true,
+        "actual_request_count": 2,
+        "request_graph_rows": 2,
+        "actual_token_count": 8,
+        "graph_rows": 8,
+        "raw_bs": 2,
+        "capture_bs": [
+          1,
+          2,
+          4,
+          8,
+          16,
+          32,
+          64
+        ],
+        "captured_req_width": 4,
+        "ragged_verify_mode": false,
+        "slot": 6
+      },
+      {
+        "decode_step": 7,
+        "request_ids": [],
+        "live_rows": [
+          true,
+          true
+        ],
+        "scheduled_rows": 8,
+        "output_lengths": [],
+        "generated_token_ids": [],
+        "forward_mode": "target_verify",
+        "draft_token_num": 4,
+        "moe_rows": 8,
+        "target_frame_id": 7,
+        "can_run_graph": true,
+        "actual_request_count": 2,
+        "request_graph_rows": 2,
+        "actual_token_count": 8,
+        "graph_rows": 8,
+        "raw_bs": 2,
+        "capture_bs": [
+          1,
+          2,
+          4,
+          8,
+          16,
+          32,
+          64
+        ],
+        "captured_req_width": 4,
+        "ragged_verify_mode": false,
+        "slot": 7
+      },
+      {
+        "decode_step": 8,
+        "request_ids": [],
+        "live_rows": [
+          true,
+          true
+        ],
+        "scheduled_rows": 8,
+        "output_lengths": [],
+        "generated_token_ids": [],
+        "forward_mode": "target_verify",
+        "draft_token_num": 4,
+        "moe_rows": 8,
+        "target_frame_id": 8,
+        "can_run_graph": true,
+        "actual_request_count": 2,
+        "request_graph_rows": 2,
+        "actual_token_count": 8,
+        "graph_rows": 8,
+        "raw_bs": 2,
+        "capture_bs": [
+          1,
+          2,
+          4,
+          8,
+          16,
+          32,
+          64
+        ],
+        "captured_req_width": 4,
+        "ragged_verify_mode": false,
+        "slot": 8
+      },
+      {
+        "decode_step": 9,
+        "request_ids": [],
+        "live_rows": [
+          true,
+          true
+        ],
+        "scheduled_rows": 8,
+        "output_lengths": [],
+        "generated_token_ids": [],
+        "forward_mode": "target_verify",
+        "draft_token_num": 4,
+        "moe_rows": 8,
+        "target_frame_id": 9,
+        "can_run_graph": true,
+        "actual_request_count": 2,
+        "request_graph_rows": 2,
+        "actual_token_count": 8,
+        "graph_rows": 8,
+        "raw_bs": 2,
+        "capture_bs": [
+          1,
+          2,
+          4,
+          8,
+          16,
+          32,
+          64
+        ],
+        "captured_req_width": 4,
+        "ragged_verify_mode": false,
+        "slot": 9
+      },
+      {
+        "decode_step": 10,
+        "request_ids": [],
+        "live_rows": [
+          true,
+          true
+        ],
+        "scheduled_rows": 8,
+        "output_lengths": [],
+        "generated_token_ids": [],
+        "forward_mode": "target_verify",
+        "draft_token_num": 4,
+        "moe_rows": 8,
+        "target_frame_id": 10,
+        "can_run_graph": true,
+        "actual_request_count": 2,
+        "request_graph_rows": 2,
+        "actual_token_count": 8,
+        "graph_rows": 8,
+        "raw_bs": 2,
+        "capture_bs": [
+          1,
+          2,
+          4,
+          8,
+          16,
+          32,
+          64
+        ],
+        "captured_req_width": 4,
+        "ragged_verify_mode": false,
+        "slot": 10
+      },
+      {
+        "decode_step": 11,
+        "request_ids": [],
+        "live_rows": [
+          true,
+          true
+        ],
+        "scheduled_rows": 8,
+        "output_lengths": [],
+        "generated_token_ids": [],
+        "forward_mode": "target_verify",
+        "draft_token_num": 4,
+        "moe_rows": 8,
+        "target_frame_id": 11,
+        "can_run_graph": true,
+        "actual_request_count": 2,
+        "request_graph_rows": 2,
+        "actual_token_count": 8,
+        "graph_rows": 8,
+        "raw_bs": 2,
+        "capture_bs": [
+          1,
+          2,
+          4,
+          8,
+          16,
+          32,
+          64
+        ],
+        "captured_req_width": 4,
+        "ragged_verify_mode": false,
+        "slot": 11
+      },
+      {
+        "decode_step": 12,
+        "request_ids": [],
+        "live_rows": [
+          true,
+          true
+        ],
+        "scheduled_rows": 8,
+        "output_lengths": [],
+        "generated_token_ids": [],
+        "forward_mode": "target_verify",
+        "draft_token_num": 4,
+        "moe_rows": 8,
+        "target_frame_id": 12,
+        "can_run_graph": true,
+        "actual_request_count": 2,
+        "request_graph_rows": 2,
+        "actual_token_count": 8,
+        "graph_rows": 8,
+        "raw_bs": 2,
+        "capture_bs": [
+          1,
+          2,
+          4,
+          8,
+          16,
+          32,
+          64
+        ],
+        "captured_req_width": 4,
+        "ragged_verify_mode": false,
+        "slot": 12
+      },
+      {
+        "decode_step": 13,
+        "request_ids": [],
+        "live_rows": [
+          true,
+          true
+        ],
+        "scheduled_rows": 8,
+        "output_lengths": [],
+        "generated_token_ids": [],
+        "forward_mode": "target_verify",
+        "draft_token_num": 4,
+        "moe_rows": 8,
+        "target_frame_id": 13,
+        "can_run_graph": true,
+        "actual_request_count": 2,
+        "request_graph_rows": 2,
+        "actual_token_count": 8,
+        "graph_rows": 8,
+        "raw_bs": 2,
+        "capture_bs": [
+          1,
+          2,
+          4,
+          8,
+          16,
+          32,
+          64
+        ],
+        "captured_req_width": 4,
+        "ragged_verify_mode": false,
+        "slot": 13
+      },
+      {
+        "decode_step": 14,
+        "request_ids": [],
+        "live_rows": [
+          true,
+          true
+        ],
+        "scheduled_rows": 8,
+        "output_lengths": [],
+        "generated_token_ids": [],
+        "forward_mode": "target_verify",
+        "draft_token_num": 4,
+        "moe_rows": 8,
+        "target_frame_id": 14,
+        "can_run_graph": true,
+        "actual_request_count": 2,
+        "request_graph_rows": 2,
+        "actual_token_count": 8,
+        "graph_rows": 8,
+        "raw_bs": 2,
+        "capture_bs": [
+          1,
+          2,
+          4,
+          8,
+          16,
+          32,
+          64
+        ],
+        "captured_req_width": 4,
+        "ragged_verify_mode": false,
+        "slot": 14
+      },
+      {
+        "decode_step": 15,
+        "request_ids": [],
+        "live_rows": [
+          true,
+          true
+        ],
+        "scheduled_rows": 8,
+        "output_lengths": [],
+        "generated_token_ids": [],
+        "forward_mode": "target_verify",
+        "draft_token_num": 4,
+        "moe_rows": 8,
+        "target_frame_id": 15,
+        "can_run_graph": true,
+        "actual_request_count": 2,
+        "request_graph_rows": 2,
+        "actual_token_count": 8,
+        "graph_rows": 8,
+        "raw_bs": 2,
+        "capture_bs": [
+          1,
+          2,
+          4,
+          8,
+          16,
+          32,
+          64
+        ],
+        "captured_req_width": 4,
+        "ragged_verify_mode": false,
+        "slot": 15
+      }
+    ],
+    "total_decode_steps": 50,
+    "captured_steps": 16,
+    "limit": 16,
+    "job": "86533",
+    "total_verify_frames": 66,
+    "partial_verify_frames": 16,
+    "partial_frames": [
+      {
+        "target_frame_id": 50,
+        "actual_request_count": 1,
+        "actual_token_count": 4,
+        "draft_token_num": 4,
+        "reason": "not full requested concurrency"
+      },
+      {
+        "target_frame_id": 51,
+        "actual_request_count": 1,
+        "actual_token_count": 4,
+        "draft_token_num": 4,
+        "reason": "not full requested concurrency"
+      },
+      {
+        "target_frame_id": 52,
+        "actual_request_count": 1,
+        "actual_token_count": 4,
+        "draft_token_num": 4,
+        "reason": "not full requested concurrency"
+      },
+      {
+        "target_frame_id": 53,
+        "actual_request_count": 1,
+        "actual_token_count": 4,
+        "draft_token_num": 4,
+        "reason": "not full requested concurrency"
+      },
+      {
+        "target_frame_id": 54,
+        "actual_request_count": 1,
+        "actual_token_count": 4,
+        "draft_token_num": 4,
+        "reason": "not full requested concurrency"
+      },
+      {
+        "target_frame_id": 55,
+        "actual_request_count": 1,
+        "actual_token_count": 4,
+        "draft_token_num": 4,
+        "reason": "not full requested concurrency"
+      },
+      {
+        "target_frame_id": 56,
+        "actual_request_count": 1,
+        "actual_token_count": 4,
+        "draft_token_num": 4,
+        "reason": "not full requested concurrency"
+      },
+      {
+        "target_frame_id": 57,
+        "actual_request_count": 1,
+        "actual_token_count": 4,
+        "draft_token_num": 4,
+        "reason": "not full requested concurrency"
+      },
+      {
+        "target_frame_id": 58,
+        "actual_request_count": 1,
+        "actual_token_count": 4,
+        "draft_token_num": 4,
+        "reason": "not full requested concurrency"
+      },
+      {
+        "target_frame_id": 59,
+        "actual_request_count": 1,
+        "actual_token_count": 4,
+        "draft_token_num": 4,
+        "reason": "not full requested concurrency"
+      },
+      {
+        "target_frame_id": 60,
+        "actual_request_count": 1,
+        "actual_token_count": 4,
+        "draft_token_num": 4,
+        "reason": "not full requested concurrency"
+      },
+      {
+        "target_frame_id": 61,
+        "actual_request_count": 1,
+        "actual_token_count": 4,
+        "draft_token_num": 4,
+        "reason": "not full requested concurrency"
+      },
+      {
+        "target_frame_id": 62,
+        "actual_request_count": 1,
+        "actual_token_count": 4,
+        "draft_token_num": 4,
+        "reason": "not full requested concurrency"
+      },
+      {
+        "target_frame_id": 63,
+        "actual_request_count": 1,
+        "actual_token_count": 4,
+        "draft_token_num": 4,
+        "reason": "not full requested concurrency"
+      },
+      {
+        "target_frame_id": 64,
+        "actual_request_count": 1,
+        "actual_token_count": 4,
+        "draft_token_num": 4,
+        "reason": "not full requested concurrency"
+      },
+      {
+        "target_frame_id": 65,
+        "actual_request_count": 1,
+        "actual_token_count": 4,
+        "draft_token_num": 4,
+        "reason": "not full requested concurrency"
+      }
+    ],
+    "gate_output_dtypes": {
+      "3:256": "torch.bfloat16",
+      "5:256": "torch.bfloat16",
+      "8:256": "torch.bfloat16",
+      "11:256": "torch.bfloat16",
+      "13:256": "torch.bfloat16",
+      "16:256": "torch.bfloat16",
+      "18:256": "torch.bfloat16",
+      "21:256": "torch.bfloat16",
+      "23:256": "torch.bfloat16",
+      "26:256": "torch.bfloat16",
+      "29:256": "torch.bfloat16",
+      "31:256": "torch.bfloat16",
+      "34:256": "torch.bfloat16",
+      "36:256": "torch.bfloat16",
+      "39:256": "torch.bfloat16",
+      "40:256": "torch.bfloat16",
+      "44:256": "torch.bfloat16",
+      "46:256": "torch.bfloat16",
+      "48:256": "torch.bfloat16",
+      "51:256": "torch.bfloat16",
+      "54:256": "torch.bfloat16",
+      "56:256": "torch.bfloat16",
+      "59:256": "torch.bfloat16",
+      "61:256": "torch.bfloat16",
+      "64:256": "torch.bfloat16",
+      "66:256": "torch.bfloat16",
+      "69:256": "torch.bfloat16",
+      "72:256": "torch.bfloat16",
+      "74:256": "torch.bfloat16",
+      "77:256": "torch.bfloat16",
+      "3:128": "torch.bfloat16",
+      "5:128": "torch.bfloat16",
+      "8:128": "torch.bfloat16",
+      "11:128": "torch.bfloat16",
+      "13:128": "torch.bfloat16",
+      "16:128": "torch.bfloat16",
+      "18:128": "torch.bfloat16",
+      "21:128": "torch.bfloat16",
+      "23:128": "torch.bfloat16",
+      "26:128": "torch.bfloat16",
+      "29:128": "torch.bfloat16",
+      "31:128": "torch.bfloat16",
+      "34:128": "torch.bfloat16",
+      "36:128": "torch.bfloat16",
+      "39:128": "torch.bfloat16",
+      "40:128": "torch.bfloat16",
+      "44:128": "torch.bfloat16",
+      "46:128": "torch.bfloat16",
+      "48:128": "torch.bfloat16",
+      "51:128": "torch.bfloat16",
+      "54:128": "torch.bfloat16",
+      "56:128": "torch.bfloat16",
+      "59:128": "torch.bfloat16",
+      "61:128": "torch.bfloat16",
+      "64:128": "torch.bfloat16",
+      "66:128": "torch.bfloat16",
+      "69:128": "torch.bfloat16",
+      "72:128": "torch.bfloat16",
+      "74:128": "torch.bfloat16",
+      "77:128": "torch.bfloat16",
+      "3:64": "torch.bfloat16",
+      "5:64": "torch.bfloat16",
+      "8:64": "torch.bfloat16",
+      "11:64": "torch.bfloat16",
+      "13:64": "torch.bfloat16",
+      "16:64": "torch.bfloat16",
+      "18:64": "torch.bfloat16",
+      "21:64": "torch.bfloat16",
+      "23:64": "torch.bfloat16",
+      "26:64": "torch.bfloat16",
+      "29:64": "torch.bfloat16",
+      "31:64": "torch.bfloat16",
+      "34:64": "torch.bfloat16",
+      "36:64": "torch.bfloat16",
+      "39:64": "torch.bfloat16",
+      "40:64": "torch.bfloat16",
+      "44:64": "torch.bfloat16",
+      "46:64": "torch.bfloat16",
+      "48:64": "torch.bfloat16",
+      "51:64": "torch.bfloat16",
+      "54:64": "torch.bfloat16",
+      "56:64": "torch.bfloat16",
+      "59:64": "torch.bfloat16",
+      "61:64": "torch.bfloat16",
+      "64:64": "torch.bfloat16",
+      "66:64": "torch.bfloat16",
+      "69:64": "torch.bfloat16",
+      "72:64": "torch.bfloat16",
+      "74:64": "torch.bfloat16",
+      "77:64": "torch.bfloat16",
+      "3:32": "torch.bfloat16",
+      "5:32": "torch.bfloat16",
+      "8:32": "torch.bfloat16",
+      "11:32": "torch.bfloat16",
+      "13:32": "torch.bfloat16",
+      "16:32": "torch.bfloat16",
+      "18:32": "torch.bfloat16",
+      "21:32": "torch.bfloat16",
+      "23:32": "torch.bfloat16",
+      "26:32": "torch.bfloat16",
+      "29:32": "torch.bfloat16",
+      "31:32": "torch.bfloat16",
+      "34:32": "torch.bfloat16",
+      "36:32": "torch.bfloat16",
+      "39:32": "torch.bfloat16",
+      "40:32": "torch.bfloat16",
+      "44:32": "torch.bfloat16",
+      "46:32": "torch.bfloat16",
+      "48:32": "torch.bfloat16",
+      "51:32": "torch.bfloat16",
+      "54:32": "torch.bfloat16",
+      "56:32": "torch.bfloat16",
+      "59:32": "torch.bfloat16",
+      "61:32": "torch.bfloat16",
+      "64:32": "torch.bfloat16",
+      "66:32": "torch.bfloat16",
+      "69:32": "torch.bfloat16",
+      "72:32": "torch.bfloat16",
+      "74:32": "torch.bfloat16",
+      "77:32": "torch.bfloat16",
+      "3:16": "torch.bfloat16",
+      "5:16": "torch.bfloat16",
+      "8:16": "torch.bfloat16",
+      "11:16": "torch.bfloat16",
+      "13:16": "torch.bfloat16",
+      "16:16": "torch.bfloat16",
+      "18:16": "torch.bfloat16",
+      "21:16": "torch.bfloat16",
+      "23:16": "torch.bfloat16",
+      "26:16": "torch.bfloat16",
+      "29:16": "torch.bfloat16",
+      "31:16": "torch.bfloat16",
+      "34:16": "torch.bfloat16",
+      "36:16": "torch.bfloat16",
+      "39:16": "torch.bfloat16",
+      "40:16": "torch.bfloat16",
+      "44:16": "torch.bfloat16",
+      "46:16": "torch.bfloat16",
+      "48:16": "torch.bfloat16",
+      "51:16": "torch.bfloat16",
+      "54:16": "torch.bfloat16",
+      "56:16": "torch.bfloat16",
+      "59:16": "torch.bfloat16",
+      "61:16": "torch.bfloat16",
+      "64:16": "torch.bfloat16",
+      "66:16": "torch.bfloat16",
+      "69:16": "torch.bfloat16",
+      "72:16": "torch.bfloat16",
+      "74:16": "torch.bfloat16",
+      "77:16": "torch.bfloat16",
+      "3:8": "torch.bfloat16",
+      "5:8": "torch.bfloat16",
+      "8:8": "torch.bfloat16",
+      "11:8": "torch.bfloat16",
+      "13:8": "torch.bfloat16",
+      "16:8": "torch.bfloat16",
+      "18:8": "torch.bfloat16",
+      "21:8": "torch.bfloat16",
+      "23:8": "torch.bfloat16",
+      "26:8": "torch.bfloat16",
+      "29:8": "torch.bfloat16",
+      "31:8": "torch.bfloat16",
+      "34:8": "torch.bfloat16",
+      "36:8": "torch.bfloat16",
+      "39:8": "torch.bfloat16",
+      "40:8": "torch.bfloat16",
+      "44:8": "torch.bfloat16",
+      "46:8": "torch.bfloat16",
+      "48:8": "torch.bfloat16",
+      "51:8": "torch.bfloat16",
+      "54:8": "torch.bfloat16",
+      "56:8": "torch.bfloat16",
+      "59:8": "torch.bfloat16",
+      "61:8": "torch.bfloat16",
+      "64:8": "torch.bfloat16",
+      "66:8": "torch.bfloat16",
+      "69:8": "torch.bfloat16",
+      "72:8": "torch.bfloat16",
+      "74:8": "torch.bfloat16",
+      "77:8": "torch.bfloat16",
+      "3:4": "torch.bfloat16",
+      "5:4": "torch.bfloat16",
+      "8:4": "torch.bfloat16",
+      "11:4": "torch.bfloat16",
+      "13:4": "torch.bfloat16",
+      "16:4": "torch.bfloat16",
+      "18:4": "torch.bfloat16",
+      "21:4": "torch.bfloat16",
+      "23:4": "torch.bfloat16",
+      "26:4": "torch.bfloat16",
+      "29:4": "torch.bfloat16",
+      "31:4": "torch.bfloat16",
+      "34:4": "torch.bfloat16",
+      "36:4": "torch.bfloat16",
+      "39:4": "torch.bfloat16",
+      "40:4": "torch.bfloat16",
+      "44:4": "torch.bfloat16",
+      "46:4": "torch.bfloat16",
+      "48:4": "torch.bfloat16",
+      "51:4": "torch.bfloat16",
+      "54:4": "torch.bfloat16",
+      "56:4": "torch.bfloat16",
+      "59:4": "torch.bfloat16",
+      "61:4": "torch.bfloat16",
+      "64:4": "torch.bfloat16",
+      "66:4": "torch.bfloat16",
+      "69:4": "torch.bfloat16",
+      "72:4": "torch.bfloat16",
+      "74:4": "torch.bfloat16",
+      "77:4": "torch.bfloat16",
+      "3:6": "torch.bfloat16",
+      "5:6": "torch.bfloat16",
+      "8:6": "torch.bfloat16",
+      "11:6": "torch.bfloat16",
+      "13:6": "torch.bfloat16",
+      "16:6": "torch.bfloat16",
+      "18:6": "torch.bfloat16",
+      "21:6": "torch.bfloat16",
+      "23:6": "torch.bfloat16",
+      "26:6": "torch.bfloat16",
+      "29:6": "torch.bfloat16",
+      "31:6": "torch.bfloat16",
+      "34:6": "torch.bfloat16",
+      "36:6": "torch.bfloat16",
+      "39:6": "torch.bfloat16",
+      "40:6": "torch.bfloat16",
+      "44:6": "torch.bfloat16",
+      "46:6": "torch.bfloat16",
+      "48:6": "torch.bfloat16",
+      "51:6": "torch.bfloat16",
+      "54:6": "torch.bfloat16",
+      "56:6": "torch.bfloat16",
+      "59:6": "torch.bfloat16",
+      "61:6": "torch.bfloat16",
+      "64:6": "torch.bfloat16",
+      "66:6": "torch.bfloat16",
+      "69:6": "torch.bfloat16",
+      "72:6": "torch.bfloat16",
+      "74:6": "torch.bfloat16",
+      "77:6": "torch.bfloat16",
+      "3:1": "torch.bfloat16",
+      "5:1": "torch.bfloat16",
+      "8:1": "torch.bfloat16",
+      "11:1": "torch.bfloat16",
+      "13:1": "torch.bfloat16",
+      "16:1": "torch.bfloat16",
+      "18:1": "torch.bfloat16",
+      "21:1": "torch.bfloat16",
+      "23:1": "torch.bfloat16",
+      "26:1": "torch.bfloat16",
+      "29:1": "torch.bfloat16",
+      "31:1": "torch.bfloat16",
+      "34:1": "torch.bfloat16",
+      "36:1": "torch.bfloat16",
+      "39:1": "torch.bfloat16",
+      "40:1": "torch.bfloat16",
+      "44:1": "torch.bfloat16",
+      "46:1": "torch.bfloat16",
+      "48:1": "torch.bfloat16",
+      "51:1": "torch.bfloat16",
+      "54:1": "torch.bfloat16",
+      "56:1": "torch.bfloat16",
+      "59:1": "torch.bfloat16",
+      "61:1": "torch.bfloat16",
+      "64:1": "torch.bfloat16",
+      "66:1": "torch.bfloat16",
+      "69:1": "torch.bfloat16",
+      "72:1": "torch.bfloat16",
+      "74:1": "torch.bfloat16",
+      "77:1": "torch.bfloat16"
+    },
+    "row_capacity": 256,
+    "observed_scheduler_modes": [
+      "1",
+      "1",
+      "2",
+      "2",
+      "2",
+      "2",
+      "2",
+      "2",
+      "2",
+      "2",
+      "2",
+      "2",
+      "2",
+      "2",
+      "2",
+      "2",
+      "2",
+      "2",
+      "2",
+      "2",
+      "2",
+      "2",
+      "2",
+      "2",
+      "2",
+      "2",
+      "2",
+      "2",
+      "2",
+      "2",
+      "2",
+      "2",
+      "2",
+      "2",
+      "2",
+      "2",
+      "2",
+      "2",
+      "2",
+      "2",
+      "2",
+      "2",
+      "2",
+      "2",
+      "2",
+      "2",
+      "2",
+      "2",
+      "2",
+      "2",
+      "2",
+      "2",
+      "2",
+      "2",
+      "2",
+      "2",
+      "2",
+      "2",
+      "2",
+      "2",
+      "2",
+      "2",
+      "2",
+      "2",
+      "2",
+      "2",
+      "2",
+      "2"
+    ],
+    "kv_cache_dtype": "fp8_e4m3",
+    "native_backend": true,
+    "sglang_sha": "46beacf13dbcd9d3aea456301f2d39ea3888540e",
+    "aiter_sha": "c8325e00c88f1b97af75150a311f6704c2729f9c",
+    "float32_matmul_precision": "highest",
+    "allow_tf32": false,
+    "gate_dtypes": {
+      "3": "torch.bfloat16",
+      "5": "torch.bfloat16",
+      "8": "torch.bfloat16",
+      "11": "torch.bfloat16",
+      "13": "torch.bfloat16",
+      "16": "torch.bfloat16",
+      "18": "torch.bfloat16",
+      "21": "torch.bfloat16",
+      "23": "torch.bfloat16",
+      "26": "torch.bfloat16",
+      "29": "torch.bfloat16",
+      "31": "torch.bfloat16",
+      "34": "torch.bfloat16",
+      "36": "torch.bfloat16",
+      "39": "torch.bfloat16",
+      "40": "torch.bfloat16",
+      "44": "torch.bfloat16",
+      "46": "torch.bfloat16",
+      "48": "torch.bfloat16",
+      "51": "torch.bfloat16",
+      "54": "torch.bfloat16",
+      "56": "torch.bfloat16",
+      "59": "torch.bfloat16",
+      "61": "torch.bfloat16",
+      "64": "torch.bfloat16",
+      "66": "torch.bfloat16",
+      "69": "torch.bfloat16",
+      "72": "torch.bfloat16",
+      "74": "torch.bfloat16",
+      "77": "torch.bfloat16"
+    },
+    "hook_fields": [
+      "input",
+      "output",
+      "logits",
+      "ids",
+      "routing_weights"
+    ],
+    "hook_coverage": [
+      [
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ]
+      ],
+      [
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ]
+      ],
+      [
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ]
+      ],
+      [
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ]
+      ],
+      [
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ]
+      ],
+      [
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ]
+      ],
+      [
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ]
+      ],
+      [
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ]
+      ],
+      [
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ]
+      ],
+      [
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ]
+      ],
+      [
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ]
+      ],
+      [
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ]
+      ],
+      [
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ]
+      ],
+      [
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ]
+      ],
+      [
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ]
+      ],
+      [
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ]
+      ]
+    ]
+  }
+}

@@ -1,0 +1,10 @@
+Separate MoE replay profile (profiled durations are not clean latency)
+Clean mean of per-case medians: None us
+Profiled device span: 24.519001007080078 us
+Profiled kernel sum: 24.518 us
+Profile minus clean: None us
+Visible kernels: 2
+
+Order Stream Start(us) Duration(us) Kernel
+   0      0        0.000       19.879 gemm1_a4w4_port_fp4_h6144_i256_ne257_bm16_iq_sep_native_scale_merge8_reset
+   1      0       19.880        4.639 gemm2_a4w4_port_ne257_h6144_i256_bm16_nt_atomic_merge8

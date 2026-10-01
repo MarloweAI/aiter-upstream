@@ -1,0 +1,9 @@
+{
+  "group": "native-m8-v1-supported-nt",
+  "concurrency": 2,
+  "rows": 8,
+  "status": "failed",
+  "error": "Traceback (most recent call last):\n  File \"/workspace/hassane/moe-native-tiny-20261001/source/marlowe-kernels/benchmarks/moe_replay/upstream_campaign.py\", line 845, in main\n    gate = qualify(arms, bundle, snapshots, references, root)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/workspace/hassane/moe-native-tiny-20261001/source/marlowe-kernels/benchmarks/moe_replay/upstream_campaign.py\", line 532, in qualify\n    require_gate(receipt)\n  File \"/workspace/hassane/moe-native-tiny-20261001/source/marlowe-kernels/benchmarks/moe_replay/upstream_contract.py\", line 88, in require_gate\n    raise QualificationFailure(\"Correctness/identity gate failed before timing\")\nbenchmarks.moe_replay.upstream_contract.QualificationFailure: Correctness/identity gate failed before timing\n",
+  "fatal_state_corruption": false,
+  "total_wall_seconds": 2.526029570028186
+}

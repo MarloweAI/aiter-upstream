@@ -1,0 +1,28 @@
+{
+  "group": "native-m8-v2-native-silu",
+  "concurrency": 2,
+  "rows": 8,
+  "status": "qualified",
+  "gate": {
+    "source": true,
+    "routes": true,
+    "dispatch": true,
+    "eager": true,
+    "graph": true,
+    "state": true
+  },
+  "baseline_us": 33.456473981883995,
+  "candidate_us": 34.54018750150377,
+  "cases": 480,
+  "independent_reference_cases_per_arm": 480,
+  "phase_seconds": {
+    "prepare_dispatch": 1.9184980529826134,
+    "independent_references": 10.854643743019551,
+    "eager_graph_state_gates": 1.7772350371815264,
+    "clean_and_profiles": 2.9515782759990543
+  },
+  "comparison_semantics": "matched native source patch, unchanged quantizer/route/output contract",
+  "excluded_from_primary_ranking": false,
+  "cross_reference_parity_passed": true,
+  "total_wall_seconds": 17.72232563304715
+}

@@ -1,0 +1,67 @@
+{
+  "capture_sglang_sha": "46beacf13dbcd9d3aea456301f2d39ea3888540e",
+  "capture_aiter_sha": "c8325e00c88f1b97af75150a311f6704c2729f9c",
+  "all_passed": true,
+  "checks": [
+    {
+      "layer": 3,
+      "step": 0,
+      "passed": true,
+      "finite": true,
+      "mismatch_fraction": 0.0,
+      "nrmse": 0.0032991129823581045,
+      "global_difference_D": 5.442056787206574e-06,
+      "max_abs_error": 1.52587890625e-05,
+      "tolerances": {
+        "rtol": 0.02,
+        "atol": 0.02,
+        "nrmse": 0.01
+      }
+    },
+    {
+      "layer": 77,
+      "step": 0,
+      "passed": true,
+      "finite": true,
+      "mismatch_fraction": 0.0,
+      "nrmse": 0.0020377380915777925,
+      "global_difference_D": 2.07617867915544e-06,
+      "max_abs_error": 0.03125,
+      "tolerances": {
+        "rtol": 0.02,
+        "atol": 0.02,
+        "nrmse": 0.01
+      }
+    },
+    {
+      "layer": 3,
+      "step": 1,
+      "passed": true,
+      "finite": true,
+      "mismatch_fraction": 0.0,
+      "nrmse": 0.00327641781539818,
+      "global_difference_D": 5.367508040826074e-06,
+      "max_abs_error": 1.52587890625e-05,
+      "tolerances": {
+        "rtol": 0.02,
+        "atol": 0.02,
+        "nrmse": 0.01
+      }
+    },
+    {
+      "layer": 77,
+      "step": 1,
+      "passed": true,
+      "finite": true,
+      "mismatch_fraction": 0.0,
+      "nrmse": 0.0023641907525220143,
+      "global_difference_D": 2.7947250064127515e-06,
+      "max_abs_error": 0.0625,
+      "tolerances": {
+        "rtol": 0.02,
+        "atol": 0.02,
+        "nrmse": 0.01
+      }
+    }
+  ]
+}

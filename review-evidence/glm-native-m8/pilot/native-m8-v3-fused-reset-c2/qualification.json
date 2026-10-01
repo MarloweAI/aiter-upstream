@@ -1,0 +1,863 @@
+{
+  "gate": {
+    "source": true,
+    "routes": true,
+    "dispatch": true,
+    "eager": true,
+    "graph": true,
+    "state": true
+  },
+  "eager": {
+    "baseline": [
+      {
+        "layer": 3,
+        "step": 0,
+        "passed": true,
+        "finite": true,
+        "mismatch_fraction": 0.0,
+        "nrmse": 0.003239964632597817,
+        "global_difference_D": 5.248509528668319e-06,
+        "max_abs_error": 1.52587890625e-05,
+        "tolerances": {
+          "rtol": 0.02,
+          "atol": 0.02,
+          "nrmse": 0.01
+        }
+      },
+      {
+        "layer": 77,
+        "step": 0,
+        "passed": true,
+        "finite": true,
+        "mismatch_fraction": 0.0,
+        "nrmse": 0.002165226667021762,
+        "global_difference_D": 2.3440553964343226e-06,
+        "max_abs_error": 0.0625,
+        "tolerances": {
+          "rtol": 0.02,
+          "atol": 0.02,
+          "nrmse": 0.01
+        }
+      },
+      {
+        "layer": 3,
+        "step": 1,
+        "passed": true,
+        "finite": true,
+        "mismatch_fraction": 0.0,
+        "nrmse": 0.003025889984737839,
+        "global_difference_D": 4.577875536906439e-06,
+        "max_abs_error": 7.62939453125e-06,
+        "tolerances": {
+          "rtol": 0.02,
+          "atol": 0.02,
+          "nrmse": 0.01
+        }
+      },
+      {
+        "layer": 77,
+        "step": 1,
+        "passed": true,
+        "finite": true,
+        "mismatch_fraction": 0.0,
+        "nrmse": 0.0024277415194264387,
+        "global_difference_D": 2.9465394477348495e-06,
+        "max_abs_error": 0.125,
+        "tolerances": {
+          "rtol": 0.02,
+          "atol": 0.02,
+          "nrmse": 0.01
+        }
+      }
+    ],
+    "candidate": [
+      {
+        "layer": 3,
+        "step": 0,
+        "passed": true,
+        "finite": true,
+        "mismatch_fraction": 0.0,
+        "nrmse": 0.003278204196169692,
+        "global_difference_D": 5.373425474106623e-06,
+        "max_abs_error": 1.52587890625e-05,
+        "tolerances": {
+          "rtol": 0.02,
+          "atol": 0.02,
+          "nrmse": 0.01
+        }
+      },
+      {
+        "layer": 77,
+        "step": 0,
+        "passed": true,
+        "finite": true,
+        "mismatch_fraction": 0.0,
+        "nrmse": 0.003620002653629765,
+        "global_difference_D": 6.552126530019725e-06,
+        "max_abs_error": 0.0625,
+        "tolerances": {
+          "rtol": 0.02,
+          "atol": 0.02,
+          "nrmse": 0.01
+        }
+      },
+      {
+        "layer": 3,
+        "step": 1,
+        "passed": true,
+        "finite": true,
+        "mismatch_fraction": 0.0,
+        "nrmse": 0.002007420120851557,
+        "global_difference_D": 2.0148588811610106e-06,
+        "max_abs_error": 7.62939453125e-06,
+        "tolerances": {
+          "rtol": 0.02,
+          "atol": 0.02,
+          "nrmse": 0.01
+        }
+      },
+      {
+        "layer": 77,
+        "step": 1,
+        "passed": true,
+        "finite": true,
+        "mismatch_fraction": 0.0,
+        "nrmse": 0.0027224597045268258,
+        "global_difference_D": 3.705210445968766e-06,
+        "max_abs_error": 0.0625,
+        "tolerances": {
+          "rtol": 0.02,
+          "atol": 0.02,
+          "nrmse": 0.01
+        }
+      }
+    ]
+  },
+  "graph": {
+    "baseline": [
+      {
+        "replay": 0,
+        "case": 0,
+        "passed": true,
+        "finite": true,
+        "mismatch_fraction": 0.0,
+        "nrmse": 0.0032643826029129307,
+        "global_difference_D": 5.32801259484115e-06,
+        "max_abs_error": 1.52587890625e-05,
+        "tolerances": {
+          "rtol": 0.02,
+          "atol": 0.02,
+          "nrmse": 0.01
+        }
+      },
+      {
+        "replay": 0,
+        "case": 1,
+        "passed": true,
+        "finite": true,
+        "mismatch_fraction": 0.0,
+        "nrmse": 0.0020476015130065947,
+        "global_difference_D": 2.096196149457448e-06,
+        "max_abs_error": 0.0625,
+        "tolerances": {
+          "rtol": 0.02,
+          "atol": 0.02,
+          "nrmse": 0.01
+        }
+      },
+      {
+        "replay": 0,
+        "case": 2,
+        "passed": true,
+        "finite": true,
+        "mismatch_fraction": 0.0,
+        "nrmse": 0.003191066519482088,
+        "global_difference_D": 5.091410212261876e-06,
+        "max_abs_error": 1.52587890625e-05,
+        "tolerances": {
+          "rtol": 0.02,
+          "atol": 0.02,
+          "nrmse": 0.01
+        }
+      },
+      {
+        "replay": 0,
+        "case": 3,
+        "passed": true,
+        "finite": true,
+        "mismatch_fraction": 0.0,
+        "nrmse": 0.0022073548982862105,
+        "global_difference_D": 2.4361299808025995e-06,
+        "max_abs_error": 0.0625,
+        "tolerances": {
+          "rtol": 0.02,
+          "atol": 0.02,
+          "nrmse": 0.01
+        }
+      },
+      {
+        "replay": 1,
+        "case": 0,
+        "passed": true,
+        "finite": true,
+        "mismatch_fraction": 0.0,
+        "nrmse": 0.003151374484606629,
+        "global_difference_D": 4.9656133355829545e-06,
+        "max_abs_error": 1.52587890625e-05,
+        "tolerances": {
+          "rtol": 0.02,
+          "atol": 0.02,
+          "nrmse": 0.01
+        }
+      },
+      {
+        "replay": 1,
+        "case": 1,
+        "passed": true,
+        "finite": true,
+        "mismatch_fraction": 0.0,
+        "nrmse": 0.002070038332580646,
+        "global_difference_D": 2.1424767545972095e-06,
+        "max_abs_error": 0.0625,
+        "tolerances": {
+          "rtol": 0.02,
+          "atol": 0.02,
+          "nrmse": 0.01
+        }
+      },
+      {
+        "replay": 1,
+        "case": 2,
+        "passed": true,
+        "finite": true,
+        "mismatch_fraction": 0.0,
+        "nrmse": 0.003356329633723995,
+        "global_difference_D": 5.632457968116266e-06,
+        "max_abs_error": 1.52587890625e-05,
+        "tolerances": {
+          "rtol": 0.02,
+          "atol": 0.02,
+          "nrmse": 0.01
+        }
+      },
+      {
+        "replay": 1,
+        "case": 3,
+        "passed": true,
+        "finite": true,
+        "mismatch_fraction": 0.0,
+        "nrmse": 0.0025498990632319943,
+        "global_difference_D": 3.250213365029074e-06,
+        "max_abs_error": 0.125,
+        "tolerances": {
+          "rtol": 0.02,
+          "atol": 0.02,
+          "nrmse": 0.01
+        }
+      },
+      {
+        "replay": 2,
+        "case": 0,
+        "passed": true,
+        "finite": true,
+        "mismatch_fraction": 0.0,
+        "nrmse": 0.0033599888837261838,
+        "global_difference_D": 5.6449351211287725e-06,
+        "max_abs_error": 1.52587890625e-05,
+        "tolerances": {
+          "rtol": 0.02,
+          "atol": 0.02,
+          "nrmse": 0.01
+        }
+      },
+      {
+        "replay": 2,
+        "case": 1,
+        "passed": true,
+        "finite": true,
+        "mismatch_fraction": 0.0,
+        "nrmse": 0.0019721475244193105,
+        "global_difference_D": 1.94457619100168e-06,
+        "max_abs_error": 0.0625,
+        "tolerances": {
+          "rtol": 0.02,
+          "atol": 0.02,
+          "nrmse": 0.01
+        }
+      },
+      {
+        "replay": 2,
+        "case": 2,
+        "passed": true,
+        "finite": true,
+        "mismatch_fraction": 0.0,
+        "nrmse": 0.0029139838841784316,
+        "global_difference_D": 4.245591750804657e-06,
+        "max_abs_error": 7.62939453125e-06,
+        "tolerances": {
+          "rtol": 0.02,
+          "atol": 0.02,
+          "nrmse": 0.01
+        }
+      },
+      {
+        "replay": 2,
+        "case": 3,
+        "passed": true,
+        "finite": true,
+        "mismatch_fraction": 0.0,
+        "nrmse": 0.002565430480328701,
+        "global_difference_D": 3.2902205367002153e-06,
+        "max_abs_error": 0.125,
+        "tolerances": {
+          "rtol": 0.02,
+          "atol": 0.02,
+          "nrmse": 0.01
+        }
+      }
+    ],
+    "candidate": [
+      {
+        "replay": 0,
+        "case": 0,
+        "passed": true,
+        "finite": true,
+        "mismatch_fraction": 0.0,
+        "nrmse": 0.0034668605735519806,
+        "global_difference_D": 6.009738299911285e-06,
+        "max_abs_error": 3.0517578125e-05,
+        "tolerances": {
+          "rtol": 0.02,
+          "atol": 0.02,
+          "nrmse": 0.01
+        }
+      },
+      {
+        "replay": 0,
+        "case": 1,
+        "passed": true,
+        "finite": true,
+        "mismatch_fraction": 0.0,
+        "nrmse": 0.0034139591808264994,
+        "global_difference_D": 5.828037467641679e-06,
+        "max_abs_error": 0.0625,
+        "tolerances": {
+          "rtol": 0.02,
+          "atol": 0.02,
+          "nrmse": 0.01
+        }
+      },
+      {
+        "replay": 0,
+        "case": 2,
+        "passed": true,
+        "finite": true,
+        "mismatch_fraction": 0.0,
+        "nrmse": 0.002001869931714049,
+        "global_difference_D": 2.0037519461366414e-06,
+        "max_abs_error": 7.62939453125e-06,
+        "tolerances": {
+          "rtol": 0.02,
+          "atol": 0.02,
+          "nrmse": 0.01
+        }
+      },
+      {
+        "replay": 0,
+        "case": 3,
+        "passed": true,
+        "finite": true,
+        "mismatch_fraction": 0.0,
+        "nrmse": 0.0024262938153193194,
+        "global_difference_D": 2.943256153755077e-06,
+        "max_abs_error": 0.0625,
+        "tolerances": {
+          "rtol": 0.02,
+          "atol": 0.02,
+          "nrmse": 0.01
+        }
+      },
+      {
+        "replay": 1,
+        "case": 0,
+        "passed": true,
+        "finite": true,
+        "mismatch_fraction": 0.0,
+        "nrmse": 0.0031590823700474095,
+        "global_difference_D": 4.990079104494182e-06,
+        "max_abs_error": 1.52587890625e-05,
+        "tolerances": {
+          "rtol": 0.02,
+          "atol": 0.02,
+          "nrmse": 0.01
+        }
+      },
+      {
+        "replay": 1,
+        "case": 1,
+        "passed": true,
+        "finite": true,
+        "mismatch_fraction": 0.0,
+        "nrmse": 0.0033562944180486392,
+        "global_difference_D": 5.633611175050447e-06,
+        "max_abs_error": 0.0625,
+        "tolerances": {
+          "rtol": 0.02,
+          "atol": 0.02,
+          "nrmse": 0.01
+        }
+      },
+      {
+        "replay": 1,
+        "case": 2,
+        "passed": true,
+        "finite": true,
+        "mismatch_fraction": 0.0,
+        "nrmse": 0.0019989587791175035,
+        "global_difference_D": 1.997929121885014e-06,
+        "max_abs_error": 7.62939453125e-06,
+        "tolerances": {
+          "rtol": 0.02,
+          "atol": 0.02,
+          "nrmse": 0.01
+        }
+      },
+      {
+        "replay": 1,
+        "case": 3,
+        "passed": true,
+        "finite": true,
+        "mismatch_fraction": 0.0,
+        "nrmse": 0.0027743910981737384,
+        "global_difference_D": 3.847823208739244e-06,
+        "max_abs_error": 0.0625,
+        "tolerances": {
+          "rtol": 0.02,
+          "atol": 0.02,
+          "nrmse": 0.01
+        }
+      },
+      {
+        "replay": 2,
+        "case": 0,
+        "passed": true,
+        "finite": true,
+        "mismatch_fraction": 0.0,
+        "nrmse": 0.0032479510843723062,
+        "global_difference_D": 5.274621832929534e-06,
+        "max_abs_error": 1.52587890625e-05,
+        "tolerances": {
+          "rtol": 0.02,
+          "atol": 0.02,
+          "nrmse": 0.01
+        }
+      },
+      {
+        "replay": 2,
+        "case": 1,
+        "passed": true,
+        "finite": true,
+        "mismatch_fraction": 0.0,
+        "nrmse": 0.003316643773054416,
+        "global_difference_D": 5.500497534131913e-06,
+        "max_abs_error": 0.0625,
+        "tolerances": {
+          "rtol": 0.02,
+          "atol": 0.02,
+          "nrmse": 0.01
+        }
+      },
+      {
+        "replay": 2,
+        "case": 2,
+        "passed": true,
+        "finite": true,
+        "mismatch_fraction": 0.0,
+        "nrmse": 0.0020126275601564324,
+        "global_difference_D": 2.0253410902488004e-06,
+        "max_abs_error": 3.814697265625e-06,
+        "tolerances": {
+          "rtol": 0.02,
+          "atol": 0.02,
+          "nrmse": 0.01
+        }
+      },
+      {
+        "replay": 2,
+        "case": 3,
+        "passed": true,
+        "finite": true,
+        "mismatch_fraction": 0.0,
+        "nrmse": 0.002271299971162488,
+        "global_difference_D": 2.5793797560735916e-06,
+        "max_abs_error": 0.0625,
+        "tolerances": {
+          "rtol": 0.02,
+          "atol": 0.02,
+          "nrmse": 0.01
+        }
+      }
+    ]
+  },
+  "state": {
+    "baseline": [
+      {
+        "layer": 3,
+        "case": 2,
+        "output": {
+          "passed": true,
+          "finite": true,
+          "mismatch_fraction": 0.0,
+          "nrmse": 0.003015360726255265,
+          "global_difference_D": 4.546377492611072e-06,
+          "max_abs_error": 1.52587890625e-05,
+          "tolerances": {
+            "rtol": 0.02,
+            "atol": 0.02,
+            "nrmse": 0.01
+          }
+        },
+        "state": {
+          "passed": true,
+          "scratch_contract": "native API checked through alternating-input and zero-input replay"
+        },
+        "passed": true
+      },
+      {
+        "layer": 3,
+        "case": 0,
+        "output": {
+          "passed": true,
+          "finite": true,
+          "mismatch_fraction": 0.0,
+          "nrmse": 0.0031245124978256694,
+          "global_difference_D": 4.881373954949969e-06,
+          "max_abs_error": 1.52587890625e-05,
+          "tolerances": {
+            "rtol": 0.02,
+            "atol": 0.02,
+            "nrmse": 0.01
+          }
+        },
+        "state": {
+          "passed": true,
+          "scratch_contract": "native API checked through alternating-input and zero-input replay"
+        },
+        "passed": true
+      },
+      {
+        "layer": 3,
+        "zero": {
+          "passed": true,
+          "finite": true,
+          "mismatch_fraction": 0.0,
+          "nrmse": 0.0,
+          "global_difference_D": 0.0,
+          "max_abs_error": 0.0,
+          "tolerances": {
+            "rtol": 0.02,
+            "atol": 0.02,
+            "nrmse": 0.01
+          }
+        },
+        "restored": {
+          "passed": true,
+          "finite": true,
+          "mismatch_fraction": 0.0,
+          "nrmse": 0.0033330013515283402,
+          "global_difference_D": 5.5545283464402115e-06,
+          "max_abs_error": 3.0517578125e-05,
+          "tolerances": {
+            "rtol": 0.02,
+            "atol": 0.02,
+            "nrmse": 0.01
+          }
+        },
+        "passed": true
+      },
+      {
+        "layer": 77,
+        "case": 3,
+        "output": {
+          "passed": true,
+          "finite": true,
+          "mismatch_fraction": 0.0,
+          "nrmse": 0.0024737618773447534,
+          "global_difference_D": 3.0590176096318697e-06,
+          "max_abs_error": 0.125,
+          "tolerances": {
+            "rtol": 0.02,
+            "atol": 0.02,
+            "nrmse": 0.01
+          }
+        },
+        "state": {
+          "passed": true,
+          "scratch_contract": "native API checked through alternating-input and zero-input replay"
+        },
+        "passed": true
+      },
+      {
+        "layer": 77,
+        "case": 1,
+        "output": {
+          "passed": true,
+          "finite": true,
+          "mismatch_fraction": 0.0,
+          "nrmse": 0.002003179513622898,
+          "global_difference_D": 2.0062173066150453e-06,
+          "max_abs_error": 0.0625,
+          "tolerances": {
+            "rtol": 0.02,
+            "atol": 0.02,
+            "nrmse": 0.01
+          }
+        },
+        "state": {
+          "passed": true,
+          "scratch_contract": "native API checked through alternating-input and zero-input replay"
+        },
+        "passed": true
+      },
+      {
+        "layer": 77,
+        "zero": {
+          "passed": true,
+          "finite": true,
+          "mismatch_fraction": 0.0,
+          "nrmse": 0.0,
+          "global_difference_D": 0.0,
+          "max_abs_error": 0.0,
+          "tolerances": {
+            "rtol": 0.02,
+            "atol": 0.02,
+            "nrmse": 0.01
+          }
+        },
+        "restored": {
+          "passed": true,
+          "finite": true,
+          "mismatch_fraction": 0.0,
+          "nrmse": 0.00210222287133521,
+          "global_difference_D": 2.209424429075035e-06,
+          "max_abs_error": 0.0625,
+          "tolerances": {
+            "rtol": 0.02,
+            "atol": 0.02,
+            "nrmse": 0.01
+          }
+        },
+        "passed": true
+      }
+    ],
+    "candidate": [
+      {
+        "layer": 3,
+        "case": 2,
+        "output": {
+          "passed": true,
+          "finite": true,
+          "mismatch_fraction": 0.0,
+          "nrmse": 0.001985837045275805,
+          "global_difference_D": 1.9717529877070825e-06,
+          "max_abs_error": 7.62939453125e-06,
+          "tolerances": {
+            "rtol": 0.02,
+            "atol": 0.02,
+            "nrmse": 0.01
+          }
+        },
+        "state": {
+          "passed": true,
+          "scratch_contract": "private scratch; all G1 CTAs reset output before G2; no counters",
+          "accuracy_state_checks": "performed separately by alternating/zero graph qualification"
+        },
+        "passed": true
+      },
+      {
+        "layer": 3,
+        "case": 0,
+        "output": {
+          "passed": true,
+          "finite": true,
+          "mismatch_fraction": 0.0,
+          "nrmse": 0.0034116619103750686,
+          "global_difference_D": 5.819807083583938e-06,
+          "max_abs_error": 1.52587890625e-05,
+          "tolerances": {
+            "rtol": 0.02,
+            "atol": 0.02,
+            "nrmse": 0.01
+          }
+        },
+        "state": {
+          "passed": true,
+          "scratch_contract": "private scratch; all G1 CTAs reset output before G2; no counters",
+          "accuracy_state_checks": "performed separately by alternating/zero graph qualification"
+        },
+        "passed": true
+      },
+      {
+        "layer": 3,
+        "zero": {
+          "passed": true,
+          "finite": true,
+          "mismatch_fraction": 0.0,
+          "nrmse": 0.0,
+          "global_difference_D": 0.0,
+          "max_abs_error": 0.0,
+          "tolerances": {
+            "rtol": 0.02,
+            "atol": 0.02,
+            "nrmse": 0.01
+          }
+        },
+        "restored": {
+          "passed": true,
+          "finite": true,
+          "mismatch_fraction": 0.0,
+          "nrmse": 0.0035758115069459404,
+          "global_difference_D": 6.393356957933972e-06,
+          "max_abs_error": 1.52587890625e-05,
+          "tolerances": {
+            "rtol": 0.02,
+            "atol": 0.02,
+            "nrmse": 0.01
+          }
+        },
+        "passed": true
+      },
+      {
+        "layer": 77,
+        "case": 3,
+        "output": {
+          "passed": true,
+          "finite": true,
+          "mismatch_fraction": 0.0,
+          "nrmse": 0.002572041392894187,
+          "global_difference_D": 3.307434344239758e-06,
+          "max_abs_error": 0.03125,
+          "tolerances": {
+            "rtol": 0.02,
+            "atol": 0.02,
+            "nrmse": 0.01
+          }
+        },
+        "state": {
+          "passed": true,
+          "scratch_contract": "private scratch; all G1 CTAs reset output before G2; no counters",
+          "accuracy_state_checks": "performed separately by alternating/zero graph qualification"
+        },
+        "passed": true
+      },
+      {
+        "layer": 77,
+        "case": 1,
+        "output": {
+          "passed": true,
+          "finite": true,
+          "mismatch_fraction": 0.0,
+          "nrmse": 0.0035558770283276087,
+          "global_difference_D": 6.322834895313812e-06,
+          "max_abs_error": 0.0625,
+          "tolerances": {
+            "rtol": 0.02,
+            "atol": 0.02,
+            "nrmse": 0.01
+          }
+        },
+        "state": {
+          "passed": true,
+          "scratch_contract": "private scratch; all G1 CTAs reset output before G2; no counters",
+          "accuracy_state_checks": "performed separately by alternating/zero graph qualification"
+        },
+        "passed": true
+      },
+      {
+        "layer": 77,
+        "zero": {
+          "passed": true,
+          "finite": true,
+          "mismatch_fraction": 0.0,
+          "nrmse": 0.0,
+          "global_difference_D": 0.0,
+          "max_abs_error": 0.0,
+          "tolerances": {
+            "rtol": 0.02,
+            "atol": 0.02,
+            "nrmse": 0.01
+          }
+        },
+        "restored": {
+          "passed": true,
+          "finite": true,
+          "mismatch_fraction": 0.0,
+          "nrmse": 0.0032540873513668225,
+          "global_difference_D": 5.295454300446881e-06,
+          "max_abs_error": 0.0625,
+          "tolerances": {
+            "rtol": 0.02,
+            "atol": 0.02,
+            "nrmse": 0.01
+          }
+        },
+        "passed": true
+      }
+    ]
+  },
+  "cross_reference_parity": [
+    {
+      "passed": true,
+      "finite": true,
+      "mismatch_fraction": 0.0,
+      "nrmse": 0.0,
+      "global_difference_D": 0.0,
+      "max_abs_error": 0.0,
+      "tolerances": {
+        "rtol": 0.02,
+        "atol": 0.02,
+        "nrmse": 0.01
+      }
+    },
+    {
+      "passed": true,
+      "finite": true,
+      "mismatch_fraction": 0.0,
+      "nrmse": 0.0,
+      "global_difference_D": 0.0,
+      "max_abs_error": 0.0,
+      "tolerances": {
+        "rtol": 0.02,
+        "atol": 0.02,
+        "nrmse": 0.01
+      }
+    },
+    {
+      "passed": true,
+      "finite": true,
+      "mismatch_fraction": 0.0,
+      "nrmse": 0.0,
+      "global_difference_D": 0.0,
+      "max_abs_error": 0.0,
+      "tolerances": {
+        "rtol": 0.02,
+        "atol": 0.02,
+        "nrmse": 0.01
+      }
+    },
+    {
+      "passed": true,
+      "finite": true,
+      "mismatch_fraction": 0.0,
+      "nrmse": 0.0,
+      "global_difference_D": 0.0,
+      "max_abs_error": 0.0,
+      "tolerances": {
+        "rtol": 0.02,
+        "atol": 0.02,
+        "nrmse": 0.01
+      }
+    }
+  ],
+  "cross_reference_parity_passed": true
+}

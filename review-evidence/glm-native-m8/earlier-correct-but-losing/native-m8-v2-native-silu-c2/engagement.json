@@ -1,0 +1,17 @@
+{
+  "passed": true,
+  "markers": [
+    "gemm1_a4w4_port_fp4_h6144_i256_ne257_bm16_iq_sep_native_scale_merge8",
+    "gemm2_a4w4_port_ne257_h6144_i256_bm16_nt_atomic_merge8"
+  ],
+  "baseline_kernels": [
+    "void aiter::mxfp4_moe::moe_sort_quant::sort_quant_kernel_impl<257, 9, 16, 6144, 128, 1024, true, false>(int, __hip_bfloat16 const*, int const*, float const*, int*, int*, int*, int*, float*, unsigned char*, unsigned char*, int*, __hip_bfloat16*, void*, long long)",
+    "gemm1_a4w4_port_fp4_h6144_i256_ne257_bm16_iq_sep_native_scale",
+    "gemm2_a4w4_port_ne257_h6144_i256_bm16_nt_atomic"
+  ],
+  "candidate_kernels": [
+    "void at::native::vectorized_elementwise_kernel<8, at::native::FillFunctor<c10::BFloat16>, std::array<char*, 1ul> >(int, at::native::FillFunctor<c10::BFloat16>, std::array<char*, 1ul>)",
+    "gemm1_a4w4_port_fp4_h6144_i256_ne257_bm16_iq_sep_native_scale_merge8",
+    "gemm2_a4w4_port_ne257_h6144_i256_bm16_nt_atomic_merge8"
+  ]
+}

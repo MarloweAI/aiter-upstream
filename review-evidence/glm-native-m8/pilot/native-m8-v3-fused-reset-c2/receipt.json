@@ -1,0 +1,28 @@
+{
+  "group": "native-m8-v3-fused-reset",
+  "concurrency": 2,
+  "rows": 8,
+  "status": "qualified",
+  "gate": {
+    "source": true,
+    "routes": true,
+    "dispatch": true,
+    "eager": true,
+    "graph": true,
+    "state": true
+  },
+  "baseline_us": 30.27000045403838,
+  "candidate_us": 26.16050001233816,
+  "cases": 4,
+  "independent_reference_cases_per_arm": 4,
+  "phase_seconds": {
+    "prepare_dispatch": 0.763042164966464,
+    "independent_references": 2.6694451309740543,
+    "eager_graph_state_gates": 0.2197879629675299,
+    "clean_and_profiles": 0.48632889706641436
+  },
+  "comparison_semantics": "matched native source patch, unchanged quantizer/route/output contract",
+  "excluded_from_primary_ranking": false,
+  "cross_reference_parity_passed": true,
+  "total_wall_seconds": 4.143574784044176
+}

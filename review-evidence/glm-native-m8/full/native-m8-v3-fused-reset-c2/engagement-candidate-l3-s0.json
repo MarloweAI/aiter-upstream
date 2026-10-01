@@ -1,0 +1,30 @@
+{
+  "schema": 1,
+  "clean_mean_per_case_median_us": null,
+  "profiled_device_span_us": 24.519001007080078,
+  "profiled_kernel_sum_us": 24.518,
+  "profile_minus_clean_us": null,
+  "visible_kernels": 2,
+  "usable_kernel_breakdown": true,
+  "warning": null,
+  "kernels": [
+    {
+      "name": "gemm1_a4w4_port_fp4_h6144_i256_ne257_bm16_iq_sep_native_scale_merge8_reset",
+      "start_us": 24753922025.292,
+      "duration_us": 19.879,
+      "stream": 0,
+      "device": 2,
+      "order": 0,
+      "relative_start_us": 0.0
+    },
+    {
+      "name": "gemm2_a4w4_port_ne257_h6144_i256_bm16_nt_atomic_merge8",
+      "start_us": 24753922045.172,
+      "duration_us": 4.639,
+      "stream": 0,
+      "device": 2,
+      "order": 1,
+      "relative_start_us": 19.880001068115234
+    }
+  ]
+}

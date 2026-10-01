@@ -1,0 +1,11 @@
+Separate MoE replay profile (profiled durations are not clean latency)
+Clean mean of per-case medians: 31.08000010251999 us
+Profiled device span: 26.079002380371094 us
+Profiled kernel sum: 26.076999999999998 us
+Profile minus clean: -5.000997722148895 us
+Visible kernels: 3
+
+Order Stream Start(us) Duration(us) Kernel
+   0      0        0.000        3.119 void at::native::vectorized_elementwise_kernel<8, at::native::FillFunctor<c10::BFloat16>, std::array<char*, 1ul> >(int, at::native::FillFunctor<c10::BFloat16>, std::array<char*, 1ul>)
+   1      0        3.120       18.159 gemm1_a4w4_port_fp4_h6144_i256_ne257_bm16_iq_sep_native_scale_merge8
+   2      0       21.280        4.799 gemm2_a4w4_port_ne257_h6144_i256_bm16_nt_atomic_merge8

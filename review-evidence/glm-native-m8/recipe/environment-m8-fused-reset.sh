@@ -1,0 +1,36 @@
+#!/usr/bin/env bash
+set -euo pipefail
+export MOE_PORT_ROOT=/workspace/hassane/moe-native-tiny-20261001
+export MOE_PORT_AITER_SOURCE=$MOE_PORT_ROOT/source/aiter-m8-v1
+export MOE_PORT_SGLANG_SOURCE=$MOE_PORT_ROOT/source/sglang
+export MOE_PORT_SGLANG_SHA=a0fcebb3bb7043e62b6ca8885b9e723f2262e091
+export MOE_PORT_CAPTURE=/workspace/hassane/moe-upstream-qualification-20260929/results/fp8-native-target-verify-capture
+export MOE_PORT_MANIFEST=$MOE_PORT_ROOT/manifests/native-m8-v3-fused-reset.json
+export MOE_PORT_RUNTIME_MANIFEST=$MOE_PORT_ROOT/results/runtime-m8-fused-reset.json
+export TMPDIR=$MOE_PORT_ROOT/tmp
+export XDG_CACHE_HOME=$MOE_PORT_ROOT/cache/xdg
+export SGLANG_CACHE_DIR=$MOE_PORT_ROOT/cache/sglang-main-a0fcebb3
+export SGLANG_JIT_CACHE_DIR=$SGLANG_CACHE_DIR/jit
+export TILELANG_CACHE_DIR=$MOE_PORT_ROOT/cache/tilelang
+export TRITON_CACHE_DIR=$MOE_PORT_ROOT/cache/triton
+export TORCH_EXTENSIONS_DIR=$MOE_PORT_ROOT/cache/torch-extensions
+export AITER_JIT_DIR=$MOE_PORT_ROOT/cache/aiter-9a701a0
+export AITER_ROOT_DIR=$MOE_PORT_ROOT/cache/aiter-cpp-9a701a0
+export FLYDSL_RUNTIME_CACHE_DIR=$MOE_PORT_ROOT/cache/flydsl-m8-9b145e0
+export MOE_PORT_AITER_JIT_DIR=$AITER_JIT_DIR
+export MOE_PORT_AITER_ROOT_DIR=$AITER_ROOT_DIR
+export MOE_PORT_FLYDSL_CACHE=$FLYDSL_RUNTIME_CACHE_DIR
+export PYHIP_CACHE_DIR=$MOE_PORT_ROOT/cache/pyhip
+export TORCHINDUCTOR_CACHE_DIR=$MOE_PORT_ROOT/cache/torch-inductor
+export PYTHONPATH=$MOE_PORT_AITER_SOURCE:$MOE_PORT_SGLANG_SOURCE/python:$MOE_PORT_ROOT/source/marlowe-kernels:$MOE_PORT_ROOT/deps
+export AITER_USE_SYSTEM_TRITON=1
+export MAX_JOBS=4
+export SGLANG_SET_CPU_AFFINITY=0
+export PYTHONUNBUFFERED=1
+export PYTHONDONTWRITEBYTECODE=1
+export SGLANG_USE_MARLOWE_ATTENTION=0
+export SGLANG_USE_MARLOWE_KERNELS=0
+for path in "$TMPDIR" "$XDG_CACHE_HOME" "$SGLANG_CACHE_DIR" "$SGLANG_JIT_CACHE_DIR" "$TILELANG_CACHE_DIR" "$TRITON_CACHE_DIR" "$TORCH_EXTENSIONS_DIR" "$AITER_JIT_DIR" "$AITER_ROOT_DIR" "$FLYDSL_RUNTIME_CACHE_DIR" "$PYHIP_CACHE_DIR" "$TORCHINDUCTOR_CACHE_DIR"; do mkdir -p "$path"; test -w "$path"; done
+cd "$MOE_PORT_ROOT/source/marlowe-kernels"
+
+# Reuse byte-identical core/aux C++ kernels at current569base; only FlyDSL bodies change.

@@ -1,0 +1,12 @@
+{
+  "benchmark_qualified": true,
+  "recipe_exit": 1,
+  "recipe_failure": "Post-benchmark wrapper incorrectly asserted len(rows)==2 for one concurrency. It did not change or rerun measurement.",
+  "corrected_expected_receipt_count": 1,
+  "actual_receipt_count": 1,
+  "summary_sha256": "c9d304fe1beeac5f0bd001080321f02e7a14dbc09d31e8036ea6628750f90789",
+  "baseline_us": 33.456473981883995,
+  "candidate_us": 34.54018750150377,
+  "saved_us": -1.0837135196197778,
+  "percent_saved": -3.2391743379968454
+}

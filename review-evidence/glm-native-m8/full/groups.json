@@ -1,0 +1,189 @@
+{
+  "schema": 1,
+  "comparison": "selected backend minus one group versus selected backend",
+  "boundary": "supplied routes through complete local MoE output",
+  "row_contract": "EAGLE 3-1-4 target verification: M=4*C",
+  "primary_rows": [
+    4,
+    8,
+    16,
+    32,
+    64,
+    128,
+    256
+  ],
+  "unsupported": {
+    "256": "No qualified custom target-C64 program; do not extend it here."
+  },
+  "groups": {
+    "g2_coalesced_sparse": {
+      "name": "g2_coalesced_sparse",
+      "label": "LDS coalesced and sparse G2 output",
+      "rows": [
+        8,
+        16,
+        32,
+        64,
+        128
+      ],
+      "baseline": "g2_wave",
+      "candidate": "selected_supplied",
+      "dependencies": [
+        "native_mxfp4_backend"
+      ],
+      "contract_change": false,
+      "limitation": "Wave coalescing remains in the baseline; this does not price the entire historical scattered-to-coalesced change."
+    },
+    "g2_sparse_epilogue": {
+      "name": "g2_sparse_epilogue",
+      "label": "Skip empty LDS output chunks",
+      "rows": [
+        8,
+        16,
+        32,
+        64,
+        128
+      ],
+      "baseline": "g2_lds_dense",
+      "candidate": "selected_supplied",
+      "dependencies": [
+        "native_mxfp4_backend",
+        "g2_lds_coalescing"
+      ],
+      "contract_change": false,
+      "limitation": "Subset of g2_coalesced_sparse; never sum both deltas as independent PR gains."
+    },
+    "paired_load_scheduling": {
+      "name": "paired_load_scheduling",
+      "label": "Paired G1/G2 scales and packed input-scale loads",
+      "rows": [
+        8,
+        16,
+        32,
+        64,
+        128
+      ],
+      "baseline": "unpaired_loads",
+      "candidate": "selected_supplied",
+      "dependencies": [
+        "native_mxfp4_backend"
+      ],
+      "contract_change": false,
+      "limitation": "Same matrix tiles/split/route grid. Scheduling and scale-load width change together; required ISA waits remain enabled."
+    },
+    "small_m_fusion": {
+      "name": "small_m_fusion",
+      "label": "Direct small-row preparation and consumer fusion",
+      "rows": [
+        1,
+        2,
+        4
+      ],
+      "baseline": "small_separate",
+      "candidate": "selected_supplied",
+      "dependencies": [
+        "native_mxfp4_backend",
+        "g2_wave_coalescing"
+      ],
+      "contract_change": false,
+      "limitation": "One bundle removes inline G1 route/input preparation and G2 local split reduction/packing. The output combination stays BF16 atomic."
+    },
+    "small_m_g1_overlap": {
+      "name": "small_m_g1_overlap",
+      "label": "Overlap G1 weight requests with input packing",
+      "rows": [
+        1,
+        2,
+        4
+      ],
+      "baseline": "small_serial_pack",
+      "candidate": "selected_supplied",
+      "dependencies": [
+        "small_m_fusion"
+      ],
+      "contract_change": false,
+      "limitation": "Subset of small_m_fusion; not an independent additive delta."
+    },
+    "small_m_scale_predecode": {
+      "name": "small_m_scale_predecode",
+      "label": "Predecode independent G1 scale operands",
+      "rows": [
+        1,
+        2,
+        4
+      ],
+      "baseline": "small_serial_scales",
+      "candidate": "selected_supplied",
+      "dependencies": [
+        "small_m_fusion"
+      ],
+      "contract_change": false,
+      "limitation": "Baseline retains required explicit MFMA scale-input NOPs. Subset, not an additive delta."
+    },
+    "m8_ballot_merge": {
+      "name": "m8_ballot_merge",
+      "label": "Consumer-side eight-row route merge",
+      "rows": [
+        8
+      ],
+      "baseline": "m8_direct",
+      "candidate": "selected_supplied",
+      "dependencies": [
+        "native_mxfp4_backend",
+        "paired_load_scheduling",
+        "g2_coalesced_sparse"
+      ],
+      "contract_change": false,
+      "limitation": "Direct grid72 versus ballot grid65; grouped row layout and compatible output epilogue necessarily change together."
+    },
+    "fixed_expert_dispatch": {
+      "name": "fixed_expert_dispatch",
+      "label": "Fixed expert segments and double-buffered counts",
+      "rows": [
+        16,
+        32,
+        64,
+        128
+      ],
+      "baseline": "chunk_map_dispatch",
+      "candidate": "selected_supplied",
+      "dependencies": [
+        "native_mxfp4_backend",
+        "paired_load_scheduling",
+        "g2_coalesced_sparse"
+      ],
+      "contract_change": false,
+      "limitation": "The chunk-map baseline reuses existing emitters with a new launch adapter and needs fresh GPU qualification. Scratch layout/state reset and route resolution are inseparable."
+    },
+    "supplied_direct_combine": {
+      "name": "supplied_direct_combine",
+      "label": "Direct BF16 supplied-route accumulation",
+      "rows": [
+        1,
+        2,
+        4,
+        8,
+        16,
+        32,
+        64,
+        128
+      ],
+      "baseline": "ordered_supplied",
+      "candidate": "selected_supplied",
+      "dependencies": [
+        "native_mxfp4_backend"
+      ],
+      "contract_change": true,
+      "limitation": "BF16-rounded contributions are unchanged, but ordered FP32 sum becomes BF16 atomic accumulation. Both require explicit own-contract references; exclude from arithmetic-preserving ranking."
+    }
+  },
+  "reference": {
+    "input": "BF16 [M,6144]",
+    "routes": "int32 [M,8], distinct within each token",
+    "route_weights": "FP32 [M,8], finite, native supplied values",
+    "shared": "Append expert256/weight1 exactly once",
+    "intermediate": "FP32 SiLU/up before MXFP4 at M1/4/8/32; BF16 storage rounding before MXFP4 at M2/16/64/128",
+    "output": "BF16 expert operands and direct BF16 atomic sum, except declared ordered baseline",
+    "gates": "Independent eager/graph references, exact IDs/weights, zero-input clearing, changing-input replay, state and source identity; thresholds unchanged"
+  }
+}

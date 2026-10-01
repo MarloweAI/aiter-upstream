@@ -1,0 +1,13 @@
+{
+  "job": "86952",
+  "step": "22",
+  "host": "marlowe-mi355x-1",
+  "devices": 1,
+  "assigned_visible": "0",
+  "memory_allocated": 0,
+  "memory_reserved": 0,
+  "free_bytes": 308556070912,
+  "total_bytes": 309220868096,
+  "owned_cgroup_processes": [],
+  "scope": "Only this cleanup probe expected; no surviving benchmark process or server. No processes from other allocations are touched."
+}

@@ -1,0 +1,12 @@
+{
+  "measured_source_sha": "9b145e0de47daacc939b8730d145138f182bdb24",
+  "review_source_sha": "34795206af96156f6c61930ec8d2100e80bef3d7",
+  "change": "host-only prelaunch input/scratch byte-range alias rejection; no new kernel or timing claim",
+  "kernel_and_gpu_fixture_bytes_unchanged": {
+    "aiter/ops/flydsl/kernels/mxfp4_gemm1.py": "740029cf94e4146069966c3e0922b75aaf3d1dea74e60be0cacdd5e30cbe8f3a",
+    "aiter/ops/flydsl/kernels/mxfp4_gemm2.py": "b55c9d57721502c85d15b83df1848d36ba8cca3f22d602e195e40afbbc53b938",
+    "aiter/ops/flydsl/kernels/mxmoe_routes8.py": "4080dca8f97afba39e3adb313a310dac8d0c2c4cafc1615cc253a389ae9815a6",
+    "op_tests/flydsl_tests/test_mxmoe_tiny_m8.py": "daaa66d10eeb5aff2f1d4d97ba53948770631e905b857680432331edaa1e61f9"
+  },
+  "eligible_launch_path_ast_identical_after_removing_host_alias_check": true
+}

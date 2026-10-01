@@ -1,0 +1,20 @@
+/usr/bin/bash: /opt/venv/lib/python3.12/site-packages/torch/lib/libtinfo.so.6: no version information available (required by /usr/bin/bash)
+[aiter] import [module_aiter_core] under /workspace/hassane/moe-native-tiny-20261001/cache/aiter-5a51a69/module_aiter_core.so
+CURRENT_NATIVE_HEALTH_READY {"job": "86952", "step": "5", "host": "marlowe-mi355x-1", "devices": 1, "device": "AMD Instinct MI355X", "torch": "2.11.0+rocm7.2", "hip": "7.2.26015", "aiter": "/workspace/hassane/moe-native-tiny-20261001/source/aiter-m8-v1/aiter/__init__.py", "feature_sha": "5a51a693e7fa6cb9cc63f57aeb652801959ef331", "base_sha": "569d981db738682668ac97db457f5423382f9bd2", "sglang_sha": "a0fcebb3bb7043e62b6ca8885b9e723f2262e091", "sorting_adapter_sha256": "16ecef99a80d2efef01885674a181829949f5c1b7dce7d61b722f4c53e256442", "flydsl": "0.3.4.1", "pyhip": "1.0.1.dev485+g270225149", "image_path": "/workspace/hassane/attention-image-mi355x-8da12b8b-20260917-r3/raw/sglang-rocm-8da12b8b.sqsh", "image_sha256": "8375b26f6360f877628a363a3093173ac63b9e780f48e23389f10bdfd67cb5e4", "image_bytes": 60567834624, "capture": "/workspace/hassane/moe-upstream-qualification-20260929/results/fp8-native-target-verify-capture", "capture_native_source": "AITER c8325e00 / SGLang46beacf; fresh standalone current569d981/a0fcebb3 control, no recapture", "flydsl_cache": "/workspace/hassane/moe-native-tiny-20261001/cache/flydsl-m8-5a51a69"}
+[aiter] import [module_aiter_core] under /workspace/hassane/moe-native-tiny-20261001/cache/aiter-5a51a69/module_aiter_core.so
+Traceback (most recent call last):
+  File "/workspace/hassane/moe-native-tiny-20261001/source/aiter-m8-v1/op_tests/flydsl_tests/test_mxmoe_tiny_m8.py", line 108, in <module>
+    main()
+  File "/workspace/hassane/moe-native-tiny-20261001/source/aiter-m8-v1/op_tests/flydsl_tests/test_mxmoe_tiny_m8.py", line 41, in main
+    operators = [make_operator(weights=weights, rows=8) for _ in range(2)]
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/hassane/moe-native-tiny-20261001/source/aiter-m8-v1/aiter/ops/flydsl/mxmoe_tiny_m8.py", line 187, in make_operator
+    return PreparedRouteMerge8(
+           ^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/hassane/moe-native-tiny-20261001/source/aiter-m8-v1/aiter/ops/flydsl/mxmoe_tiny_m8.py", line 81, in __init__
+    self.g1 = compile_gemm1_a4w4_port(
+              ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/hassane/moe-native-tiny-20261001/source/aiter-m8-v1/aiter/ops/flydsl/kernels/mxfp4_gemm1.py", line 1543, in compile_gemm1_a4w4_port
+    raise AssertionError(
+AssertionError: unsupported gemm1 variant (a_dtype=fp4, BM=16, use_nt=False, inline_quant=True)
+M8_PILOT_DONE rc=1

@@ -1,0 +1,11 @@
+Separate MoE replay profile (profiled durations are not clean latency)
+Clean mean of per-case medians: 29.200000688433647 us
+Profiled device span: 27.358997344970703 us
+Profiled kernel sum: 27.357 us
+Profile minus clean: -1.841003343462944 us
+Visible kernels: 3
+
+Order Stream Start(us) Duration(us) Kernel
+   0      0        0.000        4.359 void aiter::mxfp4_moe::moe_sort_quant::sort_quant_kernel_impl<257, 9, 16, 6144, 128, 1024, true, false>(int, __hip_bfloat16 const*, int const*, float const*, int*, int*, int*, int*, float*, unsigned char*, unsigned char*, int*, __hip_bfloat16*, void*, long long)
+   1      0        4.360       18.839 gemm1_a4w4_port_fp4_h6144_i256_ne257_bm16_iq_sep_native_scale
+   2      0       23.200        4.159 gemm2_a4w4_port_ne257_h6144_i256_bm16_nt_atomic

@@ -1,0 +1,11 @@
+{
+  "job": 86952,
+  "step": "86952.5",
+  "feature_sha": "5a51a693e7fa6cb9cc63f57aeb652801959ef331",
+  "status": "failed_before_compile",
+  "reason": "Native G1 BM16/inlinequant requires use_nt=True; sourceowner fixed staticchoice at f00fc9b1ca49360c7c8257ae809004cbe484a81f",
+  "numerical_gate_changed": false,
+  "clean_timing_collected": false,
+  "git_patch_abbrev": 9,
+  "allocation_reused": true
+}

@@ -1,0 +1,198 @@
+{
+  "passed": true,
+  "feature_sha": "9b145e0de47daacc939b8730d145138f182bdb24",
+  "official_base": "569d981db738682668ac97db457f5423382f9bd2",
+  "pristine_source": "e3f517ebbb4005b4d63195a646c089b882f96f97 (only new M4 files; all pre-existing native source/config bytes exactlyofficialbase)",
+  "compiler": "same verified FlyDSL0.3.4.1/image/Torch/HIP device",
+  "case": "M8/C2 native control, captured layer3 step0",
+  "comparison": "Exact ELF .text bytes hashed/extracted from source-specific native compilation caches; kernel symbols matched, not guessed by cache path",
+  "actual_native_normalization_receipt": {
+    "passed": true,
+    "feature_sha": "9b145e0de47daacc939b8730d145138f182bdb24",
+    "observed_native_host_normalization": [
+      {
+        "input_limit": null,
+        "activation": "silu",
+        "normalized_limit": "+inf"
+      },
+      {
+        "input_limit": null,
+        "activation": "silu",
+        "normalized_limit": "+inf"
+      },
+      {
+        "input_limit": null,
+        "activation": "silu",
+        "normalized_limit": "+inf"
+      },
+      {
+        "input_limit": null,
+        "activation": "silu",
+        "normalized_limit": "+inf"
+      },
+      {
+        "input_limit": null,
+        "activation": "silu",
+        "normalized_limit": "+inf"
+      },
+      {
+        "input_limit": null,
+        "activation": "silu",
+        "normalized_limit": "+inf"
+      },
+      {
+        "input_limit": null,
+        "activation": "silu",
+        "normalized_limit": "+inf"
+      },
+      {
+        "input_limit": null,
+        "activation": "silu",
+        "normalized_limit": "+inf"
+      },
+      {
+        "input_limit": null,
+        "activation": "silu",
+        "normalized_limit": "+inf"
+      },
+      {
+        "input_limit": null,
+        "activation": "silu",
+        "normalized_limit": "+inf"
+      },
+      {
+        "input_limit": null,
+        "activation": "silu",
+        "normalized_limit": "+inf"
+      },
+      {
+        "input_limit": null,
+        "activation": "silu",
+        "normalized_limit": "+inf"
+      },
+      {
+        "input_limit": null,
+        "activation": "silu",
+        "normalized_limit": "+inf"
+      },
+      {
+        "input_limit": null,
+        "activation": "silu",
+        "normalized_limit": "+inf"
+      },
+      {
+        "input_limit": null,
+        "activation": "silu",
+        "normalized_limit": "+inf"
+      },
+      {
+        "input_limit": null,
+        "activation": "silu",
+        "normalized_limit": "+inf"
+      },
+      {
+        "input_limit": null,
+        "activation": "silu",
+        "normalized_limit": "+inf"
+      },
+      {
+        "input_limit": null,
+        "activation": "silu",
+        "normalized_limit": "+inf"
+      },
+      {
+        "input_limit": null,
+        "activation": "silu",
+        "normalized_limit": "+inf"
+      },
+      {
+        "input_limit": null,
+        "activation": "silu",
+        "normalized_limit": "+inf"
+      },
+      {
+        "input_limit": null,
+        "activation": "silu",
+        "normalized_limit": "+inf"
+      }
+    ],
+    "source": "aiter.ops.flydsl.moe_kernels.runtime_swiglu_limit; actual public fused_moe native calls",
+    "high_activation_fixture": "x=1/4; gate/up approximately12 > old clamp7"
+  },
+  "actual_normalized_native_arguments": {
+    "activation": "silu",
+    "swiglu_limit": "+inf",
+    "input": "BF16 inline MXFP4 0x7fffff",
+    "middle": "FP32 SiLU*up to MXFP4 0x7fffff"
+  },
+  "pairs": [
+    {
+      "symbols": [
+        "gemm1_a4w4_port_fp4_h6144_i256_ne257_bm16_iq_sep_native_scale"
+      ],
+      "pristine": {
+        "cache": "/tmp/glm-moe-native-tiny-cache-inspection/m4-with-pristine-c2/launch_gemm1_76c4e1d48a56bf53ee6c50f5262bc9eb/01b85446479dc177.pkl",
+        "names": [
+          "gemm1_a4w4_port_fp4_h6144_i256_ne257_bm16_iq_sep_native_scale"
+        ],
+        "elf_bytes": 22024,
+        "text_bytes": 18176,
+        "text_sha256": "a11bf79f5cfb01deed3069cf01fa447eb40f9c31af538672cb1f166233db5c4c"
+      },
+      "default_false": {
+        "cache": "/tmp/glm-moe-native-tiny-cache-inspection/flydsl-m8-9b145e0/launch_gemm1_16e597618ce7581f6e6d269ac8d4b66c/2267825a176259b3.pkl",
+        "names": [
+          "gemm1_a4w4_port_fp4_h6144_i256_ne257_bm16_iq_sep_native_scale"
+        ],
+        "elf_bytes": 22024,
+        "text_bytes": 18176,
+        "text_sha256": "a11bf79f5cfb01deed3069cf01fa447eb40f9c31af538672cb1f166233db5c4c"
+      },
+      "text_identical": true
+    },
+    {
+      "symbols": [
+        "gemm2_a4w4_port_ne257_h6144_i256_bm16_nt_atomic"
+      ],
+      "pristine": {
+        "cache": "/tmp/glm-moe-native-tiny-cache-inspection/m4-with-pristine-c2/launch_gemm2_63a87ef7935b8d3c2d96f7e1cba018a0/442ec633f794aecc.pkl",
+        "names": [
+          "gemm2_a4w4_port_ne257_h6144_i256_bm16_nt_atomic"
+        ],
+        "elf_bytes": 6256,
+        "text_bytes": 2432,
+        "text_sha256": "2fee4f1fcd6cd5918f46e2d3ac6145570da04ab13978723b38d3db88cbe09ccf"
+      },
+      "default_false": {
+        "cache": "/tmp/glm-moe-native-tiny-cache-inspection/flydsl-m8-9b145e0/launch_gemm2_945fb9dd64d97a5d097534ba0f92edb9/5ec282ab4c9efb17.pkl",
+        "names": [
+          "gemm2_a4w4_port_ne257_h6144_i256_bm16_nt_atomic"
+        ],
+        "elf_bytes": 6256,
+        "text_bytes": 2432,
+        "text_sha256": "2fee4f1fcd6cd5918f46e2d3ac6145570da04ab13978723b38d3db88cbe09ccf"
+      },
+      "text_identical": true
+    }
+  ],
+  "candidate_merge8_distinct": [
+    {
+      "cache": "/tmp/glm-moe-native-tiny-cache-inspection/flydsl-m8-9b145e0/launch_gemm2_6e99a2b5fa7c5e1311f7aa0e7ff5d2d2/5ec282ab4c9efb17.pkl",
+      "names": [
+        "gemm2_a4w4_port_ne257_h6144_i256_bm16_nt_atomic_merge8"
+      ],
+      "elf_bytes": 6784,
+      "text_bytes": 2944,
+      "text_sha256": "514fc6fa08c057e70f9ed295d5a0c8646a3574c49add777d7ca7ad7f1b61cc62"
+    },
+    {
+      "cache": "/tmp/glm-moe-native-tiny-cache-inspection/flydsl-m8-9b145e0/launch_gemm1_f959af37c45de59477bcd46ca0b3735d/2267825a176259b3.pkl",
+      "names": [
+        "gemm1_a4w4_port_fp4_h6144_i256_ne257_bm16_iq_sep_native_scale_merge8_reset"
+      ],
+      "elf_bytes": 22504,
+      "text_bytes": 18624,
+      "text_sha256": "a944f3fa861bf5ab5930d7bc1a45b9a3fe118010fb88f1b7a8e04c4754128f01"
+    }
+  ]
+}

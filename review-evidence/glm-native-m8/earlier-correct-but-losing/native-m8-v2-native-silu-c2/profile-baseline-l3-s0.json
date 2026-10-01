@@ -1,0 +1,39 @@
+{
+  "schema": 1,
+  "clean_mean_per_case_median_us": 30.44000081717968,
+  "profiled_device_span_us": 27.119003295898438,
+  "profiled_kernel_sum_us": 27.117,
+  "profile_minus_clean_us": -3.3209975212812424,
+  "visible_kernels": 3,
+  "usable_kernel_breakdown": true,
+  "warning": null,
+  "kernels": [
+    {
+      "name": "void aiter::mxfp4_moe::moe_sort_quant::sort_quant_kernel_impl<257, 9, 16, 6144, 128, 1024, true, false>(int, __hip_bfloat16 const*, int const*, float const*, int*, int*, int*, int*, float*, unsigned char*, unsigned char*, int*, __hip_bfloat16*, void*, long long)",
+      "start_us": 24326079193.808,
+      "duration_us": 4.479,
+      "stream": 0,
+      "device": 2,
+      "order": 0,
+      "relative_start_us": 0.0
+    },
+    {
+      "name": "gemm1_a4w4_port_fp4_h6144_i256_ne257_bm16_iq_sep_native_scale",
+      "start_us": 24326079198.288,
+      "duration_us": 18.639,
+      "stream": 0,
+      "device": 2,
+      "order": 1,
+      "relative_start_us": 4.479999542236328
+    },
+    {
+      "name": "gemm2_a4w4_port_ne257_h6144_i256_bm16_nt_atomic",
+      "start_us": 24326079216.928,
+      "duration_us": 3.999,
+      "stream": 0,
+      "device": 2,
+      "order": 2,
+      "relative_start_us": 23.12000274658203
+    }
+  ]
+}
